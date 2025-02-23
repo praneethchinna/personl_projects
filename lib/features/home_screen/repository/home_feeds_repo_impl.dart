@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/features/home_screen/response_model/home_feeds_response_model.dart';
 import 'package:ysr_project/features/home_screen/response_model/notification_response_model.dart';
+import 'package:ysr_project/features/home_screen/response_model/special_points.dart';
 import 'package:ysr_project/features/home_screen/response_model/user_points_response_model.dart';
 import 'package:ysr_project/services/user/user_data.dart';
 
@@ -75,6 +76,34 @@ class HomeFeedsRepoImpl {
       }
     } catch (e) {
       throw Exception("Failed to fetch Latest Videos");
+    }
+  }
+
+  Future<List<SpecialPoints>> getUserPointsForBatchId(String batchId) async {
+    try {
+      final response = await dio.get('/special_points/$batchId');
+      if (response.statusCode == 200) {
+        final listOfPoints = response.data as List;
+        return listOfPoints
+            .map((element) => SpecialPoints.fromJson(element))
+            .toList();
+      } else {
+        throw Exception("Failed to fetch User Points for Batch Id");
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch User Points for Batch Id");
+    }
+  }
+
+  Future<String> getUrl() async {
+    try {
+      final response = await dio.get('/live-videos');
+      if (response.statusCode == 200) {
+        return response.data['video_url'];
+      }
+      throw Exception("Failed to fetch url");
+    } catch (e) {
+      throw Exception("Failed to fetch url");
     }
   }
 }

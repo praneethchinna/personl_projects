@@ -43,30 +43,31 @@ class HomeFeedNotifer extends StateNotifier<HomeViewModel> {
   HomeFeedViewModel updateFromResponseModel(
       HomeFeedsResponseModel responseModel) {
     return HomeFeedViewModel(
-      batchId: responseModel.batchId,
-      likeCount: responseModel.likeCount,
-      likedUsers: List<int?>.from(responseModel.likedUsers),
-      createdBy: responseModel.createdBy,
-      description: responseModel.description,
-      postedDate: responseModel.postedDate,
-      editedBy: responseModel.editedBy,
-      editedTime: responseModel.editedTime,
-      region: responseModel.region,
-      media: responseModel.media
-          .map((m) => MediaViewModel(fileUrl: m.fileUrl, fileType: m.fileType))
-          .toList(),
-      commentCount: responseModel.commentCount,
-      commentedUsers: List<int?>.from(responseModel.commentedUsers),
-      shareCount: responseModel.shareCount,
-      comments: responseModel.comments
-          .map((c) => CommentViewModel(
-                commentDate: c.commentDate,
-                commentText: c.commentText,
-                userId: c.userId,
-                userName: c.userName,
-              ))
-          .toList(),
-    );
+        batchId: responseModel.batchId,
+        likeCount: responseModel.likeCount,
+        likedUsers: List<int?>.from(responseModel.likedUsers),
+        createdBy: responseModel.createdBy,
+        description: responseModel.description,
+        postedDate: responseModel.postedDate,
+        editedBy: responseModel.editedBy,
+        editedTime: responseModel.editedTime,
+        region: responseModel.region,
+        media: responseModel.media
+            .map(
+                (m) => MediaViewModel(fileUrl: m.fileUrl, fileType: m.fileType))
+            .toList(),
+        commentCount: responseModel.commentCount,
+        commentedUsers: List<int?>.from(responseModel.commentedUsers),
+        shareCount: responseModel.shareCount,
+        comments: responseModel.comments
+            .map((c) => CommentViewModel(
+                  commentDate: c.commentDate,
+                  commentText: c.commentText,
+                  userId: c.userId,
+                  userName: c.userName,
+                ))
+            .toList(),
+        postType: responseModel.postType);
   }
 
   void updateComments(int index, String comment) {

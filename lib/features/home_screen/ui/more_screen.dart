@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ysr_project/features/gallery/ui/gallary_ui.dart';
@@ -8,6 +11,7 @@ import 'package:ysr_project/features/home_screen/providers/home_feed_repository.
 import 'package:ysr_project/features/home_screen/ui/notifications_ui.dart';
 import 'package:ysr_project/features/login/ui/login_screen.dart';
 import 'package:ysr_project/features/polls/providers/polls_provider.dart';
+import 'package:ysr_project/services/http_networks/dio_provider.dart';
 import 'package:ysr_project/services/shared_preferences/shared_preferences_provider.dart';
 import 'package:ysr_project/services/user/user_data.dart';
 
@@ -22,10 +26,19 @@ class MoreScreen extends ConsumerWidget {
         children: [
           InkWell(
             onTap: () async {
-              ShareCard(
-                      title: "sakshi tv",
-                      link: "https://www.youtube.com/@SakshiTVLIVE")
-                  .launchURL(context);
+              try {
+                final dio = ref.read(dioProvider);
+                final response = await dio.get('/live-videos');
+                if (response.statusCode == 200) {
+                  ShareCard(
+                          title: "sakshi tv", link: response.data['video_url'])
+                      .launchURL(context);
+                }
+              } catch (e) {
+                log(e.toString());
+              } finally {
+                EasyLoading.dismiss();
+              }
             },
             child: _buildMenuItem(Icons.live_tv, "Live", Colors.red),
           ),

@@ -14,6 +14,7 @@ class HomeFeedViewModel {
     required this.commentedUsers,
     required this.shareCount,
     required this.comments,
+    required this.postType,
   });
 
   String batchId;
@@ -30,6 +31,7 @@ class HomeFeedViewModel {
   List<int?> commentedUsers;
   int shareCount;
   List<CommentViewModel> comments;
+  String postType;
 
   HomeFeedViewModel copyWith({
     String? batchId,
@@ -46,6 +48,7 @@ class HomeFeedViewModel {
     List<int?>? commentedUsers,
     int? shareCount,
     List<CommentViewModel>? comments,
+    String ? postType
   }) =>
       HomeFeedViewModel(
         batchId: batchId ?? this.batchId,
@@ -62,6 +65,7 @@ class HomeFeedViewModel {
         commentedUsers: commentedUsers ?? this.commentedUsers,
         shareCount: shareCount ?? this.shareCount,
         comments: comments ?? this.comments,
+        postType: postType ?? this.postType
       );
 }
 

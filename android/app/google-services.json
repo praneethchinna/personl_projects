@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "527923106789",
+    "project_id": "weysrcpfcm",
+    "storage_bucket": "weysrcpfcm.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527923106789:android:1e0e0bb58e534d7c3b950c",
+        "android_client_info": {
+          "package_name": "com.example.ysr_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxHQnc0wZmSLpcqsHQK9mJMyOuaJ0P7y4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

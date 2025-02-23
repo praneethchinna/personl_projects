@@ -25,6 +25,7 @@ class HomeFeedsResponseModel {
     required this.commentedUsers,
     required this.shareCount,
     required this.comments,
+    required this.postType,
   });
 
   factory HomeFeedsResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -49,6 +50,7 @@ class HomeFeedsResponseModel {
         shareCount: json["share_count"] as int,
         comments: List<Comment>.from((json["comments"] ?? [])
             .map((x) => Comment.fromJson(x as Map<String, dynamic>))),
+        postType: json["post_type"] ?? "",
       );
 
   String batchId;
@@ -65,6 +67,7 @@ class HomeFeedsResponseModel {
   List<int?> commentedUsers;
   int shareCount;
   List<Comment> comments;
+  String postType;
 }
 
 class Media {

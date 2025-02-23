@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_initicon/flutter_initicon.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:ysr_project/features/home_screen/helper_class/logout_invalidate_providers.dart';
+import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
+import 'package:ysr_project/features/home_screen/widgets/multi_level_progress_widgets.dart';
 import 'package:ysr_project/features/profile/provider/profileProvider.dart';
 
 class UserProfileUI extends ConsumerWidget {
@@ -36,7 +39,20 @@ class UserProfileUI extends ConsumerWidget {
                     ),
 
                     SizedBox(height: 20),
-
+                    ref.watch(futurePointsProvider).when(
+                          loading: () => Skeletonizer(
+                            enabled: true,
+                            child: MultiLevelProgressWidget(
+                              progress: 100,
+                              progressColor: Colors.grey,
+                            ),
+                          ),
+                          data: (data) => MultiLevelProgressWidget(
+                            progress: data.totalPoints!.toDouble(),
+                          ),
+                          error: (_, __) => SizedBox.shrink(),
+                        ),
+                    SizedBox(height: 20),
                     // User Details
                     if (data.name.isNotEmpty) ...[
                       ProfileCard(
