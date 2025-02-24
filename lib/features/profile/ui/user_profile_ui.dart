@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_initicon/flutter_initicon.dart';
+import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/home_screen/helper_class/logout_invalidate_providers.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/widgets/multi_level_progress_widgets.dart';
@@ -48,13 +52,42 @@ class UserProfileUI extends ConsumerWidget {
                             ),
                           ),
                           data: (data) => ListTile(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                            leading: Icon(Icons.control_point_sharp, color: Colors.blueAccent),
-                            title: Text("Total Points", style: TextStyle(fontWeight: FontWeight.bold)),
-                            trailing: Text(data.totalPoints!.toString(), style: TextStyle(color: Colors.green,fontSize: 20)),
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 20),
+                            leading: Image.asset(
+                              'assets/coin.png',
+                              width: 25,
+                              height: 25,
+                            ),
+                            title: Text("Total Points",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            subtitle: Text(
+                                "Level: ${(data.totalPoints! ~/ 100)}",
+                                style: TextStyle()),
+                            trailing: Row(
+
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("${data.totalPoints.toString()} / ${((data.totalPoints! ~/ 100)+1) * 100}",
+                                    style:
+                                        TextStyle(color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
+                                Gap(10),
+                                CircularPercentIndicator(
+                                  radius: 20.0,
+                                  lineWidth: 7.0,
+                                  animation: true,
+                                  animationDuration: 3000,
+                                  percent: ((data.totalPoints! % 100) / 100)
+                                      .clamp(0.0, 1.0),
+                                  circularStrokeCap: CircularStrokeCap.round,
+                                  progressColor: AppColors.primaryColor,
+                                  backgroundColor: Colors.green.shade300,
+                                )
+                              ],
+                            ),
                           ),
-
-
                           error: (_, __) => SizedBox.shrink(),
                         ),
                     SizedBox(height: 10),

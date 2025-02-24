@@ -24,7 +24,7 @@ class MultiLevelProgressWidget extends StatelessWidget {
             context: context,
             builder: (b) {
               return FractionallySizedBox(
-                heightFactor: 0.3,
+                heightFactor: 0.4,
                 child: MultiLevelCircularProgressWidget(
                   progress: progress,
                   progressColor: progressColor,
@@ -36,7 +36,7 @@ class MultiLevelProgressWidget extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
         decoration: BoxDecoration(
-          color: progressColor != null ? progressColor : Colors.green.shade500,
+          color: progressColor ?? Colors.green.shade500,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(

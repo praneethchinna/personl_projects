@@ -169,8 +169,8 @@ class _VideoCardState extends State<VideoCard> {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Wrap(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _socialButton(FontAwesomeIcons.whatsapp, Colors.green, () {
                       ShareCard(title: widget.title, link: widget.videoUrl)
