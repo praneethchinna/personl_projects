@@ -71,6 +71,7 @@ dependencies:
   super_tooltip: ^2.0.9
   flutter_native_splash: ^2.4.4
   gif_view: ^1.0.0
+  percent_indicator: ^4.2.4
 
 
 

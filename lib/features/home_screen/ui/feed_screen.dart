@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:super_tooltip/super_tooltip.dart';
-import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repository.dart';
 import 'package:ysr_project/features/home_screen/widgets/home_feed_widget.dart';

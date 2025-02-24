@@ -3,17 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:ysr_project/features/gallery/ui/gallary_ui.dart';
 import 'package:ysr_project/features/home_screen/helper_class/logout_invalidate_providers.dart';
-import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
-import 'package:ysr_project/features/home_screen/providers/home_feed_repository.dart';
 import 'package:ysr_project/features/home_screen/ui/notifications_ui.dart';
-import 'package:ysr_project/features/login/ui/login_screen.dart';
-import 'package:ysr_project/features/polls/providers/polls_provider.dart';
 import 'package:ysr_project/services/http_networks/dio_provider.dart';
-import 'package:ysr_project/services/shared_preferences/shared_preferences_provider.dart';
-import 'package:ysr_project/services/user/user_data.dart';
 
 class MoreScreen extends ConsumerWidget {
   const MoreScreen({super.key});

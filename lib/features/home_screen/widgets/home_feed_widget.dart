@@ -16,7 +16,6 @@ import 'package:ysr_project/features/home_screen/view_model/home_feed_view_model
 import 'package:ysr_project/features/home_screen/widgets/build_platform_icons.dart';
 import 'package:ysr_project/features/home_screen/widgets/comment_widget.dart';
 import 'package:ysr_project/features/home_screen/widgets/media_carousel.dart';
-import 'package:ysr_project/services/http_networks/dio_provider.dart';
 import 'package:ysr_project/services/user/user_data.dart';
 
 class HomeFeedWidget extends ConsumerStatefulWidget {
@@ -100,11 +99,11 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
                             data: (data) {
                               return SingleChildScrollView(
                                 child: SizedBox(
-                                  width: 300,
+                                  width: 250,
                                   child: Column(
                                     children: [
                                       Row(children: [
-                                        buildExpanded("Social Media", 2),
+                                        buildExpanded("Actions", 2),
                                         Gap(3),
                                         buildExpanded("Points", 1),
                                       ]),

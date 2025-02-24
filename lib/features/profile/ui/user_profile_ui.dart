@@ -47,12 +47,17 @@ class UserProfileUI extends ConsumerWidget {
                               progressColor: Colors.grey,
                             ),
                           ),
-                          data: (data) => MultiLevelProgressWidget(
-                            progress: data.totalPoints!.toDouble(),
+                          data: (data) => ListTile(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                            leading: Icon(Icons.control_point_sharp, color: Colors.blueAccent),
+                            title: Text("Total Points", style: TextStyle(fontWeight: FontWeight.bold)),
+                            trailing: Text(data.totalPoints!.toString(), style: TextStyle(color: Colors.green,fontSize: 20)),
                           ),
+
+
                           error: (_, __) => SizedBox.shrink(),
                         ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     // User Details
                     if (data.name.isNotEmpty) ...[
                       ProfileCard(

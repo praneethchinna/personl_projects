@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/features/home_screen/ui/home_feed_screen.dart';
 import 'package:ysr_project/features/home_screen/ui/more_screen.dart';
 import 'package:ysr_project/features/home_screen/ui/notification_imp.dart';
-import 'package:ysr_project/features/home_screen/ui/notifications_ui.dart';
 import 'package:ysr_project/features/polls/ui/poll_screen.dart';
 import 'package:ysr_project/features/profile/ui/user_profile_ui.dart';
 import 'package:ysr_project/services/user/user_data.dart';

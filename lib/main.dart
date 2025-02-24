@@ -81,7 +81,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       // Stop 2 frames before the end using a timer
       timer = Timer(const Duration(milliseconds: 1000), () async {
         controller.pause();
-       await Future.delayed(Duration(seconds: 2));
+        await Future.delayed(Duration(seconds: 2));
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
         String? userData = prefs.getString("userData");
