@@ -65,14 +65,14 @@ class UserProfileUI extends ConsumerWidget {
                                 "Level: ${(data.totalPoints! ~/ 100)}",
                                 style: TextStyle()),
                             trailing: Row(
-
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text("${data.totalPoints.toString()} / ${((data.totalPoints! ~/ 100)+1) * 100}",
-                                    style:
-                                        TextStyle(color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold)),
+                                Text(
+                                    "${data.totalPoints.toString()} / ${((data.totalPoints! ~/ 100) + 1) * 100}",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold)),
                                 Gap(10),
                                 CircularPercentIndicator(
                                   radius: 20.0,
@@ -113,13 +113,7 @@ class UserProfileUI extends ConsumerWidget {
                         value: data.mobile,
                       ),
                     ],
-                    if (data.role.isNotEmpty) ...[
-                      ProfileCard(
-                        icon: LucideIcons.briefcase,
-                        title: "Role",
-                        value: data.role,
-                      ),
-                    ],
+
                     if (data.parliament.isNotEmpty) ...[
                       ProfileCard(
                         icon: LucideIcons.mapPin,
@@ -159,6 +153,7 @@ class UserProfileUI extends ConsumerWidget {
                       child: Text("Logout",
                           style: TextStyle(fontSize: 18, color: Colors.white)),
                     ),
+                    SizedBox(height: 30),
                   ],
                 ),
               );

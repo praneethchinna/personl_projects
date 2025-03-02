@@ -100,7 +100,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
             label: 'Poll',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.more_horiz),
+            icon: Icon(Icons.more_vert_rounded),
             label: 'More',
           ),
         ],

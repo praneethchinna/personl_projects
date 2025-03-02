@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:super_tooltip/super_tooltip.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/helper/download_multiple_file.dart';
 import 'package:ysr_project/features/home_screen/helper_class/file_share_helper.dart';
@@ -36,10 +37,89 @@ class HomeFeedWidget extends ConsumerStatefulWidget {
 
 class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
   final _controller = SuperTooltipController();
+  String description = "";
+  List<String> links = [];
+  List<String> hashTags = [];
   String _currentUrl = "";
+
+  Widget buildLinks(List<String> links) {
+    return Padding(
+      padding: EdgeInsets.only(left: 10),
+      child: Column(
+        children: links
+            .map((e) => GestureDetector(
+                  onTap: () async {
+                    final Uri url = Uri.parse(e);
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url,
+                          mode: LaunchMode.externalApplication);
+                    }
+                  },
+                  child: Text(e,
+                      style: const TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline)),
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  Widget buildHashTags(List<String> hashTags) {
+    return Padding(
+      padding: EdgeInsets.only(left: 10),
+      child: Wrap(
+        children: hashTags
+            .map((e) => GestureDetector(
+                  onTap: () async {
+                    final Uri url = Uri.parse("https://twitter.com/hashtag/$e");
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url, mode: LaunchMode.externalApplication);
+                    }
+                  },
+                  child: Container(
+                      margin: EdgeInsets.all(4),
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child:
+                          Text(e, style: const TextStyle(color: Colors.white))),
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  void updateDescriptionAndLink() {
+    String value = widget.item.description ?? "";
+    value = value.replaceAll("\r", " ");
+    value = value.replaceAll("\n", " ");
+
+    while (value.contains("#")) {
+      int index = value.indexOf("#");
+      String temp = value.substring(index);
+      String hashTag = temp.split(" ").first;
+      hashTags.add(hashTag);
+      value = value.replaceAll(hashTag, "");
+    }
+
+    while (value.contains("https")) {
+      int index = value.indexOf("https");
+      String temp = value.substring(index);
+      String url = temp.split(" ").first;
+      links.add(url);
+      value = value.replaceAll(url, "");
+    }
+    description = value = value.replaceAll("<br>", "");
+    ;
+  }
 
   @override
   Widget build(BuildContext context) {
+    updateDescriptionAndLink();
     final userData = ref.watch(userProvider);
     final notifier = ref.read(homeFeedNotifierProvider.notifier);
     return Container(
@@ -183,12 +263,14 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Text(
-              widget.item.description,
+              description,
               style: TextStyle(
                 fontSize: 17,
               ),
             ),
           ),
+          if (hashTags.isNotEmpty) buildHashTags(hashTags),
+          if (links.isNotEmpty) buildLinks(links),
           Divider(
             endIndent: 10,
             indent: 10,

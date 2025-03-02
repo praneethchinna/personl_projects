@@ -177,7 +177,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Email (Optional)",
+                        "Email",
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),

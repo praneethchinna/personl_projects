@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/features/home_screen/response_model/home_feeds_response_model.dart';
 import 'package:ysr_project/features/home_screen/response_model/notification_response_model.dart';
 import 'package:ysr_project/features/home_screen/response_model/special_points.dart';
+import 'package:ysr_project/features/home_screen/response_model/special_videos.dart';
 import 'package:ysr_project/features/home_screen/response_model/user_points_response_model.dart';
 import 'package:ysr_project/services/user/user_data.dart';
 
@@ -104,6 +105,22 @@ class HomeFeedsRepoImpl {
       throw Exception("Failed to fetch url");
     } catch (e) {
       throw Exception("Failed to fetch url");
+    }
+  }
+
+  Future<List<SpecialVideos>> getSpecialVideos() async {
+    try {
+      final response = await dio.get('/special-videos');
+      if (response.statusCode == 200) {
+        final listOfVideos = response.data as List;
+        return listOfVideos
+            .map((element) => SpecialVideos.fromJson(element))
+            .toList();
+      } else {
+        throw Exception("Failed to fetch Special Videos");
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch Special Videos");
     }
   }
 }

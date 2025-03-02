@@ -15,7 +15,7 @@ class NotificationImp extends ConsumerWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "Notificatons",
+          "Notifications",
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
         ),
         leading: IconButton(
