@@ -49,7 +49,8 @@ class SpecialVideos {
 }
 
 List<SpecialVideos> videoListFromJson(String str) {
-  return List<SpecialVideos>.from(json.decode(str).map((x) => SpecialVideos.fromJson(x)));
+  return List<SpecialVideos>.from(
+      json.decode(str).map((x) => SpecialVideos.fromJson(x)));
 }
 
 String videoListToJson(List<SpecialVideos> data) {

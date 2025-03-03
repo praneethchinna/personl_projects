@@ -47,6 +47,7 @@ foregroundColor: Colors.white,
                   log(video.url);
                   log(video.title);
                   return VideoCard(
+                    channelName: video.channelName,
                     title: video.title,
                     onShare: () {},
                     subtitle: "",

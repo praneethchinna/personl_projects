@@ -72,10 +72,13 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
         children: hashTags
             .map((e) => GestureDetector(
                   onTap: () async {
-                    final Uri url = Uri.parse("https://twitter.com/hashtag/$e");
+                    final hashtag = e.replaceAll("#", "");
+                    final Uri url =
+                        Uri.parse("https://twitter.com/hashtag/$hashtag");
                     if (await canLaunchUrl(url)) {
-                      await launchUrl(url,
-                          mode: LaunchMode.externalApplication);
+                      await launchUrl(
+                        url,
+                      );
                     }
                   },
                   child: Container(

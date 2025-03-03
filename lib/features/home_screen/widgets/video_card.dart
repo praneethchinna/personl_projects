@@ -12,15 +12,16 @@ class VideoCard extends StatefulWidget {
   final String subtitle;
   final VoidCallback onShare;
   final DateTime postedDate;
+  final String? channelName;
 
-  const VideoCard({
-    Key? key,
-    required this.videoUrl,
-    required this.title,
-    required this.subtitle,
-    required this.onShare,
-    required this.postedDate,
-  }) : super(key: key);
+  const VideoCard(
+      {super.key,
+      required this.videoUrl,
+      required this.title,
+      required this.subtitle,
+      required this.onShare,
+      required this.postedDate,
+      this.channelName});
 
   @override
   State<VideoCard> createState() => _VideoCardState();
@@ -48,27 +49,24 @@ class _VideoCardState extends State<VideoCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            children: [
-              Icon(
-                Icons.notifications_active,
-                color: AppColors.primaryColor,
-              ),
-              Gap(10),
-              Text(
-                "Check out this new Video",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Gap(10),
-              Text(
-                "SLOM YSRCP",
-                style:
-                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-              ),
-            ],
+        ListTile(
+          leading: Icon(
+            Icons.notifications_active,
+            color: AppColors.primaryColor,
           ),
+          title: Text(
+            "Check out this new Video",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            widget.channelName ?? "SLOM YSRCP",
+            style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+                decoration: TextDecoration.underline,
+                decorationColor: Colors.red),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
         ),
         Container(
           width: double.infinity,
@@ -80,7 +78,8 @@ class _VideoCardState extends State<VideoCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding:  EdgeInsets.only(left: 15, right: 15, top: 15,bottom: 5),
+                padding:
+                    EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 5),
                 child: Row(
                   children: [
                     CircleAvatar(

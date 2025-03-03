@@ -29,6 +29,7 @@ final asyncUrlProvider = FutureProvider<String>((ref) async {
   return ref.read(homeFeedRepoProvider).getUrl();
 });
 
-final specialVideoProvider = FutureProvider<List<SpecialVideos>>((ref) async {
+final specialVideoProvider =
+    FutureProvider.autoDispose<List<SpecialVideos>>((ref) async {
   return ref.read(homeFeedRepoProvider).getSpecialVideos();
 });
