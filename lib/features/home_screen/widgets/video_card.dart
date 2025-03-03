@@ -52,7 +52,10 @@ class _VideoCardState extends State<VideoCard> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: [
-              Icon(Icons.notifications_active,color: AppColors.primaryColor,),
+              Icon(
+                Icons.notifications_active,
+                color: AppColors.primaryColor,
+              ),
               Gap(10),
               Text(
                 "Check out this new Video",
@@ -67,15 +70,17 @@ class _VideoCardState extends State<VideoCard> {
             ],
           ),
         ),
-        Card(
-          color: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.shade300)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding:  EdgeInsets.only(left: 15, right: 15, top: 15,bottom: 5),
                 child: Row(
                   children: [
                     CircleAvatar(
@@ -190,7 +195,6 @@ class _VideoCardState extends State<VideoCard> {
                                 title: widget.title, link: widget.videoUrl)
                             .shareOnSocialMedia(context, "twitter"),
                         "twitter"),
-                    Spacer(),
                     _socialButton(
                         Icons.share,
                         Colors.black54,

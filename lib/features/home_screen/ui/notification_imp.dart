@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/widgets/video_card.dart';
 
@@ -13,6 +14,7 @@ class NotificationImp extends ConsumerWidget {
     final notificationResponse = ref.watch(futureNotificatonProvider);
     return Scaffold(
       appBar: AppBar(
+foregroundColor: Colors.white,
         centerTitle: true,
         title: Text(
           "Notifications",
@@ -22,7 +24,7 @@ class NotificationImp extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.primaryColor,
         elevation: 0,
       ),
       body: Padding(

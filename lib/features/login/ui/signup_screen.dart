@@ -14,8 +14,11 @@ class SignupScreen extends ConsumerStatefulWidget {
 class _SignupScreenState extends ConsumerState<SignupScreen> {
   String _selectedGender = 'Male';
   bool _isPasswordVisible = false;
-  final _emailController = TextEditingController();
+  final _phoneNoController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  String? _emailErrorText;
+  bool isEmailEmpty = true;
   String? _mobileErrorText;
   String? _passwordErrorText;
   bool ismobileNumeberEmpty = true;
@@ -23,9 +26,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   @override
   void initState() {
-    _emailController.addListener(() {
+    _phoneNoController.addListener(() {
       setState(() {
-        ismobileNumeberEmpty = _emailController.text.trim().length < 10;
+        ismobileNumeberEmpty = _phoneNoController.text.trim().length < 10;
         _mobileErrorText =
             ismobileNumeberEmpty ? 'Mobile number should be 10 digits' : null;
       });
@@ -37,7 +40,19 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             isPasswordEmpty ? 'Password should be minimum 8 characters' : null;
       });
     });
+    _emailController.addListener(() {
+      setState(() {
+        isEmailEmpty = !isValidEmail(_emailController.text);
+        _emailErrorText = isEmailEmpty ? "email should be valid" : null;
+      });
+    });
     super.initState();
+  }
+
+  bool isValidEmail(String email) {
+    final emailRegex =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    return emailRegex.hasMatch(email);
   }
 
   @override
@@ -143,7 +158,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                       SizedBox(height: 8),
                       TextField(
-                        controller: _emailController,
+                        controller: _phoneNoController,
                         onChanged: (value) {
                           notifier.updateMobileNumber(value);
                         },
@@ -183,10 +198,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                       SizedBox(height: 8),
                       TextField(
+                        controller: _emailController,
                         onChanged: (value) {
                           notifier.updateEmail(value);
                         },
                         decoration: InputDecoration(
+                          errorText: _emailErrorText,
                           hintText: 'Enter Your email Id',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -241,7 +258,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (_passwordErrorText != null ||
-                          _mobileErrorText != null) {
+                          _mobileErrorText != null ||
+                          _emailErrorText != null) {
                         return;
                       }
                       Navigator.push(

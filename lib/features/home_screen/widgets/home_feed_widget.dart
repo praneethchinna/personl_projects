@@ -74,7 +74,8 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
                   onTap: () async {
                     final Uri url = Uri.parse("https://twitter.com/hashtag/$e");
                     if (await canLaunchUrl(url)) {
-                      await launchUrl(url, mode: LaunchMode.externalApplication);
+                      await launchUrl(url,
+                          mode: LaunchMode.externalApplication);
                     }
                   },
                   child: Container(
@@ -113,8 +114,15 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
       links.add(url);
       value = value.replaceAll(url, "");
     }
-    description = value = value.replaceAll("<br>", "");
-    ;
+    description = replaceBrWithNewLine(value);
+  }
+
+  String replaceBrWithNewLine(String input) {
+    // Replace multiple <br> tags with a single new line
+    String formatted = input.replaceAll(RegExp(r'(<br\s*/?>\s*)+'), '\n\n');
+
+    // Trim any extra new lines at the start and end
+    return formatted.trim();
   }
 
   @override

@@ -12,6 +12,7 @@ import 'package:ysr_project/features/gallery/ui/gallary_ui.dart';
 import 'package:ysr_project/features/home_screen/helper_class/logout_invalidate_providers.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/ui/notifications_ui.dart';
+import 'package:ysr_project/features/home_screen/widgets/video_card.dart';
 import 'package:ysr_project/services/http_networks/dio_provider.dart';
 
 class MoreScreen extends ConsumerWidget {
@@ -80,69 +81,48 @@ class MoreScreen extends ConsumerWidget {
                     },
                     child:
                         _buildMenuItem(Icons.photo, "Gallery", Colors.purple)),
-                ExpansionTile(
-                    collapsedBackgroundColor: Colors.white,
-                    backgroundColor: Colors.white,
-                    collapsedShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    title: Text("Youtube"),
-                    leading: Icon(
-                      MdiIcons.youtube,
-                      color: Colors.red,
-                      size: 30,
-                    ),
-                    initiallyExpanded: true,
-                    children:
-                        ref.watch(specialVideoProvider).when(data: (data) {
-                      return List.generate(
-                          data.length,
-                          (index) => Container(
-                                margin: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                  border:
-                                      Border.all(color: Colors.grey.shade300),
-                                ),
-                                child: ListTile(
-                                  title: Text(data[index].title),
-                                  leading: Icon(
-                                    MdiIcons.youtube,
-                                    color: Colors.deepOrange,
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4),
+                  child: ExpansionTile(
+                      collapsedBackgroundColor: Colors.white,
+                      backgroundColor: Colors.white,
+                      collapsedShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      title: Text("Special videos"),
+                      leading: Icon(
+                        MdiIcons.youtube,
+                        color: Colors.red,
+                        size: 30,
+                      ),
+                      initiallyExpanded: true,
+                      children:
+                          ref.watch(specialVideoProvider).when(data: (data) {
+                        return List.generate(
+                            data.length,
+                            (index) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  child: VideoCard(
+                                    title: data[index].title,
+                                    onShare: () {},
+                                    subtitle: "",
+                                    videoUrl: data[index].videoUrl,
+                                    postedDate: data[index].createdTime,
                                   ),
-                                  subtitle: SelectableText(
-                                    data[index].videoUrl,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline),
-                                    onTap: () async {
-                                      await launchTheUrl(data[index].videoUrl);
-                                    },
-                                  ),
-                                  trailing: IconButton(
-                                    icon: Icon(
-                                      Icons.play_circle_fill_outlined,
-                                      color: AppColors.primaryColor,
-                                    ),
-                                    onPressed: () async {
-                                      await launchTheUrl(data[index].videoUrl);
-                                    },
-                                  ),
-                                ),
-                              ));
-                    }, error: (e, s) {
-                      return [SizedBox.shrink()];
-                    }, loading: () {
-                      return List.generate(
-                          4,
-                          (index) => Skeletonizer(
-                                enabled: true,
-                                child: _buildMenuItem(
-                                    Icons.live_tv, "Live", Colors.red),
-                              ));
-                    })),
+                                ));
+                      }, error: (e, s) {
+                        return [SizedBox.shrink()];
+                      }, loading: () {
+                        return List.generate(
+                            4,
+                            (index) => Skeletonizer(
+                                  enabled: true,
+                                  child: _buildMenuItem(
+                                      Icons.live_tv, "Live", Colors.red),
+                                ));
+                      })),
+                ),
                 _buildMenuItem(Icons.help, "Help", Colors.orange),
                 _buildMenuItem(Icons.people, "Grievance", Colors.brown),
                 _buildMenuItem(Icons.share, "Share", Colors.blueGrey),
