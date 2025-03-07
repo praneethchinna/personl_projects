@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "527923106789",
-    "project_id": "weysrcpfcm",
-    "storage_bucket": "weysrcpfcm.firebasestorage.app"
+    "project_number": "261839471016",
+    "project_id": "weysrcpapplogin",
+    "storage_bucket": "weysrcpapplogin.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:527923106789:android:1e0e0bb58e534d7c3b950c",
+        "mobilesdk_app_id": "1:261839471016:android:3a8c2725d36ff7e341dd9d",
         "android_client_info": {
           "package_name": "com.example.ysr_project"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDxHQnc0wZmSLpcqsHQK9mJMyOuaJ0P7y4"
+          "current_key": "AIzaSyBq0KCZmngTgtdStwjwnpmH7111yByxGfY"
         }
       ],
       "services": {

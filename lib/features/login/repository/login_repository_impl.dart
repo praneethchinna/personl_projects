@@ -13,26 +13,13 @@ class LoginRepositoryImpl {
   LoginRepositoryImpl({required this.dio, required this.ref});
 
   Future<bool> login(String email, String password) async {
-    final prefs = await ref.read(sharedPreferencesProvider.future);
     try {
       final response = await dio
           .post('/login', data: {'mobile': email, 'password': password});
 
       if (response.statusCode == 200) {
-        prefs.setString("userData", jsonEncode(response.data));
-        final userRealData = response.data;
-        ref.read(userProvider.notifier).update(
-              (state) => User(
-                message: userRealData['message'],
-                userId: userRealData['user_id'],
-                name: userRealData['name'],
-                role: userRealData['role'],
-                mobile: userRealData['mobile'],
-                parliament: userRealData['parliament'],
-                constituency: userRealData['constituency'],
-              ),
-            );
-        return true;
+        final value = await updateUserData(response);
+        return value;
       } else if (response.statusCode == 422) {
         return throw Exception("Failed to login");
       }
@@ -67,6 +54,42 @@ class LoginRepositoryImpl {
       return throw Exception(e.response!.data['detail']);
     } catch (e) {
       return throw Exception("Failed to SignUp");
+    }
+  }
+
+  Future<bool> signInGoogleWithEmail(String email) async {
+    try {
+      final response = await dio.post("/auth/email", data: {"email": email});
+
+      if (response.statusCode == 200 && response.data['user_id'] != null) {
+        final value = await updateUserData(response);
+        return value;
+      }
+      return false;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<bool> updateUserData(dynamic response) async {
+    try {
+      final prefs = await ref.read(sharedPreferencesProvider.future);
+      prefs.setString("userData", jsonEncode(response.data));
+      final userRealData = response.data;
+      ref.read(userProvider.notifier).update(
+            (state) => User(
+              message: userRealData['message'],
+              userId: userRealData['user_id'],
+              name: userRealData['name'],
+              role: userRealData['role'],
+              mobile: userRealData['mobile'],
+              parliament: userRealData['parliament'],
+              constituency: userRealData['constituency'],
+            ),
+          );
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }

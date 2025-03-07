@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -6,6 +9,7 @@ import 'package:ysr_project/features/home_screen/ui/home_tab_screen.dart';
 import 'package:ysr_project/features/login/providers/repo_providers.dart';
 import 'package:ysr_project/features/login/ui/signup_screen.dart';
 import 'package:ysr_project/features/widget/show_error_dialog.dart';
+import 'package:ysr_project/services/google_sign_in/google_sign_in_helper.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -15,6 +19,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  UserCredential? userCredential;
   bool _isPasswordVisible = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -200,7 +205,43 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   )),
                   SizedBox(height: 20),
                   OutlinedButton.icon(
-                    onPressed: () {},
+                    onPressed: () async {
+                      EasyLoading.show();
+                      signInWithGoogle().then((result) async {
+                        userCredential = result;
+                        if (userCredential == null) {
+                          EasyLoading.dismiss();
+                          throw Error();
+                        }
+                        final value = userCredential?.user?.email;
+                        return ref
+                            .read(repoProvider)
+                            .signInGoogleWithEmail(value!);
+                      }).then((value) {
+                        if (value) {
+                          _showSuccessDialog(context);
+                        } else {
+                          final name = userCredential?.user?.displayName;
+                          final email = userCredential?.user?.email;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignupScreen(
+                                      email: email,
+                                      name: name,
+                                    )),
+                          );
+                        }
+                      }).catchError((e, stack) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignupScreen()),
+                        );
+                      }).whenComplete(() {
+                        EasyLoading.dismiss();
+                      });
+                    },
                     icon: Image.asset('assets/google2.png', height: 35),
                     label: Text(
                       'Sign in with Google',
@@ -264,6 +305,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _showSuccessDialog(BuildContext context) {
+    EasyLoading.dismiss();
     showDialog(
       context: context,
       barrierDismissible: false, // Prevent closing manually

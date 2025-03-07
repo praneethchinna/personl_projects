@@ -13,6 +13,7 @@ class VideoCard extends StatefulWidget {
   final VoidCallback onShare;
   final DateTime postedDate;
   final String? channelName;
+  final bool showChannelName;
 
   const VideoCard(
       {super.key,
@@ -21,7 +22,8 @@ class VideoCard extends StatefulWidget {
       required this.subtitle,
       required this.onShare,
       required this.postedDate,
-      this.channelName});
+      this.channelName,
+      this.showChannelName = true});
 
   @override
   State<VideoCard> createState() => _VideoCardState();
@@ -49,6 +51,7 @@ class _VideoCardState extends State<VideoCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
+        if(widget.showChannelName)
         ListTile(
           leading: Icon(
             Icons.notifications_active,
@@ -173,27 +176,41 @@ class _VideoCardState extends State<VideoCard> {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                child: Wrap(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _socialButton(FontAwesomeIcons.whatsapp, Colors.green, () {
-                      ShareCard(title: widget.title, link: widget.videoUrl)
-                          .shareOnSocialMedia(context, "whatsapp");
-                    }, "Whatsapp"),
-                    _socialButton(
-                        FontAwesomeIcons.facebook,
-                        Colors.blue,
-                        () => ShareCard(
-                                title: widget.title, link: widget.videoUrl)
-                            .shareOnSocialMedia(context, "facebook"),
-                        "facebook"),
-                    _socialButton(
-                        FontAwesomeIcons.twitter,
-                        Colors.lightBlue,
-                        () => ShareCard(
-                                title: widget.title, link: widget.videoUrl)
-                            .shareOnSocialMedia(context, "twitter"),
-                        "twitter"),
+                    GestureDetector(
+                      onTap: () {
+                        ShareCard(title: widget.title, link: widget.videoUrl)
+                            .launchURL(context);
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.watch_later_outlined),
+                          Gap(10),
+                          Text("watch Now")
+                        ],
+                      ),
+                    ),
+                    // _socialButton(FontAwesomeIcons.whatsapp, Colors.green, () {
+                    //   ShareCard(title: widget.title, link: widget.videoUrl)
+                    //       .shareOnSocialMedia(context, "whatsapp");
+                    // }, "Whatsapp"),
+                    // _socialButton(
+                    //     FontAwesomeIcons.facebook,
+                    //     Colors.blue,
+                    //     () => ShareCard(
+                    //             title: widget.title, link: widget.videoUrl)
+                    //         .shareOnSocialMedia(context, "facebook"),
+                    //     "facebook"),
+                    // _socialButton(
+                    //     FontAwesomeIcons.twitter,
+                    //     Colors.lightBlue,
+                    //     () => ShareCard(
+                    //             title: widget.title, link: widget.videoUrl)
+                    //         .shareOnSocialMedia(context, "twitter"),
+                    //     "twitter"),
                     _socialButton(
                         Icons.share,
                         Colors.black54,

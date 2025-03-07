@@ -42,6 +42,12 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
   List<String> hashTags = [];
   String _currentUrl = "";
 
+  @override
+  void initState() {
+    super.initState();
+    updateDescriptionAndLink();
+  }
+
   Widget buildLinks(List<String> links) {
     return Padding(
       padding: EdgeInsets.only(left: 10),
@@ -130,7 +136,6 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
 
   @override
   Widget build(BuildContext context) {
-    updateDescriptionAndLink();
     final userData = ref.watch(userProvider);
     final notifier = ref.read(homeFeedNotifierProvider.notifier);
     return Container(

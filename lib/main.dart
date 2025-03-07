@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,7 +10,9 @@ import 'package:ysr_project/features/home_screen/ui/home_tab_screen.dart';
 import 'package:ysr_project/features/login/ui/login_screen.dart';
 import 'package:ysr_project/services/user/user_data.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     ProviderScope(
       child: const MyApp(),
@@ -39,7 +42,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor:
             Colors.grey.shade200, // Background color for Scaffold
@@ -84,10 +88,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     // Create scale animation
     //use elasticout for better effect
     _scaleAnimation = Tween<double>(begin: 0.1, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.elasticInOut
-      ),
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticInOut),
     );
 
     // Start the animation

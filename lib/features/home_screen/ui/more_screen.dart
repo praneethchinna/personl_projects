@@ -12,6 +12,7 @@ import 'package:ysr_project/features/gallery/ui/gallary_ui.dart';
 import 'package:ysr_project/features/home_screen/helper_class/logout_invalidate_providers.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/ui/notifications_ui.dart';
+import 'package:ysr_project/features/home_screen/ui/special_videos_page.dart';
 import 'package:ysr_project/features/home_screen/widgets/video_card.dart';
 import 'package:ysr_project/services/http_networks/dio_provider.dart';
 
@@ -81,48 +82,14 @@ class MoreScreen extends ConsumerWidget {
                     },
                     child:
                         _buildMenuItem(Icons.photo, "Gallery", Colors.purple)),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4),
-                  child: ExpansionTile(
-                      collapsedBackgroundColor: Colors.white,
-                      backgroundColor: Colors.white,
-                      collapsedShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      title: Text("Special videos"),
-                      leading: Icon(
-                        MdiIcons.youtube,
-                        color: Colors.red,
-                        size: 30,
-                      ),
-                      initiallyExpanded: true,
-                      children:
-                          ref.watch(specialVideoProvider).when(data: (data) {
-                        return List.generate(
-                            data.length,
-                            (index) => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 10),
-                                  child: VideoCard(
-                                    title: data[index].title,
-                                    onShare: () {},
-                                    subtitle: "",
-                                    videoUrl: data[index].videoUrl,
-                                    postedDate: data[index].createdTime,
-                                  ),
-                                ));
-                      }, error: (e, s) {
-                        return [SizedBox.shrink()];
-                      }, loading: () {
-                        return List.generate(
-                            4,
-                            (index) => Skeletonizer(
-                                  enabled: true,
-                                  child: _buildMenuItem(
-                                      Icons.live_tv, "Live", Colors.red),
-                                ));
-                      })),
-                ),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SpecialVideosPage(),
+                      ));
+                    },
+                    child: _buildMenuItem(
+                        MdiIcons.youtube, "Special Videos", Colors.redAccent)),
                 _buildMenuItem(Icons.help, "Help", Colors.orange),
                 _buildMenuItem(Icons.people, "Grievance", Colors.brown),
                 _buildMenuItem(Icons.share, "Share", Colors.blueGrey),

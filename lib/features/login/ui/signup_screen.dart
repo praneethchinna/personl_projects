@@ -5,7 +5,9 @@ import 'package:ysr_project/features/login/providers/login_provider.dart';
 import 'package:ysr_project/features/login/ui/select_location_screen.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
-  const SignupScreen({super.key});
+  final String? email;
+  final String? name;
+  const SignupScreen({super.key, this.email, this.name});
 
   @override
   _SignupScreenState createState() => _SignupScreenState();
@@ -14,18 +16,29 @@ class SignupScreen extends ConsumerStatefulWidget {
 class _SignupScreenState extends ConsumerState<SignupScreen> {
   String _selectedGender = 'Male';
   bool _isPasswordVisible = false;
+  late TextEditingController _nameController;
   final _phoneNoController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _emailController = TextEditingController();
+  late TextEditingController _emailController;
   String? _emailErrorText;
   bool isEmailEmpty = true;
   String? _mobileErrorText;
   String? _passwordErrorText;
   bool ismobileNumeberEmpty = true;
   bool isPasswordEmpty = true;
+  bool isNameEmpty = true;
 
   @override
   void initState() {
+    isNameEmpty = widget.name == null;
+
+    _emailController = TextEditingController(text: widget.email ?? "");
+    _nameController = TextEditingController(text: widget.name ?? "");
+    _nameController.addListener(() {
+      setState(() {
+        isNameEmpty = _nameController.text.isEmpty;
+      });
+    });
     _phoneNoController.addListener(() {
       setState(() {
         ismobileNumeberEmpty = _phoneNoController.text.trim().length < 10;
@@ -133,11 +146,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                       SizedBox(height: 8),
                       TextField(
+                        controller: _nameController,
                         onChanged: (value) {
                           notifier.updateFullName(value);
                         },
                         decoration: InputDecoration(
                           hintText: 'Enter Your Full Name',
+                          hintStyle: TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -165,6 +180,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                           hintText: 'Enter Your Mobile Number',
+                          hintStyle: TextStyle(color: Colors.grey),
                           errorText: _mobileErrorText,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -205,6 +221,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         decoration: InputDecoration(
                           errorText: _emailErrorText,
                           hintText: 'Enter Your email Id',
+                          hintStyle: TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -232,6 +249,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         obscureText: _isPasswordVisible,
                         decoration: InputDecoration(
                           hintText: 'Password',
+                          hintStyle: TextStyle(color: Colors.grey),
                           errorText: _passwordErrorText,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -257,9 +275,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () {
-                      if (_passwordErrorText != null ||
-                          _mobileErrorText != null ||
-                          _emailErrorText != null) {
+                      if (isNameEmpty ||
+                          isEmailEmpty ||
+                          isPasswordEmpty ||
+                          ismobileNumeberEmpty) {
                         return;
                       }
                       Navigator.push(
