@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,10 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/home_screen/ui/home_tab_screen.dart';
+import 'package:ysr_project/features/login/providers/login_provider.dart';
 import 'package:ysr_project/features/login/providers/repo_providers.dart';
+import 'package:ysr_project/features/login/ui/forgot_password/forgot_otp_screen.dart';
+import 'package:ysr_project/features/login/ui/otp_screen.dart';
 import 'package:ysr_project/features/login/ui/signup_screen.dart';
 import 'package:ysr_project/features/widget/show_error_dialog.dart';
 import 'package:ysr_project/services/google_sign_in/google_sign_in_helper.dart';
@@ -138,7 +142,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgotOtpScreen()));
+                      },
                       child: Text('Forgot Password?',
                           style: TextStyle(
                               decoration: TextDecoration.underline,
@@ -206,6 +215,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   SizedBox(height: 20),
                   OutlinedButton.icon(
                     onPressed: () async {
+                      if (Platform.isIOS) {
+                        return;
+                      }
                       EasyLoading.show();
                       signInWithGoogle().then((result) async {
                         userCredential = result;
@@ -223,6 +235,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         } else {
                           final name = userCredential?.user?.displayName;
                           final email = userCredential?.user?.email;
+                          final notifier = ref.read(signupProvider.notifier);
+                          notifier.updateEmail(email ?? "");
+                          notifier.updateFullName(name ?? "");
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -233,11 +248,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           );
                         }
                       }).catchError((e, stack) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignupScreen()),
+                        showDialog(
+                          context: context,
+                          builder: (builder) => ErrorDialog(
+                            title: 'Error',
+                            message: e.toString(),
+                          ),
                         );
+
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => SignupScreen()),
+                        // );
                       }).whenComplete(() {
                         EasyLoading.dismiss();
                       });
@@ -247,24 +270,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       'Sign in with Google',
                       style: TextStyle(
                           fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 12),
-                  OutlinedButton.icon(
-                    onPressed: () {},
-                    icon: Image.asset('assets/facebook2.png', height: 35),
-                    label: Text(
-                      'Sign in with Facebook',
-                      style: TextStyle(
-                          fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: Colors.black),
                     ),
@@ -285,7 +290,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SignupScreen()),
+                                builder: (context) => OtpScreen()),
                           );
                         },
                         child: Text(

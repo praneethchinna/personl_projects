@@ -41,10 +41,10 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
                     "Select the events: ",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  Spacer(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
+                      width: 200,
                       decoration: BoxDecoration(
                         border: Border.all(color: AppColors.primaryColor),
                         borderRadius: BorderRadius.circular(10),
@@ -52,6 +52,7 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: DropdownButton<String>(
+                          isExpanded: true,
                           value: viewModel.eventName,
                           onChanged: (String? newValue) {
                             notifier.updateEvent(newValue!);
@@ -71,12 +72,12 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
                               ),
                             );
                           }).toList(),
-                          icon: Icon(
-                            Icons.keyboard_arrow_down,
-                            color: AppColors.primaryColor,
-                          ),
-                          iconSize: 24,
-                          underline: Container(),
+                          // icon: Icon(
+                          //   Icons.keyboard_arrow_down,
+                          //   color: AppColors.primaryColor,
+                          // ),
+                          // iconSize: 24,
+                          // underline: Container(),
                         ),
                       ),
                     ),

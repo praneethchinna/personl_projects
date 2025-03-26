@@ -26,6 +26,7 @@ class HomeFeedsResponseModel {
     required this.shareCount,
     required this.comments,
     required this.postType,
+    required this.pinnedPost
   });
 
   factory HomeFeedsResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -51,6 +52,7 @@ class HomeFeedsResponseModel {
         comments: List<Comment>.from((json["comments"] ?? [])
             .map((x) => Comment.fromJson(x as Map<String, dynamic>))),
         postType: json["post_type"] ?? "",
+        pinnedPost: json["pinned_post"] ?? false
       );
 
   String batchId;
@@ -68,6 +70,7 @@ class HomeFeedsResponseModel {
   int shareCount;
   List<Comment> comments;
   String postType;
+  bool pinnedPost;
 }
 
 class Media {

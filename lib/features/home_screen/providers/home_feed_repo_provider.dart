@@ -1,6 +1,8 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/features/home_screen/repository/home_feeds_repo_impl.dart';
+import 'package:ysr_project/features/home_screen/response_model/influencer_video_response_model.dart';
 import 'package:ysr_project/features/home_screen/response_model/notification_response_model.dart';
+import 'package:ysr_project/features/home_screen/response_model/pdf_files_response_model.dart';
 import 'package:ysr_project/features/home_screen/response_model/special_points.dart';
 import 'package:ysr_project/features/home_screen/response_model/special_videos.dart';
 import 'package:ysr_project/features/home_screen/response_model/user_points_response_model.dart';
@@ -32,4 +34,15 @@ final asyncUrlProvider = FutureProvider<String>((ref) async {
 final specialVideoProvider =
     FutureProvider.autoDispose<List<SpecialVideos>>((ref) async {
   return ref.read(homeFeedRepoProvider).getSpecialVideos();
+});
+
+final influencerVideoProvider =
+    FutureProvider.autoDispose<List<InfluencerVideoResponseModel>>(
+        (ref) async {
+  return ref.read(homeFeedRepoProvider).getInfluencerVideos();
+});
+
+final pdfFilesProvider =
+    FutureProvider.autoDispose<List<PdfFilesResponseModel>>((ref) async {
+  return ref.read(homeFeedRepoProvider).getPdfFiles();
 });

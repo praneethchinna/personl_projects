@@ -11,6 +11,8 @@ import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/gallery/ui/gallary_ui.dart';
 import 'package:ysr_project/features/home_screen/helper_class/logout_invalidate_providers.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
+import 'package:ysr_project/features/home_screen/response_model/pdf_ui.dart';
+import 'package:ysr_project/features/home_screen/ui/influencer_video_ui.dart';
 import 'package:ysr_project/features/home_screen/ui/notifications_ui.dart';
 import 'package:ysr_project/features/home_screen/ui/special_videos_page.dart';
 import 'package:ysr_project/features/home_screen/widgets/video_card.dart';
@@ -90,6 +92,22 @@ class MoreScreen extends ConsumerWidget {
                     },
                     child: _buildMenuItem(
                         MdiIcons.youtube, "Special Videos", Colors.redAccent)),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => InfluencerVideoUI(),
+                      ));
+                    },
+                    child: _buildMenuItem(Icons.person_pin_outlined,
+                        "Influencer Videos", Colors.deepOrangeAccent)),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PdfListWidget(),
+                      ));
+                    },
+                    child: _buildMenuItem(
+                        Icons.picture_as_pdf, "Important PDF's", Colors.red)),
                 _buildMenuItem(Icons.help, "Help", Colors.orange),
                 _buildMenuItem(Icons.people, "Grievance", Colors.brown),
                 _buildMenuItem(Icons.share, "Share", Colors.blueGrey),

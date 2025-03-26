@@ -7,7 +7,8 @@ import 'package:ysr_project/features/login/ui/select_location_screen.dart';
 class SignupScreen extends ConsumerStatefulWidget {
   final String? email;
   final String? name;
-  const SignupScreen({super.key, this.email, this.name});
+  final String? phone;
+  const SignupScreen({super.key, this.email, this.name, this.phone});
 
   @override
   _SignupScreenState createState() => _SignupScreenState();
@@ -31,9 +32,16 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   @override
   void initState() {
     isNameEmpty = widget.name == null;
+    isEmailEmpty = widget.email == null;
+
+    if (widget.phone != null) {
+      ismobileNumeberEmpty = false;
+      _phoneNoController.text = widget.phone ?? "";
+    }
 
     _emailController = TextEditingController(text: widget.email ?? "");
     _nameController = TextEditingController(text: widget.name ?? "");
+
     _nameController.addListener(() {
       setState(() {
         isNameEmpty = _nameController.text.isEmpty;

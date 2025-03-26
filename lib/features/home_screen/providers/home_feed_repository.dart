@@ -67,7 +67,8 @@ class HomeFeedNotifer extends StateNotifier<HomeViewModel> {
                   userName: c.userName,
                 ))
             .toList(),
-        postType: responseModel.postType);
+        postType: responseModel.postType,
+        pinnedPost: responseModel.pinnedPost);
   }
 
   void updateComments(int index, String comment) {

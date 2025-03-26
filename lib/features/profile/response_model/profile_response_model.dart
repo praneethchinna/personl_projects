@@ -25,6 +25,9 @@ class User {
   final String parliament;
   final String mobile;
   final String gender;
+  final String country;
+  final String referralCode;
+  final String state;
 
   User({
     this.userId = 0,
@@ -35,29 +38,37 @@ class User {
     this.parliament = '',
     this.mobile = '',
     this.gender = '',
+    this.country="",
+    this.referralCode="",
+    this.state="",
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        userId: json['user_id'] as int? ?? 0,
-        name: json['name'] as String? ?? '',
-        constituency: json['constituency'] as String? ?? '',
-        email: json['email'] as String? ?? '',
-        role: json['role'] as String? ?? '',
-        parliament: json['parliament'] as String? ?? '',
-        mobile: json['mobile'] as String? ?? '',
-        gender: json['gender'] as String? ?? '',
+        userId: json['user_id'] ?? 0,
+        name: json['name'] ?? '',
+        constituency: json['constituency'] ?? '',
+        email: json['email'] ?? '',
+        role: json['role'] ?? '',
+        parliament: json['parliament'] ?? '',
+        mobile: json['mobile'] ?? '',
+        gender: json['gender'] ?? '',
+        country: json['country'] ?? '',
+        referralCode: json['referral_code'] ?? '',
+        state: json['state'] ?? '',
       );
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['user_id'] = userId;
-    data['name'] = name;
-    data['constituency'] = constituency;
-    data['email'] = email;
-    data['role'] = role;
-    data['parliament'] = parliament;
-    data['mobile'] = mobile;
-    data['gender'] = gender;
-    return data;
+    return {
+      'user_id': userId,
+      'name': name,
+      'constituency': constituency,
+      'email': email,
+      'role': role,
+      'parliament': parliament,
+      'mobile': mobile,
+      'gender': gender,
+      'country': country,
+      'referral_code': referralCode,
+    };
   }
 }

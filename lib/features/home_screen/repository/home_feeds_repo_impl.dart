@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/features/home_screen/response_model/home_feeds_response_model.dart';
+import 'package:ysr_project/features/home_screen/response_model/influencer_video_response_model.dart';
 import 'package:ysr_project/features/home_screen/response_model/notification_response_model.dart';
+import 'package:ysr_project/features/home_screen/response_model/pdf_files_response_model.dart';
 import 'package:ysr_project/features/home_screen/response_model/special_points.dart';
 import 'package:ysr_project/features/home_screen/response_model/special_videos.dart';
 import 'package:ysr_project/features/home_screen/response_model/user_points_response_model.dart';
@@ -121,6 +123,74 @@ class HomeFeedsRepoImpl {
       }
     } catch (e) {
       throw Exception("Failed to fetch Special Videos");
+    }
+  }
+
+  Future<List<InfluencerVideoResponseModel>> getInfluencerVideos() async {
+    try {
+      final response = await dio.get('/check_videos');
+      if (response.statusCode == 200) {
+        final listOfVideos = response.data["latest_videos"] as List;
+        return listOfVideos
+            .map((element) => InfluencerVideoResponseModel.fromJson(element))
+            .toList();
+      } else {
+        throw Exception("Failed to fetch Influencer Videos");
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch Influencer Videos");
+    }
+  }
+
+  Future<List<PdfFilesResponseModel>> getPdfFiles() async {
+    try {
+      final response = await dio.get('/list-pdfs/');
+      if (response.statusCode == 200) {
+        final listOfVideos = response.data["files"] as List;
+        return listOfVideos
+            .map((element) => PdfFilesResponseModel.fromJson(element))
+            .toList();
+      } else {
+        throw Exception("Failed to fetch Pdf Files");
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch Pdf Files");
+    }
+  }
+
+  Future<bool> updateProfileDetails({
+    required String name,
+    required String email,
+    required String gender,
+    required String country,
+    required String state,
+    required String parliament,
+    required String constituency,
+  }) async {
+    try {
+
+   final queryParameters = {
+        'name': name,
+    'email': email,
+    'gender': gender,
+    'country': country,
+    'state': state,
+    'parliament': parliament,
+    'constituency': constituency,
+  };
+      final userData = ref.read(userProvider);
+      final response = await dio.put('/user/update-profile', queryParameters: {
+        "mobile": userData.mobile
+      }, data: queryParameters);
+      if (response.statusCode == 200) {
+
+
+        return true;
+      } else {
+        throw Exception("Failed to update profile details");
+      }
+    } catch (e) {
+      throw Exception("Failed to update profile details");
     }
   }
 }

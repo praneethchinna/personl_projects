@@ -152,6 +152,14 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
+                if (widget.item.pinnedPost) ...[
+                  Gap(5),
+                  Icon(
+                    Icons.push_pin_sharp,
+                    color: AppColors.primaryColor,
+                  ),
+                  Gap(5)
+                ],
                 CircleAvatar(
                   backgroundImage:
                       AssetImage("assets/image_2.png"), // Change as needed

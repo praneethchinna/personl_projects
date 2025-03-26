@@ -9,8 +9,10 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/home_screen/helper_class/logout_invalidate_providers.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
+import 'package:ysr_project/features/home_screen/ui/notifications_ui.dart';
 import 'package:ysr_project/features/home_screen/widgets/multi_level_progress_widgets.dart';
 import 'package:ysr_project/features/profile/provider/profileProvider.dart';
+import 'package:ysr_project/features/profile/ui/profile_edit.dart';
 
 class UserProfileUI extends ConsumerWidget {
   final String phoneNumber;
@@ -27,10 +29,36 @@ class UserProfileUI extends ConsumerWidget {
             "Profile",
           ),
           centerTitle: true,
+          actions: [
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProfileEdit(
+                                phoneNumber: phoneNumber,
+                              )));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.edit),
+                      Gap(10),
+                      Text(
+                        "Edit",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ))
+          ],
         ),
         body: profileData.when(
             data: (value) {
-              final data = value.user!;
+              final data = value;
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -90,8 +118,71 @@ class UserProfileUI extends ConsumerWidget {
                           ),
                           error: (_, __) => SizedBox.shrink(),
                         ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 20),
                     // User Details
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 170,
+                            child: TextField(
+                              readOnly: true, // Make it non-editable
+                              controller: TextEditingController(
+                                  text: data.referralCode),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              decoration: InputDecoration(
+                                labelText: "Referral code",
+                                labelStyle: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.grey.shade800,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                filled: true,
+                                fillColor: Colors.blueGrey[50],
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                  borderSide:
+                                      BorderSide(color: Colors.grey.shade400),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 15),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              String link =
+                                  "Check out this video: referral tv\nJoin our platform using my referral code${data.referralCode} and earn Signup bonus of 100 points and Referral Bonus of 50 points! Sign up here: https://drive.google.com/file/d/1lVrEEKee_4toRpCMYhPvrJdpakUpaVpm/view?usp=drive_link";
+                              ShareCard(title: "referral tv", link: link)
+                                  .shareOnSocialMedia(context, "whatsapp");
+                            },
+                            child: Chip(
+                              label: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text("Share on"),
+                                  Gap(10),
+                                  Icon(
+                                    MdiIcons.whatsapp,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ),
+                              backgroundColor: Colors.green,
+                              labelStyle:
+                                  TextStyle(color: Colors.white, fontSize: 17),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20),
                     if (data.name.isNotEmpty) ...[
                       ProfileCard(
                         icon: LucideIcons.user,
@@ -111,6 +202,13 @@ class UserProfileUI extends ConsumerWidget {
                         icon: LucideIcons.phone,
                         title: "Phone",
                         value: data.mobile,
+                      ),
+                    ],
+                    if (data.country.isNotEmpty) ...[
+                      ProfileCard(
+                        icon: LucideIcons.globe,
+                        title: "Country",
+                        value: data.country,
                       ),
                     ],
 

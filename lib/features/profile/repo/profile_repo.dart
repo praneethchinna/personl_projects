@@ -8,12 +8,13 @@ class ProfileRepo {
 
   ProfileRepo({required this.dio, required this.ref});
 
-  Future<ProfileResponseModel> getProfileData(String phoneNumber) async {
+  Future<User> getProfileData(String phoneNumber) async {
     try {
       final response = await dio
-          .get('/user/details', queryParameters: {'mobile': phoneNumber});
+          .get('/user/profile', queryParameters: {'mobile': phoneNumber});
       if (response.statusCode == 200) {
-        return ProfileResponseModel.fromJson(response.data);
+        final responseModel = User.fromJson(response.data);
+        return responseModel;
       } else {
         throw Exception('Failed to load profile data');
       }

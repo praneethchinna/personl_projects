@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 import 'package:ysr_project/permissions/android_permissions.dart';
 
 class HelperDownloadFiles {
@@ -32,7 +33,8 @@ class HelperDownloadFiles {
     }
 
     for (String url in urls) {
-      String fileName = url.split('/').last;
+      String fileType = url.split('.').last;
+      String fileName = '${_generateUuid()}.$fileType';
       String filePath = "${directory.path}/$fileName";
 
       try {
@@ -122,6 +124,11 @@ class HelperDownloadFiles {
         print("❌ Error downloading $fileName: $e");
       }
     }
+  }
+
+  static String _generateUuid() {
+    final uuid = Uuid();
+    return uuid.v4();
   }
 }
 

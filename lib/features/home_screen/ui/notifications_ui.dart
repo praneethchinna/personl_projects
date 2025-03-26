@@ -32,10 +32,12 @@ class ShareCard {
     }
   }
 
-  Future<void> shareOnSocialMedia(BuildContext context, String platform) async {
+  Future<void> shareOnSocialMedia(BuildContext context, String platform,
+      {String? sharetext}) async {
     try {
       final encodedLink = Uri.encodeComponent(link);
-      final shareText = 'Check out this video: $title\n$link';
+      String shareTitle = sharetext ?? "Check out this video";
+      final shareText = '$shareTitle: $title\n$link';
       final encodedText = Uri.encodeComponent(shareText);
 
       String? url;

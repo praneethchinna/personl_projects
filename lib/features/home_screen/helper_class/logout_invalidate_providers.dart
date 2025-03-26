@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repository.dart';
+import 'package:ysr_project/features/home_screen/ui/more_screen.dart';
 import 'package:ysr_project/features/login/ui/login_screen.dart';
 import 'package:ysr_project/features/polls/providers/polls_provider.dart';
 import 'package:ysr_project/services/google_sign_in/google_sign_in_helper.dart';
@@ -17,6 +18,7 @@ class LogoutInvalidationProvider {
       ref.invalidate(futurePointsProvider);
       ref.invalidate(homeFeedNotifierProvider);
       ref.invalidate(futureNotificatonProvider);
+      ref.invalidate(tabIndexProvider);
 
       final prefs = await ref.read(sharedPreferencesProvider.future);
       prefs.clear();
