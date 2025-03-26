@@ -290,7 +290,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => OtpScreen()),
+                                builder: (context) => SignupScreen()),
                           );
                         },
                         child: Text(
