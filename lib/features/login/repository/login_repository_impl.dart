@@ -37,7 +37,7 @@ class LoginRepositoryImpl {
   Future<bool> updateUserDetails() async {
     final signupData = ref.read(signupProvider);
     try {
-      final response = await dio.post('/signup', data: {
+      Map<String, dynamic> body = {
         "name": signupData.fullName,
         "gender": signupData.isMale ? "Male" : "Female",
         "country": signupData.country ?? "",
@@ -46,8 +46,15 @@ class LoginRepositoryImpl {
         "constituency": signupData.assembly?.assemblyId ?? 0,
         "mobile": signupData.mobileNumber,
         "email": signupData.email ?? "",
-        "password": signupData.password
-      });
+        "password": signupData.password,
+      };
+
+      if (signupData.referralCode != null &&
+          signupData.referralCode!.isNotEmpty) {
+        body["referral_code"] = signupData.referralCode;
+      }
+
+      final response = await dio.post('/signup', data: body);
 
       if (response.statusCode == 200) {
         ref.invalidate(signupProvider);

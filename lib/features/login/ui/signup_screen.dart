@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/login/providers/login_provider.dart';
+import 'package:ysr_project/features/login/providers/repo_providers.dart';
 import 'package:ysr_project/features/login/ui/select_location_screen.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
@@ -28,6 +29,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   bool ismobileNumeberEmpty = true;
   bool isPasswordEmpty = true;
   bool isNameEmpty = true;
+  final _referralCodeController = TextEditingController();
+  final _otpController = TextEditingController();
+  bool _showOtpField = false;
+  String? _otpErrorText;
+  bool _isVerifyingOtp = false;
+  bool _isOtpVerified = false;
 
   @override
   void initState() {
@@ -195,8 +202,101 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           ),
                           filled: true,
                           fillColor: Colors.grey[100],
+                          suffixIcon: !_showOtpField
+                              ? IconButton(
+                                  icon: Icon(Icons.send),
+                                  onPressed: () async {
+                                    if (_phoneNoController.text.length != 10)
+                                      return;
+
+                                    try {
+                                      final repository = ref.read(repoProvider);
+                                      final otpSent = await repository
+                                          .getOtp(_phoneNoController.text);
+                                      if (otpSent) {
+                                        setState(() {
+                                          _showOtpField = true;
+                                        });
+                                      }
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(content: Text(e.toString())),
+                                      );
+                                    }
+                                  },
+                                )
+                              : null,
                         ),
                       ),
+                      if (_showOtpField) ...[
+                        SizedBox(height: 16),
+                        TextField(
+                          controller: _otpController,
+                          keyboardType: TextInputType.number,
+                          maxLength: 6,
+                          decoration: InputDecoration(
+                            hintText: 'Enter 6-digit OTP',
+                            errorText: _otpErrorText,
+                            hintStyle: TextStyle(color: Colors.grey),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            suffixIcon: _isVerifyingOtp
+                                ? Padding(
+                                    padding: EdgeInsets.all(14),
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
+                                  )
+                                : IconButton(
+                                    icon: _isOtpVerified
+                                        ? Icon(Icons.check_circle,
+                                            color: Colors.green)
+                                        : Icon(Icons.check_circle_outline),
+                                    onPressed: () async {
+                                      if (_otpController.text.length != 6)
+                                        return;
+
+                                      setState(() {
+                                        _isVerifyingOtp = true;
+                                        _otpErrorText = null;
+                                      });
+
+                                      try {
+                                        final repository =
+                                            ref.read(repoProvider);
+                                        final verified =
+                                            await repository.verifyOtp(
+                                          _phoneNoController.text,
+                                          _otpController.text,
+                                        );
+
+                                        if (verified) {
+                                          setState(() {
+                                            _isOtpVerified = true;
+                                          });
+                                        }
+                                      } catch (e) {
+                                        setState(() {
+                                          _otpErrorText = e.toString();
+                                        });
+                                      } finally {
+                                        setState(() {
+                                          _isVerifyingOtp = false;
+                                        });
+                                      }
+                                    },
+                                  ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                   SizedBox(height: 16),
@@ -280,13 +380,41 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Referral Code (Optional)",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      SizedBox(height: 8),
+                      TextField(
+                        controller: _referralCodeController,
+                        onChanged: (value) {
+                          notifier.updateReferralCode(value);
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Enter Referral Code',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                        ),
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () {
                       if (isNameEmpty ||
                           isEmailEmpty ||
                           isPasswordEmpty ||
-                          ismobileNumeberEmpty) {
+                          ismobileNumeberEmpty ||
+                          !_isOtpVerified) {
                         return;
                       }
                       Navigator.push(

@@ -12,6 +12,7 @@ class SignupModel {
   Assembly? assembly;
   String? country;
   String? state;
+  String? referralCode;
 
   SignupModel({
     required this.fullName,
@@ -23,6 +24,7 @@ class SignupModel {
     this.assembly,
     this.country,
     this.state,
+    this.referralCode,
   });
 
   SignupModel copyWith({
@@ -35,6 +37,7 @@ class SignupModel {
     Assembly? assembly,
     String? country,
     String? state,
+    String? referralCode,
   }) =>
       SignupModel(
         fullName: fullName ?? this.fullName,
@@ -46,6 +49,7 @@ class SignupModel {
         assembly: assembly ?? this.assembly,
         country: country ?? this.country,
         state: state ?? this.state,
+        referralCode: referralCode ?? this.referralCode,
       );
 }
 
@@ -96,5 +100,9 @@ class SignupNotifier extends StateNotifier<SignupModel> {
 
   void updateEmail(String? email) {
     state = state.copyWith(email: email);
+  }
+
+  void updateReferralCode(String referralCode) {
+    state = state.copyWith(referralCode: referralCode);
   }
 }
