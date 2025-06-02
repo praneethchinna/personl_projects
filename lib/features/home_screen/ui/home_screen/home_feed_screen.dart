@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
-import 'package:ysr_project/features/home_screen/ui/feed_screen.dart';
+import 'package:ysr_project/features/home_screen/ui/home_screen/feed_screen.dart';
 import 'package:ysr_project/features/home_screen/widgets/multi_level_progress_widgets.dart';
 
 class HomeFeedScreen extends ConsumerStatefulWidget {

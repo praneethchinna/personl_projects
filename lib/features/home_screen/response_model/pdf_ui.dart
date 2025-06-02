@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -101,7 +102,7 @@ class _PdfListWidgetState extends ConsumerState<PdfListWidget> {
       appBar: AppBar(
         centerTitle: true,
         foregroundColor: Colors.white,
-        title: const Text('Important PDF Documents'),
+        title: Text('important_pdfs'.tr()),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())

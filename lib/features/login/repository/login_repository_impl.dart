@@ -21,17 +21,16 @@ class LoginRepositoryImpl {
 
       if (response.statusCode == 200) {
         return await updateUserData(response);
-      } else {
-        handleDioError(response.statusCode, response);
       }
+      throw Exception(response.data["detail"]);
+    } on DioException catch (e) {
+      if (e.response?.data != null && e.response?.data["detail"] != null) {
+        throw Exception(e.response?.data["detail"]);
+      }
+      throw Exception("An error occurred. Please try again.");
     } catch (e) {
-      if (e is DioException) {
-        handleDioError(e.response?.statusCode, e);
-      } else {
-        throw Exception("Unexpected error occurred");
-      }
+      rethrow;
     }
-    return false;
   }
 
   Future<bool> updateUserDetails() async {
@@ -108,7 +107,7 @@ class LoginRepositoryImpl {
     }
   }
 
-  Future<bool> getOtp(String mobile) async {
+  Future<bool> newUserOtp(String mobile) async {
     try {
       final response =
           await dio.post("/generate-otp", data: {"mobile": mobile});
@@ -116,12 +115,14 @@ class LoginRepositoryImpl {
         return true;
       }
       throw Exception("Failed to get otp");
+    } on DioException catch (e) {
+      throw Exception(e.response?.data["detail"] ?? "An error occurred.");
     } catch (e) {
-      throw Exception(e.toString());
+      rethrow;
     }
   }
 
-  Future<bool> verifyOtp(String mobile, String otp) async {
+  Future<bool> verifyNewUserOtp(String mobile, String otp) async {
     try {
       final response = await dio.post("/verify-otp", data: {
         "mobile": mobile,
@@ -131,8 +132,10 @@ class LoginRepositoryImpl {
         return true;
       }
       throw Exception("Failed to get otp");
+    } on DioException catch (e) {
+      throw Exception(e.response?.data["detail"] ?? "An error occurred.");
     } catch (e) {
-      throw Exception(e.toString());
+      rethrow;
     }
   }
 
@@ -143,9 +146,11 @@ class LoginRepositoryImpl {
       if (response.statusCode == 200) {
         return true;
       }
-      throw Exception("Failed to get otp");
+      throw Exception(response.data["detail"]);
+    } on DioException catch (e) {
+      throw Exception(e.response?.data["detail"] ?? "An error occurred.");
     } catch (e) {
-      throw Exception(e.toString());
+      rethrow;
     }
   }
 
@@ -158,7 +163,9 @@ class LoginRepositoryImpl {
       if (response.statusCode == 200) {
         return true;
       }
-      throw Exception("Failed to get otp");
+      throw Exception("Failed to verify forgot otp");
+    } on DioException catch (e) {
+      throw Exception(e.response?.data["detail"] ?? "An error occurred.");
     } catch (e) {
       throw Exception(e.toString());
     }

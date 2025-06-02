@@ -70,6 +70,27 @@ class HomeFeedViewModel {
         postType: postType ?? this.postType,
         pinnedPost: pinnedPost ?? this.pinnedPost
       );
+
+  static HomeFeedViewModel dummy() {
+    return HomeFeedViewModel(
+      batchId: '',
+      likeCount: 0,
+      likedUsers: [],
+      createdBy: '',
+      description: '',
+      postedDate: DateTime.now(),
+      editedBy: '',
+      editedTime: null,
+      region: '',
+      media: [],
+      commentCount: 0,
+      commentedUsers: [],
+      shareCount: 0,
+      comments: [],
+      postType: '',
+      pinnedPost: false
+    );
+  }
 }
 
 class MediaViewModel {

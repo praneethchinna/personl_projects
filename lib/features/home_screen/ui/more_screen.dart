@@ -1,22 +1,23 @@
-import 'dart:developer';
+// ignore_for_file: avoid_print
 
+import 'package:ysr_project/main.dart';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/gallery/ui/gallary_ui.dart';
 import 'package:ysr_project/features/home_screen/helper_class/logout_invalidate_providers.dart';
-import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/response_model/pdf_ui.dart';
+import 'package:ysr_project/features/home_screen/ui/grievance/girievance_tab.dart';
+import 'package:ysr_project/features/home_screen/ui/home_screen/home_tab_screen.dart';
 import 'package:ysr_project/features/home_screen/ui/influencer_video_ui.dart';
 import 'package:ysr_project/features/home_screen/ui/notifications_ui.dart';
 import 'package:ysr_project/features/home_screen/ui/special_videos_page.dart';
-import 'package:ysr_project/features/home_screen/widgets/video_card.dart';
 import 'package:ysr_project/services/http_networks/dio_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class MoreScreen extends ConsumerWidget {
   const MoreScreen({super.key});
@@ -30,6 +31,7 @@ class MoreScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(languageProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Stack(
@@ -44,9 +46,9 @@ class MoreScreen extends ConsumerWidget {
                       final response = await dio.get('/live-videos');
                       if (response.statusCode == 200) {
                         ShareCard(
-                                title: "sakshi tv",
-                                link: response.data['video_url'])
-                            .launchURL(context);
+                          title: "live".tr(),
+                          link: response.data['video_url'],
+                        ).launchURL(context);
                       }
                     } catch (e) {
                       log(e.toString());
@@ -54,64 +56,77 @@ class MoreScreen extends ConsumerWidget {
                       EasyLoading.dismiss();
                     }
                   },
-                  child: _buildMenuItem(Icons.live_tv, "Live", Colors.red),
+                  child: _buildMenuItem(Icons.live_tv, "live", Colors.red),
                 ),
                 GestureDetector(
-                    onTap: () async {
-                      ShareCard(
-                              title: "sakshi tv",
-                              link: "https://epaper.sakshi.com/")
-                          .launchURL(context);
-                    },
-                    child: _buildMenuItem(
-                        Icons.description, "E-Paper", Colors.blue)),
+                  onTap: () async {
+                    ShareCard(
+                      title: "epaper".tr(),
+                      link: "https://epaper.sakshi.com/",
+                    ).launchURL(context);
+                  },
+                  child:
+                      _buildMenuItem(Icons.description, "epaper", Colors.blue),
+                ),
                 InkWell(
-                    onTap: () {
-                      ref.read(tabIndexProvider.notifier).state = 1;
-                    },
-                    child:
-                        _buildMenuItem(Icons.bar_chart, "Poll", Colors.green)),
+                  onTap: () {
+                    ref.read(tabIndexProvider.notifier).state = 1;
+                  },
+                  child: _buildMenuItem(Icons.bar_chart, "poll", Colors.green),
+                ),
                 GestureDetector(
-                    onTap: () {
-                      ref.read(tabIndexProvider.notifier).state = 0;
-                    },
-                    child: _buildMenuItem(Icons.home, "Home", Colors.blue)),
+                  onTap: () {
+                    ref.read(tabIndexProvider.notifier).state = 0;
+                  },
+                  child: _buildMenuItem(Icons.home, "home", Colors.blue),
+                ),
                 GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => GalleryScreen(),
-                      ));
-                    },
-                    child:
-                        _buildMenuItem(Icons.photo, "Gallery", Colors.purple)),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => GalleryScreen(),
+                    ));
+                  },
+                  child: _buildMenuItem(Icons.photo, "gallery", Colors.purple),
+                ),
                 GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SpecialVideosPage(),
-                      ));
-                    },
-                    child: _buildMenuItem(
-                        MdiIcons.youtube, "Special Videos", Colors.redAccent)),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => SpecialVideosPage(),
+                    ));
+                  },
+                  child: _buildMenuItem(
+                      MdiIcons.youtube, "special_videos", Colors.redAccent),
+                ),
                 GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => InfluencerVideoUI(),
-                      ));
-                    },
-                    child: _buildMenuItem(Icons.person_pin_outlined,
-                        "Influencer Videos", Colors.deepOrangeAccent)),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => InfluencerVideoUI(),
+                    ));
+                  },
+                  child: _buildMenuItem(Icons.person_pin_outlined,
+                      "influencer_videos", Colors.deepOrangeAccent),
+                ),
                 GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PdfListWidget(),
-                      ));
-                    },
-                    child: _buildMenuItem(
-                        Icons.picture_as_pdf, "Important PDF's", Colors.red)),
-                _buildMenuItem(Icons.help, "Help", Colors.orange),
-                _buildMenuItem(Icons.people, "Grievance", Colors.brown),
-                _buildMenuItem(Icons.share, "Share", Colors.blueGrey),
-                Gap(100),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PdfListWidget(),
+                    ));
+                  },
+                  child: _buildMenuItem(
+                      Icons.picture_as_pdf, "important_pdfs", Colors.red),
+                ),
+                _buildMenuItem(Icons.help, "help", Colors.orange),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const GrievanceTab(),
+                    ));
+                  },
+                  child:
+                      _buildMenuItem(Icons.people, "grievance", Colors.brown),
+                ),
+                _buildMenuItem(Icons.share, "share", Colors.blueGrey),
+                const Gap(100),
               ],
             ),
           ),
@@ -134,11 +149,9 @@ class MoreScreen extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Logout", style: TextStyle(color: Colors.white)),
-                    Icon(
-                      Icons.logout,
-                      color: Colors.white,
-                    )
+                    Text("logout".tr(),
+                        style: const TextStyle(color: Colors.white)),
+                    const Icon(Icons.logout, color: Colors.white),
                   ],
                 ),
               ),
@@ -149,7 +162,7 @@ class MoreScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String title, Color iconColor) {
+  Widget _buildMenuItem(IconData icon, String titleKey, Color iconColor) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
@@ -158,13 +171,14 @@ class MoreScreen extends ConsumerWidget {
       ),
       child: ListTile(
         leading: Icon(icon, color: iconColor),
-        title: Text(title, style: const TextStyle(fontSize: 16)),
+        title: Text(
+          titleKey.tr(), // 🔥 Localized key here
+          style: const TextStyle(fontSize: 16),
+        ),
         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       ),
     );
   }
 }
 
-final tabIndexProvider = StateProvider<int>((ref) {
-  return 0;
-});
+final tabIndexProvider = StateProvider<int>((ref) => 0);

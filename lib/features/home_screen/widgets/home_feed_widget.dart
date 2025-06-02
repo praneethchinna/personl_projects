@@ -1,4 +1,5 @@
 import 'package:community_material_icon/community_material_icon.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -13,10 +14,12 @@ import 'package:ysr_project/features/helper/download_multiple_file.dart';
 import 'package:ysr_project/features/home_screen/helper_class/file_share_helper.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repository.dart';
+import 'package:ysr_project/features/home_screen/ui/home_screen/home_tab_screen.dart';
 import 'package:ysr_project/features/home_screen/view_model/home_feed_view_model.dart';
 import 'package:ysr_project/features/home_screen/widgets/build_platform_icons.dart';
 import 'package:ysr_project/features/home_screen/widgets/comment_widget.dart';
 import 'package:ysr_project/features/home_screen/widgets/media_carousel.dart';
+import 'package:ysr_project/main.dart';
 import 'package:ysr_project/services/user/user_data.dart';
 
 class HomeFeedWidget extends ConsumerStatefulWidget {
@@ -136,6 +139,7 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final currentLocale=ref.watch(languageProvider);
     final userData = ref.watch(userProvider);
     final notifier = ref.read(homeFeedNotifierProvider.notifier);
     return Container(
@@ -350,15 +354,11 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
                     },
                     child: _buildAction(
                         Icon(CommunityMaterialIcons.comment_outline),
-                        "comment",
+                        "comment".tr(),
                         widget.item.comments.length.toString())),
                 GestureDetector(
                     onTap: () async {
-                      List<String> urls = [];
-                      for (var element in widget.item.media) {
-                        urls.add(element.fileUrl);
-                      }
-                      await FileShareHelper().shareFiles(urls);
+                      EasyLoading.show();
                       ref
                           .read(homeFeedRepoProvider)
                           .postAction(
@@ -367,14 +367,34 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
                               userName: userData.name,
                               commentText: "",
                               shareType: "whatsapp")
-                          .then((value) {
+                          .then((value) async {
                         EasyLoading.dismiss();
                         if (value) {
-                          ref.invalidate(futurePointsProvider);
-                        } else {}
-                      }, onError: (error, stackTrace) {}).whenComplete(() {});
+                          await shareFiles();
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  "You have reached the maximum share limit for this post(10 times)"),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          await shareFiles();
+                        }
+                      }, onError: (error, stackTrace) async {
+                        EasyLoading.dismiss();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(error.toString()),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        await shareFiles();
+                      }).whenComplete(() {
+                        EasyLoading.dismiss();
+                      });
                     },
-                    child: _buildAction(Icon(Boxicons.bx_share_alt), "share",
+                    child: _buildAction(Icon(Boxicons.bx_share_alt), "share".tr(),
                         widget.item.shareCount.toString())),
                 Spacer(),
                 IconButton(
@@ -391,6 +411,16 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
         ],
       ),
     );
+  }
+
+  Future<void> shareFiles() async {
+    List<String> urls = [];
+    for (var element in widget.item.media) {
+      urls.add(element.fileUrl);
+    }
+    await FileShareHelper().shareFiles(urls,
+        "$description${links.isNotEmpty ? "\n$links" : ""}${hashTags.isNotEmpty ? "\n$hashTags" : ""}");
+    ref.invalidate(futurePointsProvider);
   }
 
   Expanded buildExpanded(String text, int flex) {

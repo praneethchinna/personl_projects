@@ -19,32 +19,22 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   String _selectedGender = 'Male';
   bool _isPasswordVisible = false;
   late TextEditingController _nameController;
-  final _phoneNoController = TextEditingController();
+
   final _passwordController = TextEditingController();
   late TextEditingController _emailController;
   String? _emailErrorText;
   bool isEmailEmpty = true;
-  String? _mobileErrorText;
+
   String? _passwordErrorText;
-  bool ismobileNumeberEmpty = true;
+
   bool isPasswordEmpty = true;
   bool isNameEmpty = true;
   final _referralCodeController = TextEditingController();
-  final _otpController = TextEditingController();
-  bool _showOtpField = false;
-  String? _otpErrorText;
-  bool _isVerifyingOtp = false;
-  bool _isOtpVerified = false;
 
   @override
   void initState() {
     isNameEmpty = widget.name == null;
     isEmailEmpty = widget.email == null;
-
-    if (widget.phone != null) {
-      ismobileNumeberEmpty = false;
-      _phoneNoController.text = widget.phone ?? "";
-    }
 
     _emailController = TextEditingController(text: widget.email ?? "");
     _nameController = TextEditingController(text: widget.name ?? "");
@@ -54,13 +44,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         isNameEmpty = _nameController.text.isEmpty;
       });
     });
-    _phoneNoController.addListener(() {
-      setState(() {
-        ismobileNumeberEmpty = _phoneNoController.text.trim().length < 10;
-        _mobileErrorText =
-            ismobileNumeberEmpty ? 'Mobile number should be 10 digits' : null;
-      });
-    });
+
     _passwordController.addListener(() {
       setState(() {
         isPasswordEmpty = _passwordController.text.trim().length < 8;
@@ -74,6 +58,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         _emailErrorText = isEmailEmpty ? "email should be valid" : null;
       });
     });
+    // if (mounted) {
+    //   ref.read(signupProvider.notifier).updateMobileNumber(widget.phone ?? "");
+    // }
     super.initState();
   }
 
@@ -86,7 +73,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     final notifier = ref.read(signupProvider.notifier);
-    final state = ref.watch(signupProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -178,127 +164,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     ],
                   ),
                   SizedBox(height: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Mobile Number",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(height: 8),
-                      TextField(
-                        controller: _phoneNoController,
-                        onChanged: (value) {
-                          notifier.updateMobileNumber(value);
-                        },
-                        keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                          hintText: 'Enter Your Mobile Number',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          errorText: _mobileErrorText,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey[100],
-                          suffixIcon: !_showOtpField
-                              ? IconButton(
-                                  icon: Icon(Icons.send),
-                                  onPressed: () async {
-                                    if (_phoneNoController.text.length != 10)
-                                      return;
-
-                                    try {
-                                      final repository = ref.read(repoProvider);
-                                      final otpSent = await repository
-                                          .getOtp(_phoneNoController.text);
-                                      if (otpSent) {
-                                        setState(() {
-                                          _showOtpField = true;
-                                        });
-                                      }
-                                    } catch (e) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(content: Text(e.toString())),
-                                      );
-                                    }
-                                  },
-                                )
-                              : null,
-                        ),
-                      ),
-                      if (_showOtpField) ...[
-                        SizedBox(height: 16),
-                        TextField(
-                          controller: _otpController,
-                          keyboardType: TextInputType.number,
-                          maxLength: 6,
-                          decoration: InputDecoration(
-                            hintText: 'Enter 6-digit OTP',
-                            errorText: _otpErrorText,
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            filled: true,
-                            fillColor: Colors.grey[100],
-                            suffixIcon: _isVerifyingOtp
-                                ? Padding(
-                                    padding: EdgeInsets.all(14),
-                                    child: SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                      ),
-                                    ),
-                                  )
-                                : IconButton(
-                                    icon: _isOtpVerified
-                                        ? Icon(Icons.check_circle,
-                                            color: Colors.green)
-                                        : Icon(Icons.check_circle_outline),
-                                    onPressed: () async {
-                                      if (_otpController.text.length != 6)
-                                        return;
-
-                                      setState(() {
-                                        _isVerifyingOtp = true;
-                                        _otpErrorText = null;
-                                      });
-
-                                      try {
-                                        final repository =
-                                            ref.read(repoProvider);
-                                        final verified =
-                                            await repository.verifyOtp(
-                                          _phoneNoController.text,
-                                          _otpController.text,
-                                        );
-
-                                        if (verified) {
-                                          setState(() {
-                                            _isOtpVerified = true;
-                                          });
-                                        }
-                                      } catch (e) {
-                                        setState(() {
-                                          _otpErrorText = e.toString();
-                                        });
-                                      } finally {
-                                        setState(() {
-                                          _isVerifyingOtp = false;
-                                        });
-                                      }
-                                    },
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
                   SizedBox(height: 16),
                   Row(
                     children: [
@@ -410,13 +275,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () {
-                      if (isNameEmpty ||
-                          isEmailEmpty ||
-                          isPasswordEmpty ||
-                          ismobileNumeberEmpty ||
-                          !_isOtpVerified) {
+                      if (isNameEmpty || isEmailEmpty || isPasswordEmpty) {
                         return;
                       }
+                      notifier.updateMobileNumber(widget.phone ?? "");
                       Navigator.push(
                           context,
                           MaterialPageRoute(

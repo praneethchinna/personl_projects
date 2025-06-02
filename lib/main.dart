@@ -2,27 +2,37 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:camera/camera.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ysr_project/features/home_screen/ui/home_tab_screen.dart';
+import 'package:ysr_project/features/home_screen/ui/home_screen/home_tab_screen.dart';
 import 'package:ysr_project/features/login/ui/login_screen.dart';
+import 'package:ysr_project/services/shared_preferences/shared_preferences_provider.dart';
 import 'package:ysr_project/services/user/user_data.dart';
 
+List<CameraDescription> cameras = [];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
+  cameras = await availableCameras();
   if (Platform.isAndroid) {
     await Firebase.initializeApp();
   }
-
-  runApp(
-    ProviderScope(
-      child: const MyApp(),
+  final language = await LanguageSettings.getLanguage();
+  runApp(ProviderScope(
+    child: EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('te')],
+      path: 'assets/translations',
+      fallbackLocale: Locale(language),
+      child: MyApp(),
     ),
-  );
+  ));
+
   configLoading();
 }
 
@@ -49,6 +59,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       theme: ThemeData(
         scaffoldBackgroundColor:
             Colors.grey.shade200, // Background color for Scaffold
@@ -118,6 +131,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 constituency: userRealData['constituency'],
               ),
             );
+        await updateLanguageProvider();
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => HomeTabScreen()),
         );
@@ -152,4 +166,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       ),
     );
   }
+
+  Future<void> updateLanguageProvider() async {
+    final language = await LanguageSettings.getLanguage();
+    ref.read(languageProvider.notifier).update((state) => Locale(language));
+  }
 }
+
+final languageProvider = StateProvider<Locale>((ref) {
+  return Locale("en");
+});

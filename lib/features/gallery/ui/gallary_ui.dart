@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -23,7 +24,8 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: Text("Gallery", style: TextStyle(fontWeight: FontWeight.bold)),
+        title:
+            Text("gallery".tr(), style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: switch (true) {
@@ -32,19 +34,24 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
         _ when viewModel.isError.isNotEmpty =>
           Center(child: Text(viewModel.isError)),
         _ => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Gap(20),
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Gap(10),
-                  Text(
-                    "Select the events: ",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Text(
+                      "select_the_event:".tr(),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      width: 200,
                       decoration: BoxDecoration(
                         border: Border.all(color: AppColors.primaryColor),
                         borderRadius: BorderRadius.circular(10),
@@ -123,8 +130,13 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  FullScreenImage(imageUrl: imageUrl),
+                              builder: (context) => FullScreenGalleryView(
+                                imageUrls: viewModel.galleryResponseModel.images
+                                    .map((e) =>
+                                        "http://3.82.180.105:8000/api${e.url}")
+                                    .toList(),
+                                initialIndex: index,
+                              ),
                             ),
                           );
                         }
@@ -199,10 +211,16 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
   }
 }
 
-// Full-Screen Image View
-class FullScreenImage extends StatelessWidget {
-  final String imageUrl;
-  const FullScreenImage({super.key, required this.imageUrl});
+class FullScreenGalleryView extends StatelessWidget {
+  final List<String> imageUrls;
+  final int initialIndex;
+  final PageController _pageController;
+
+  FullScreenGalleryView({
+    super.key,
+    required this.imageUrls,
+    required this.initialIndex,
+  }) : _pageController = PageController(initialPage: initialIndex);
 
   @override
   Widget build(BuildContext context) {
@@ -215,20 +233,32 @@ class FullScreenImage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.download, color: Colors.white),
             onPressed: () {
-              HelperDownloadFiles.downloadMultipleFiles([imageUrl], context);
+              final currentImage =
+                  imageUrls[_pageController.page?.round() ?? 0];
+              HelperDownloadFiles.downloadMultipleFiles(
+                  [currentImage], context);
             },
           ),
         ],
       ),
-      body: Center(
-        child: InteractiveViewer(
-          minScale: 1.0, // Default scale
-          maxScale: 5.0,
-          child: Hero(
-            tag: imageUrl,
-            child: Image.network(imageUrl, fit: BoxFit.contain),
-          ),
-        ),
+      body: PageView.builder(
+        controller: _pageController,
+        itemCount: imageUrls.length,
+        itemBuilder: (context, index) {
+          return Center(
+            child: InteractiveViewer(
+              minScale: 1.0,
+              maxScale: 5.0,
+              child: Hero(
+                tag: imageUrls[index],
+                child: Image.network(
+                  imageUrls[index],
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

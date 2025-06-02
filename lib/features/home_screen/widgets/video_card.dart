@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
@@ -59,7 +60,7 @@ class _VideoCardState extends State<VideoCard> {
                 color: AppColors.primaryColor,
               ),
               title: Text(
-                "Check out this new Video",
+                "check_out_this_new_video".tr(),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
@@ -196,7 +197,7 @@ class _VideoCardState extends State<VideoCard> {
                           children: [
                             Icon(Icons.watch_later_outlined),
                             Gap(10),
-                            Text("watch Now")
+                            Text("watch_now".tr()),
                           ],
                         ),
                       ),
@@ -223,7 +224,7 @@ class _VideoCardState extends State<VideoCard> {
                           Colors.black54,
                           () => ShareCard(
                                   title: widget.title, link: widget.videoUrl)
-                              .shareOnSocialMedia(context, "share"),
+                              .shareOnSocialMedia(context, "share".tr()),
                           "generic"),
                     ],
                   ),

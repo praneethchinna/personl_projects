@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_initicon/flutter_initicon.dart';
 import 'package:gap/gap.dart';
@@ -26,7 +27,7 @@ class UserProfileUI extends ConsumerWidget {
         appBar: AppBar(
           foregroundColor: Colors.white,
           title: Text(
-            "Profile",
+            "profile".tr(),
           ),
           centerTitle: true,
           actions: [
@@ -47,7 +48,7 @@ class UserProfileUI extends ConsumerWidget {
                       Icon(Icons.edit),
                       Gap(10),
                       Text(
-                        "Edit",
+                        "edit".tr(),
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w500),
                       ),
@@ -87,10 +88,10 @@ class UserProfileUI extends ConsumerWidget {
                               width: 25,
                               height: 25,
                             ),
-                            title: Text("Total Points",
+                            title: Text("total_points".tr(),
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             subtitle: Text(
-                                "Level: ${(data.totalPoints! ~/ 100)}",
+                                "level: ${(data.totalPoints! ~/ 100)}",
                                 style: TextStyle()),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -137,7 +138,7 @@ class UserProfileUI extends ConsumerWidget {
                                 fontWeight: FontWeight.w500,
                               ),
                               decoration: InputDecoration(
-                                labelText: "Referral code",
+                                labelText: "referral_code".tr(),
                                 labelStyle: TextStyle(
                                   fontSize: 20,
                                   color: Colors.grey.shade800,
@@ -166,7 +167,7 @@ class UserProfileUI extends ConsumerWidget {
                               label: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text("Share on"),
+                                  Text("share_on".tr()),
                                   Gap(10),
                                   Icon(
                                     MdiIcons.whatsapp,
@@ -186,28 +187,28 @@ class UserProfileUI extends ConsumerWidget {
                     if (data.name.isNotEmpty) ...[
                       ProfileCard(
                         icon: LucideIcons.user,
-                        title: "Name",
+                        title: "name".tr(),
                         value: data.name,
                       ),
                     ],
                     if (data.email.isNotEmpty) ...[
                       ProfileCard(
                         icon: LucideIcons.mail,
-                        title: "Email",
+                        title: "email".tr(),
                         value: data.email,
                       ),
                     ],
                     if (data.mobile.isNotEmpty) ...[
                       ProfileCard(
                         icon: LucideIcons.phone,
-                        title: "Phone",
+                        title: "phone".tr(),
                         value: data.mobile,
                       ),
                     ],
                     if (data.country.isNotEmpty) ...[
                       ProfileCard(
                         icon: LucideIcons.globe,
-                        title: "Country",
+                        title: "country".tr(),
                         value: data.country,
                       ),
                     ],
@@ -215,21 +216,21 @@ class UserProfileUI extends ConsumerWidget {
                     if (data.parliament.isNotEmpty) ...[
                       ProfileCard(
                         icon: LucideIcons.mapPin,
-                        title: "Parliament",
+                        title: "parliament".tr(),
                         value: data.parliament,
                       ),
                     ],
                     if (data.constituency.isNotEmpty) ...[
                       ProfileCard(
                         icon: LucideIcons.mapPin,
-                        title: "Constituency",
+                        title: "constituency".tr(),
                         value: data.constituency,
                       ),
                     ],
                     if (data.gender.isNotEmpty) ...[
                       ProfileCard(
                         icon: Icons.person,
-                        title: "Gender",
+                        title: "gender".tr(),
                         value: data.gender,
                       ),
                     ],
@@ -248,7 +249,7 @@ class UserProfileUI extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: Text("Logout",
+                      child: Text("logout".tr(),
                           style: TextStyle(fontSize: 18, color: Colors.white)),
                     ),
                     SizedBox(height: 30),

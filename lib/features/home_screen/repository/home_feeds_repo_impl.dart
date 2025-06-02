@@ -1,5 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ysr_project/features/home_screen/response_model/grievance_categories_response_model.dart';
+import 'package:ysr_project/features/home_screen/response_model/grievance_response_model.dart';
+import 'package:ysr_project/features/home_screen/response_model/grievance_status.dart';
 import 'package:ysr_project/features/home_screen/response_model/home_feeds_response_model.dart';
 import 'package:ysr_project/features/home_screen/response_model/influencer_video_response_model.dart';
 import 'package:ysr_project/features/home_screen/response_model/notification_response_model.dart';
@@ -17,7 +24,8 @@ class HomeFeedsRepoImpl {
 
   Future<List<HomeFeedsResponseModel>> getHomeFeeds() async {
     try {
-      final response = await dio.get('/uploads/homefeed');
+      final userId = ref.read(userProvider).userId;
+      final response = await dio.get('/uploads/homefeeduser?user_id=$userId');
       if (response.statusCode == 200) {
         return homeFeedsResponseModelFromJson(response.data);
       } else {
@@ -25,6 +33,21 @@ class HomeFeedsRepoImpl {
       }
     } catch (e) {
       return throw Exception("Failed to fetch Home Feeds");
+    }
+  }
+
+  Future<List<Grievance>> getGrievances() async {
+    try {
+      final response = await dio.get('/grievances');
+      if (response.statusCode == 200) {
+        return (response.data as List)
+            .map((value) => Grievance.fromJson(value))
+            .toList();
+      } else {
+        return throw Exception("Failed to fetch Grievances");
+      }
+    } catch (e) {
+      return throw Exception("Failed to fetch Grievances");
     }
   }
 
@@ -62,10 +85,10 @@ class HomeFeedsRepoImpl {
       if (response.statusCode == 200) {
         return true;
       } else {
-        throw Exception("Failed to post action");
+        throw "You have reached the maximum share limit for this post(10 times)";
       }
     } catch (e) {
-      throw Exception("Failed to post action");
+      throw "You have reached the maximum share limit for this post(10 times)";
     }
   }
 
@@ -168,29 +191,119 @@ class HomeFeedsRepoImpl {
     required String constituency,
   }) async {
     try {
-
-   final queryParameters = {
+      final queryParameters = {
         'name': name,
-    'email': email,
-    'gender': gender,
-    'country': country,
-    'state': state,
-    'parliament': parliament,
-    'constituency': constituency,
-  };
+        'email': email,
+        'gender': gender,
+        'country': country,
+        'state': state,
+        'parliament': parliament,
+        'constituency': constituency,
+      };
       final userData = ref.read(userProvider);
-      final response = await dio.put('/user/update-profile', queryParameters: {
-        "mobile": userData.mobile
-      }, data: queryParameters);
+      final response = await dio.put('/user/update-profile',
+          queryParameters: {"mobile": userData.mobile}, data: queryParameters);
       if (response.statusCode == 200) {
-
-
         return true;
       } else {
         throw Exception("Failed to update profile details");
       }
     } catch (e) {
       throw Exception("Failed to update profile details");
+    }
+  }
+
+  Future<bool> submitGrievance({
+    required String name,
+    required String gender,
+    required String email,
+    required String parliament,
+    required String assembly,
+    required String categoryName,
+    required String grievanceDescription,
+    required String idProofType,
+    required XFile? selfie, // XFile or null
+    required File? idProof, // File or null
+  }) async {
+    try {
+      final mobile = ref.read(userProvider).mobile;
+      final userId = ref.read(userProvider).userId;
+      // Construct FormData
+      final formData = FormData.fromMap({
+        "name": name,
+        "gender": gender,
+        "mobile": mobile,
+        "email": email,
+        "parliament": parliament,
+        "assembly": assembly,
+        "category_name": categoryName,
+        "grievance_description": grievanceDescription,
+        "id_proof_type": idProofType,
+
+        "user_id": userId,
+        // Convert selfie from XFile to MultipartFile if not null
+        if (selfie != null)
+          "selfie": await MultipartFile.fromFile(
+            selfie.path,
+            filename: selfie.name,
+          ),
+        // Convert idProof from File to MultipartFile if not null
+        if (idProof != null)
+          "id_proof": await MultipartFile.fromFile(
+            idProof.path,
+            filename: idProof.path.split('/').last,
+          ),
+      });
+
+      final response =
+          await dio.post('/submit-grievance-mobile', data: formData);
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception(
+            "Failed to submit grievance: ${response.statusMessage}");
+      }
+    } catch (e) {
+      throw Exception("Failed to submit grievance: $e");
+    }
+  }
+
+  Future<List<GrievanceCategoryResponseModel>> grievanceCategories() async {
+    try {
+      final response = await dio.get('/grievance-categories');
+
+      if (response.statusCode == 200) {
+        if (response.data == null || (response.data as List).isEmpty) {
+          return [];
+        }
+        return (response.data as List)
+            .map((e) => GrievanceCategoryResponseModel.fromJson(e))
+            .toList();
+      } else {
+        throw Exception("Failed to fetch grievance categories");
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch grievance categories: $e");
+    }
+  }
+
+  Future<List<GrievanceStatus>> getGrievanceHistory(int id) async {
+    try {
+      final response = await dio.get('/grievances/$id/history');
+
+      if (response.statusCode == 200) {
+        if (response.data == null || (response.data as List).isEmpty) {
+          return [];
+        }
+        return (response.data as List)
+            .map((e) => GrievanceStatus.fromJson(e))
+            .toList();
+      } else {
+        throw Exception("Failed to fetch grievance history");
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch grievance history: $e");
     }
   }
 }

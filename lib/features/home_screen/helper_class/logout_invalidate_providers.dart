@@ -12,7 +12,6 @@ import 'package:ysr_project/services/user/user_data.dart';
 class LogoutInvalidationProvider {
   static Future<void> logout(WidgetRef ref, BuildContext context) async {
     {
-      ref.invalidate(homeFeedNotifierProvider);
       ref.invalidate(pollsProvider);
       ref.invalidate(userProvider);
       ref.invalidate(futurePointsProvider);

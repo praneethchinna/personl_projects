@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_initicon/flutter_initicon.dart';
@@ -72,7 +73,7 @@ class CommentsBottomSheet extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Comments',
+                    'comments'.tr(),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,

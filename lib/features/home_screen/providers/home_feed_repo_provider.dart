@@ -1,5 +1,8 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/features/home_screen/repository/home_feeds_repo_impl.dart';
+import 'package:ysr_project/features/home_screen/response_model/grievance_categories_response_model.dart';
+import 'package:ysr_project/features/home_screen/response_model/grievance_response_model.dart';
+import 'package:ysr_project/features/home_screen/response_model/grievance_status.dart';
 import 'package:ysr_project/features/home_screen/response_model/influencer_video_response_model.dart';
 import 'package:ysr_project/features/home_screen/response_model/notification_response_model.dart';
 import 'package:ysr_project/features/home_screen/response_model/pdf_files_response_model.dart';
@@ -19,8 +22,13 @@ final futureNotificatonProvider =
 });
 
 final futurePointsProvider =
-    FutureProvider<UserPointsResponseModel>((ref) async {
+    FutureProvider.autoDispose<UserPointsResponseModel>((ref) async {
   return ref.read(homeFeedRepoProvider).getUserPoints();
+});
+
+final futureGrievancesProvider =
+    FutureProvider.autoDispose<List<Grievance>>((ref) async {
+  return ref.read(homeFeedRepoProvider).getGrievances();
 });
 
 final futurePointsForBatchIdProvider =
@@ -37,12 +45,17 @@ final specialVideoProvider =
 });
 
 final influencerVideoProvider =
-    FutureProvider.autoDispose<List<InfluencerVideoResponseModel>>(
-        (ref) async {
+    FutureProvider.autoDispose<List<InfluencerVideoResponseModel>>((ref) async {
   return ref.read(homeFeedRepoProvider).getInfluencerVideos();
 });
 
 final pdfFilesProvider =
     FutureProvider.autoDispose<List<PdfFilesResponseModel>>((ref) async {
   return ref.read(homeFeedRepoProvider).getPdfFiles();
+});
+
+final grievanceCategoriesProvider =
+    FutureProvider.autoDispose<List<GrievanceCategoryResponseModel>>(
+        (ref) async {
+  return ref.read(homeFeedRepoProvider).grievanceCategories();
 });

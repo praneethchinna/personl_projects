@@ -10,7 +10,7 @@ import 'package:ysr_project/permissions/android_permissions.dart';
 class FileShareHelper {
   final Dio dio = Dio();
 
-  Future<void> shareFiles(List<String> urls) async {
+  Future<void> shareFiles(List<String> urls, String? description) async {
     EasyLoading.show(status: "Downloading files...");
 
     if (!await AndroidPermission.requestPermissions()) {
@@ -62,13 +62,19 @@ class FileShareHelper {
 
     // Share images first, then videos
     if (imageFiles.isNotEmpty) {
-      List<String> imageUrls = imageFiles.map((e) => e.path.split('/').last).toList();
-      await Share.shareXFiles(imageFiles, text: "Here are some images: ${imageUrls.join(', ')}!");
+      List<String> imageUrls =
+          imageFiles.map((e) => e.path.split('/').last).toList();
+      await Share.shareXFiles(imageFiles,
+          text:
+              description ?? "Here are some images: ${imageUrls.join(', ')}!");
     }
 
     if (videoFiles.isNotEmpty) {
-      List<String> videoUrls = videoFiles.map((e) => e.path.split('/').last).toList();
-      await Share.shareXFiles(videoFiles, text: "Here are some videos: ${videoUrls.join(', ')}!");
+      List<String> videoUrls =
+          videoFiles.map((e) => e.path.split('/').last).toList();
+      await Share.shareXFiles(videoFiles,
+          text:
+              description ?? "Here are some videos: ${videoUrls.join(', ')}!");
     }
 
     if (imageFiles.isEmpty && videoFiles.isEmpty) {

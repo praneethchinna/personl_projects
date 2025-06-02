@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/colors/app_colors.dart';
@@ -17,7 +18,7 @@ class NotificationImp extends ConsumerWidget {
         foregroundColor: Colors.white,
         centerTitle: true,
         title: Text(
-          "Notifications",
+          "notifications".tr(),
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
         ),
         leading: IconButton(

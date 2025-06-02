@@ -10,50 +10,48 @@ List<HomeFeedsResponseModel> homeFeedsResponseModelFromJson(
 }
 
 class HomeFeedsResponseModel {
-  HomeFeedsResponseModel({
-    required this.batchId,
-    required this.likeCount,
-    required this.likedUsers,
-    required this.createdBy,
-    required this.description,
-    required this.postedDate,
-    required this.editedBy,
-    required this.editedTime,
-    required this.region,
-    required this.media,
-    required this.commentCount,
-    required this.commentedUsers,
-    required this.shareCount,
-    required this.comments,
-    required this.postType,
-    required this.pinnedPost
-  });
+  HomeFeedsResponseModel(
+      {required this.batchId,
+      required this.likeCount,
+      required this.likedUsers,
+      required this.createdBy,
+      required this.description,
+      required this.postedDate,
+      required this.editedBy,
+      required this.editedTime,
+      required this.region,
+      required this.media,
+      required this.commentCount,
+      required this.commentedUsers,
+      required this.shareCount,
+      required this.comments,
+      required this.postType,
+      required this.pinnedPost});
 
   factory HomeFeedsResponseModel.fromJson(Map<String, dynamic> json) =>
       HomeFeedsResponseModel(
-        batchId: json["batch_id"] as String,
-        likeCount: json["like_count"] as int,
-        likedUsers:
-            List<int?>.from((json["liked_users"] ?? []).map((x) => x as int?)),
-        createdBy: json["created_by"] as String,
-        description: json["description"] as String,
-        postedDate: DateTime.parse(json["posted_date"] as String),
-        editedBy: json["edited_by"] as String?,
-        editedTime: json["edited_time"] == null
-            ? null
-            : DateTime.parse(json["edited_time"] as String),
-        region: json["region"] as String,
-        media: List<Media>.from((json["media"] ?? [])
-            .map((x) => Media.fromJson(x as Map<String, dynamic>))),
-        commentCount: json["comment_count"] as int,
-        commentedUsers: List<int?>.from(
-            (json["commented_users"] ?? []).map((x) => x as int?)),
-        shareCount: json["share_count"] as int,
-        comments: List<Comment>.from((json["comments"] ?? [])
-            .map((x) => Comment.fromJson(x as Map<String, dynamic>))),
-        postType: json["post_type"] ?? "",
-        pinnedPost: json["pinned_post"] ?? false
-      );
+          batchId: json["batch_id"] as String,
+          likeCount: json["like_count"] as int,
+          likedUsers: List<int?>.from(
+              (json["liked_users"] ?? []).map((x) => x as int?)),
+          createdBy: json["created_by"] as String,
+          description: json["description"] as String,
+          postedDate: DateTime.parse(json["posted_date"] as String),
+          editedBy: json["edited_by"] as String?,
+          editedTime: json["edited_time"] == null
+              ? null
+              : DateTime.parse(json["edited_time"] as String),
+          region: json["region"] as String,
+          media: List<Media>.from((json["media"] ?? [])
+              .map((x) => Media.fromJson(x as Map<String, dynamic>))),
+          commentCount: json["comment_count"] as int,
+          commentedUsers: List<int?>.from(
+              (json["commented_users"] ?? []).map((x) => x as int?)),
+          shareCount: json["share_count"] as int,
+          comments: List<Comment>.from((json["comments"] ?? [])
+              .map((x) => Comment.fromJson(x as Map<String, dynamic>))),
+          postType: json["post_type"] ?? "",
+          pinnedPost: json["pinned_post"] ?? false);
 
   String batchId;
   int likeCount;

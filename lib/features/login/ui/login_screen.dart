@@ -1,16 +1,17 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/colors/app_colors.dart';
-import 'package:ysr_project/features/home_screen/ui/home_tab_screen.dart';
+import 'package:ysr_project/features/home_screen/providers/home_feed_repository.dart';
+import 'package:ysr_project/features/home_screen/ui/home_screen/home_tab_screen.dart';
 import 'package:ysr_project/features/login/providers/login_provider.dart';
 import 'package:ysr_project/features/login/providers/repo_providers.dart';
-import 'package:ysr_project/features/login/ui/forgot_password/forgot_otp_screen.dart';
-import 'package:ysr_project/features/login/ui/otp_screen.dart';
+import 'package:ysr_project/features/login/ui/forgot_password/enter_phone_screen.dart';
 import 'package:ysr_project/features/login/ui/signup_screen.dart';
 import 'package:ysr_project/features/widget/show_error_dialog.dart';
 import 'package:ysr_project/services/google_sign_in/google_sign_in_helper.dart';
@@ -100,6 +101,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   SizedBox(height: 8),
                   TextField(
                     controller: _emailController,
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(10),
+                    ],
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -107,6 +113,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       filled: true,
                       fillColor: Colors.grey[100],
                       errorText: _mobileErrorText,
+                      hintText: 'Enter Your Mobile Number',
                     ),
                   ),
                   SizedBox(height: 20),
@@ -119,6 +126,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     controller: _passwordController,
                     obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
+                      hintText: 'Enter Your Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -146,7 +154,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ForgotOtpScreen()));
+                                builder: (context) => EnterPhoneScreen()));
                       },
                       child: Text('Forgot Password?',
                           style: TextStyle(
@@ -171,8 +179,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           .then((value) async {
                         EasyLoading.dismiss();
                         if (value) {
-                          EasyLoading.dismiss();
-                          _showSuccessDialog(context);
+                          showSuccessDialog(context);
                         } else {
                           ErrorDialog(
                             title: 'Error',
@@ -182,11 +189,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       }, onError: (error, stackTrace) {
                         EasyLoading.dismiss();
                         showDialog(
-                            context: context,
-                            builder: (builder) => ErrorDialog(
-                                  title: 'Error',
-                                  message: error.toString(),
-                                ));
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => ErrorDialog(
+                            title: 'Login Failed',
+                            message:
+                                error.toString().replaceAll('Exception: ', ''),
+                          ),
+                        );
                       }).whenComplete(() {
                         EasyLoading.dismiss();
                       });
@@ -231,7 +241,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             .signInGoogleWithEmail(value!);
                       }).then((value) {
                         if (value) {
-                          _showSuccessDialog(context);
+                          showSuccessDialog(context);
                         } else {
                           final name = userCredential?.user?.displayName;
                           final email = userCredential?.user?.email;
@@ -241,9 +251,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SignupScreen(
+                                builder: (context) => EnterPhoneScreen(
                                       email: email,
                                       name: name,
+                                      isNewUser: true,
                                     )),
                           );
                         }
@@ -290,7 +301,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SignupScreen()),
+                                builder: (context) => EnterPhoneScreen(
+                                      isNewUser: true,
+                                    )),
                           );
                         },
                         child: Text(
@@ -309,7 +322,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  void _showSuccessDialog(BuildContext context) {
+  void showSuccessDialog(BuildContext context) {
     EasyLoading.dismiss();
     showDialog(
       context: context,
@@ -323,7 +336,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.check_circle, color: Colors.green, size: 50),
+                Icon(Icons.check_circle, color: Colors.green, size: 50)
+                    .animate()
+                    .scale()
+                    .then()
+                    .shimmer(),
                 SizedBox(height: 10),
                 Text(
                   "Login Successful!",
@@ -339,6 +356,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     // Wait for 2 seconds and navigate to next screen
     Future.delayed(Duration(seconds: 2), () {
       Navigator.pop(context); // Close dialog
+      ref.invalidate(homeFeedNotifierProvider);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeTabScreen()),

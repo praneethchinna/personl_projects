@@ -1,15 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_initicon/flutter_initicon.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
-import 'package:ysr_project/features/home_screen/repository/home_feeds_repo_impl.dart';
 import 'package:ysr_project/features/login/response_models/assembly_response_model.dart';
 import 'package:ysr_project/features/login/response_models/parliament_response_model.dart';
 import 'package:ysr_project/features/login/ui/select_location_screen.dart';
 import 'package:ysr_project/features/profile/provider/profileProvider.dart';
 import 'package:ysr_project/features/widget/generic_dropdown_selector.dart';
-import 'package:ysr_project/services/http_networks/dio_provider.dart';
 
 class ProfileEdit extends ConsumerStatefulWidget {
   final String phoneNumber;
@@ -96,13 +95,14 @@ class _ProfileEditState extends ConsumerState<ProfileEdit> {
   Widget build(BuildContext context) {
     return PopScope(
       onPopInvokedWithResult: (val, val1) {
-        if(savedSuccessfully){
-        ref.invalidate(profileAsyncProvider);}
+        if (savedSuccessfully) {
+          ref.invalidate(profileAsyncProvider);
+        }
       },
       child: Scaffold(
         appBar: AppBar(
           foregroundColor: Colors.white,
-          title: Text('Profile Edit'),
+          title: Text('profile_edit'.tr()),
         ),
         body: Form(
           key: _formKey,
@@ -123,7 +123,7 @@ class _ProfileEditState extends ConsumerState<ProfileEdit> {
                         ),
                         TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'Name',
+                            labelText: 'name'.tr(),
                           ),
                           controller: _nameController,
                           validator: (value) {
@@ -136,7 +136,7 @@ class _ProfileEditState extends ConsumerState<ProfileEdit> {
                         SizedBox(height: 20),
                         DropdownButtonFormField<String>(
                           decoration: InputDecoration(
-                            labelText: 'Gender',
+                            labelText: 'gender'.tr(),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -165,7 +165,7 @@ class _ProfileEditState extends ConsumerState<ProfileEdit> {
                         SizedBox(height: 20),
                         TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'Email',
+                            labelText: 'email'.tr(),
                           ),
                           controller: _emailController,
                           validator: (value) {
@@ -178,7 +178,7 @@ class _ProfileEditState extends ConsumerState<ProfileEdit> {
                         SizedBox(height: 20),
                         TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'Country',
+                            labelText: 'country'.tr(),
                           ),
                           controller: _countryController,
                           validator: (value) {
@@ -191,7 +191,7 @@ class _ProfileEditState extends ConsumerState<ProfileEdit> {
                         SizedBox(height: 20),
                         TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'State',
+                            labelText: 'state'.tr(),
                           ),
                           controller: _stateController,
                           validator: (value) {
@@ -204,7 +204,7 @@ class _ProfileEditState extends ConsumerState<ProfileEdit> {
                         SizedBox(height: 20),
                         AsyncDropdownSelector<Parliament>(
                           hintText: "Parliament",
-                          subTitle: "Select Parliament",
+                          subTitle: "select_parliament".tr(),
                           itemsProvider: parliamentProvider,
                           textEditingController: _parliamentController,
                           itemBuilder: (itemContext, entity, isSelected) {
@@ -243,7 +243,7 @@ class _ProfileEditState extends ConsumerState<ProfileEdit> {
                         SizedBox(height: 20),
                         AsyncDropdownSelector<Assembly>(
                           hintText: "Assembly",
-                          subTitle: "Select Assembly",
+                          subTitle: "select_assembly".tr(),
                           itemsProvider: assemblyProvider(parliamentId),
                           textEditingController: _constituencyController,
                           itemBuilder: (itemContext, entity, isSelected) {
@@ -323,7 +323,7 @@ class _ProfileEditState extends ConsumerState<ProfileEdit> {
                               }
                             }
                           },
-                          child: Text('Save'),
+                          child: Text('save'.tr()),
                         ),
                       ],
                     ),

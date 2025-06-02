@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repository.dart';
+import 'package:ysr_project/features/home_screen/view_model/home_feed_view_model.dart';
 import 'package:ysr_project/features/home_screen/widgets/home_feed_widget.dart';
 
 class HomeFeedList extends ConsumerStatefulWidget {
@@ -21,8 +23,24 @@ class _HomeFeedListState extends ConsumerState<HomeFeedList> {
     final viewModel = ref.watch(homeFeedNotifierProvider);
 
     return switch (true) {
-      _ when viewModel.isLoading =>
-        Expanded(child: Center(child: CircularProgressIndicator.adaptive())),
+      _ when viewModel.isLoading => Expanded(
+          child: Skeletonizer(effect: ShimmerEffect(baseColor: Colors.grey,highlightColor: Colors.white),
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                final item = HomeFeedViewModel.dummy();
+                final isVideo = index.isEven;
+                final likedUsers = [1, 2, 3];
+                return HomeFeedWidget(
+                  item: item,
+                  index: index,
+                  isVideo: isVideo,
+                  likedUsers: likedUsers,
+                );
+              },
+              itemCount: 2,
+            ),
+          ),
+        ),
       _ when viewModel.isError => Expanded(
           child: Center(
             child: Column(
