@@ -25,7 +25,7 @@ class PdfListWidget extends ConsumerStatefulWidget {
   const PdfListWidget({super.key});
 
   @override
-  _PdfListWidgetState createState() => _PdfListWidgetState();
+  ConsumerState<PdfListWidget> createState() => _PdfListWidgetState();
 }
 
 class _PdfListWidgetState extends ConsumerState<PdfListWidget> {

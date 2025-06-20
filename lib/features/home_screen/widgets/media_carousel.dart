@@ -33,15 +33,16 @@ class _MediaCarouselState extends State<MediaCarousel>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: widget.mediaUrls.length, vsync: this);
+    _tabController =
+        TabController(length: widget.mediaUrls.length, vsync: this);
 
     flickManagers = widget.mediaUrls.map((url) {
       return _isVideo(url)
           ? FlickManager(
-        autoPlay: false,
-        videoPlayerController:
-        VideoPlayerController.networkUrl(Uri.parse(url)),
-      )
+              autoPlay: false,
+              videoPlayerController:
+                  VideoPlayerController.networkUrl(Uri.parse(url)),
+            )
           : null;
     }).toList();
 
@@ -54,7 +55,6 @@ class _MediaCarouselState extends State<MediaCarousel>
         });
       }
     });
-
   }
 
   @override
@@ -91,51 +91,89 @@ class _MediaCarouselState extends State<MediaCarousel>
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(
-          height: widget.height,
-          child: TabBarView(
-            controller: _tabController,
-            physics: BouncingScrollPhysics(),
-            children: widget.mediaUrls.map((url) {
-              return _isVideo(url)
-                  ? FlickVideoPlayer(flickManager: flickManagers[widget.mediaUrls.indexOf(url)]!)
-                  : FutureBuilder<Size>(
-                future: _getImageSize(url),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-
-                  double aspectRatio = snapshot.data!.width / snapshot.data!.height;
-                  return Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(widget.borderRadius),
-                      child: InstaImageViewer(
-                        child: Image.network(
-                          url,
-                          fit: BoxFit.contain,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator.adaptive(
-                                value: loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: SizedBox(
+            height: widget.height,
+            child: TabBarView(
+              controller: _tabController,
+              physics: BouncingScrollPhysics(),
+              children: widget.mediaUrls.map((url) {
+                return _isVideo(url)
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black, // Optional border color
+                              width: 0.6, // Optional border width
+                            ),
+                          ),
+                          child: FlickVideoPlayer(
+                              flickManager: flickManagers[
+                                  widget.mediaUrls.indexOf(url)]!),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
+                      )
+                    : FutureBuilder<Size>(
+                        future: _getImageSize(url),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Center(child: Text('Error loading image'));
+                          }
+                          if (!snapshot.hasData) {
+                            return Center(
+                                child: CircularProgressIndicator.adaptive());
+                          }
+
+                          double aspectRatio =
+                              snapshot.data!.width / snapshot.data!.height;
+                          return Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: Colors.black, // Optional border color
+                                  width: 0.6, // Optional border width
+                                ),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: InstaImageViewer(
+                                  child: Image.network(
+                                    url,
+                                    fit: BoxFit.contain,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child:
+                                            CircularProgressIndicator.adaptive(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+              }).toList(),
+            ),
           ),
         ),
-        const SizedBox(height: 10),
-        _buildDotsIndicator(),
+        if (widget.mediaUrls.length > 1) ...[
+          const SizedBox(height: 10),
+          _buildDotsIndicator(),
+        ]
       ],
     );
   }
@@ -149,10 +187,10 @@ class _MediaCarouselState extends State<MediaCarousel>
           child: AnimatedContainer(
             duration: Duration(milliseconds: 300),
             margin: EdgeInsets.symmetric(horizontal: 5),
-            width: _currentIndex == index ? 12 : 8,
-            height: _currentIndex == index ? 12 : 8,
+            width: _currentIndex == index ? 8 : 6,
+            height: _currentIndex == index ? 8 : 6,
             decoration: BoxDecoration(
-              color: _currentIndex == index ? AppColors.primaryColor : Colors.grey,
+              color: _currentIndex == index ? Colors.black : Colors.grey,
               shape: BoxShape.circle,
             ),
           ),

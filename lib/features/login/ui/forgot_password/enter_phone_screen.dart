@@ -4,6 +4,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/colors/app_colors.dart';
+import 'package:ysr_project/core_widgets/ysr_background_theme.dart';
+import 'package:ysr_project/core_widgets/ysr_button.dart';
 import 'package:ysr_project/features/login/providers/repo_providers.dart';
 import 'package:ysr_project/features/login/ui/forgot_password/otp_screen.dart';
 
@@ -16,7 +18,19 @@ class EnterPhoneScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
+    return YsrBackgroundTheme(
+        showBackButton: true,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            children: [
+              Gap(40),
+              buildPhoneNumberField(context, ref),
+              Gap(MediaQuery.of(context).size.height / 2)
+            ],
+          ),
+        ));
+    Scaffold(
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -50,14 +64,19 @@ class EnterPhoneScreen extends ConsumerWidget {
 
   Widget buildPhoneNumberField(BuildContext context, WidgetRef ref) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          "Phone Number",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+        Row(
+          children: [
+            Text(
+              "Type YourPhone Number",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 17,
+              ),
+            ),
+            Spacer()
+          ],
         ),
         Gap(20),
         TextField(
@@ -65,18 +84,24 @@ class EnterPhoneScreen extends ConsumerWidget {
           controller: phoneNumberController,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide.none,
+            contentPadding:
+                EdgeInsets.symmetric(vertical: 0.0, horizontal: 12.0),
+            hintStyle: TextStyle(
+                color: Colors.grey, fontWeight: FontWeight.w400, fontSize: 11),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: AppColors.textFieldColor),
             ),
-            hintText: '99999999999',
-            hintStyle: TextStyle(color: Colors.grey[400]),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            hintText: 'Enter your phone number',
             filled: true,
-            fillColor: Colors.grey[200],
+            fillColor: Colors.white,
           ),
         ),
         Gap(20),
-        ElevatedButton(
+        YSRButton(
           onPressed: () {
             if (phoneNumberController.text.length < 10) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -90,15 +115,11 @@ class EnterPhoneScreen extends ConsumerWidget {
               getTop(context, ref);
             }
           },
-          style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: AppColors.primaryColor,
-              minimumSize: Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+          child: Text("Send OTP",
+              style: TextStyle(
+                color: Colors.white,
               )),
-          child: Text("Send OTP"),
-        )
+        ),
       ],
     );
   }

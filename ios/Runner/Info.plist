@@ -2,6 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>CFBundleURLTypes</key>
+    <array>
+    <dict>
+    <key>CFBundleTypeRole</key>
+    <string>Editor</string>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>com.googleusercontent.apps.261839471016-19kebrkbvb0arrsko2ca8lgfp2e7s8cr</string>
+    </array>
+    </dict>
+    </array>
+
+    <key>NSCameraUsageDescription</key>
+    <string>This app uses the camera for taking photos and scanning.</string>
+
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app uses the microphone for recording audio or video.</string>
+
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app uses your location to provide location-based features.</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app accesses your photo library to let you pick and upload images.</string>
+
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
@@ -9,7 +33,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Ysr Project</string>
+	<string>YSRCP</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

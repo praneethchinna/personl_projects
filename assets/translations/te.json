@@ -65,5 +65,9 @@
   "upload_id_proof": "ID ప్రూఫ్ అప్లోడ్ చేయండి",
   "no_file_selected": "ఎటువంటి ఫైల్ ఎంచుకోలేదు",
   "selfie_capture": "సెల్ఫీ క్యాప్చర్",
-  "submit": "సమర్పించండి"
+  "submit": "సమర్పించండి",
+
+  "rewards": "రీవార్డులు",
+  "leaderboard": "లీడర్బోర్డు",
+  "language_settings": "భాష సెట్టింగులు"
 }

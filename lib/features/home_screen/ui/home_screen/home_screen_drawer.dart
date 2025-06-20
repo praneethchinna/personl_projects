@@ -11,6 +11,7 @@ import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/gallery/ui/gallary_ui.dart';
 import 'package:ysr_project/features/home_screen/response_model/pdf_ui.dart';
 import 'package:ysr_project/features/home_screen/ui/grievance/girievance_tab.dart';
+import 'package:ysr_project/features/home_screen/ui/home_screen/home_tab_screen.dart';
 import 'package:ysr_project/features/home_screen/ui/influencer_video_ui.dart';
 import 'package:ysr_project/features/home_screen/ui/more_screen.dart';
 import 'package:ysr_project/features/home_screen/ui/notifications_ui.dart';

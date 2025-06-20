@@ -11,7 +11,7 @@ class FileShareHelper {
   final Dio dio = Dio();
 
   Future<void> shareFiles(List<String> urls, String? description) async {
-    EasyLoading.show(status: "Downloading files...");
+    EasyLoading.show();
 
     if (!await AndroidPermission.requestPermissions()) {
       log("Permissions not granted");
@@ -43,7 +43,8 @@ class FileShareHelper {
         if (await file.exists() && await file.length() > 0) {
           if (filename.endsWith('.jpg') ||
               filename.endsWith('.jpeg') ||
-              filename.endsWith('.png')) {
+              filename.endsWith('.png') ||
+              filename.endsWith('.pdf')) {
             imageFiles.add(XFile(savePath));
           } else if (filename.endsWith('.mp4') ||
               filename.endsWith('.mov') ||

@@ -24,7 +24,7 @@ class LoginRepositoryImpl {
       }
       throw Exception(response.data["detail"]);
     } on DioException catch (e) {
-      if (e.response?.data != null && e.response?.data["detail"] != null) {
+      if (e.response?.data != null && e.response?.data["detail"][0] != null) {
         throw Exception(e.response?.data["detail"]);
       }
       throw Exception("An error occurred. Please try again.");

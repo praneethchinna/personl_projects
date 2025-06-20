@@ -15,6 +15,8 @@ final homeFeedNotifierProvider =
 );
 
 class HomeFeedNotifer extends StateNotifier<HomeViewModel> {
+  bool _hasMore = true;
+  int _page = 1;
   List<HomeFeedViewModel> homeFeedViewModels = [];
   final HomeFeedsRepoImpl homeFeedsRepoImpl;
   final Ref ref;
@@ -27,9 +29,29 @@ class HomeFeedNotifer extends StateNotifier<HomeViewModel> {
   Future<void> getHomeFeeds() async {
     try {
       final homeFeeds = await homeFeedsRepoImpl.getHomeFeeds();
-      homeFeeds.forEach((element) {
+      _hasMore = homeFeeds.hasNext;
+      for (var element in homeFeeds.homeFeedResponseModelList) {
         homeFeedViewModels.add(updateFromResponseModel(element));
-      });
+      }
+      state = state.copyWith(
+          isLoading: false,
+          isError: false,
+          homeFeedViewModels: homeFeedViewModels);
+    } on Exception catch (e) {
+      state = state
+          .copyWith(isLoading: false, isError: true, homeFeedViewModels: []);
+    }
+  }
+
+  Future<void> getMoreHomeFeeds() async {
+    if (!_hasMore) return;
+    try {
+      _page++;
+      final homeFeeds = await homeFeedsRepoImpl.getHomeFeeds(page: _page);
+      _hasMore = homeFeeds.hasNext;
+      for (var element in homeFeeds.homeFeedResponseModelList) {
+        homeFeedViewModels.add(updateFromResponseModel(element));
+      }
       state = state.copyWith(
           isLoading: false,
           isError: false,
@@ -43,6 +65,7 @@ class HomeFeedNotifer extends StateNotifier<HomeViewModel> {
   HomeFeedViewModel updateFromResponseModel(
       HomeFeedsResponseModel responseModel) {
     return HomeFeedViewModel(
+        isSaved: responseModel.saved,
         batchId: responseModel.batchId,
         likeCount: responseModel.likeCount,
         likedUsers: List<int?>.from(responseModel.likedUsers),
@@ -100,6 +123,14 @@ class HomeFeedNotifer extends StateNotifier<HomeViewModel> {
         List<HomeFeedViewModel>.from(state.homeFeedViewModels);
     newHomeFeedViewModels[index] =
         state.homeFeedViewModels[index].copyWith(likedUsers: likedUsers);
+    state = state.copyWith(homeFeedViewModels: newHomeFeedViewModels);
+  }
+
+  void toggleSave(int index) {
+    final List<HomeFeedViewModel> newHomeFeedViewModels =
+        List<HomeFeedViewModel>.from(state.homeFeedViewModels);
+    newHomeFeedViewModels[index] = state.homeFeedViewModels[index]
+        .copyWith(isSaved: !state.homeFeedViewModels[index].isSaved);
     state = state.copyWith(homeFeedViewModels: newHomeFeedViewModels);
   }
 }

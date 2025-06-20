@@ -4,7 +4,7 @@ import 'package:ysr_project/features/polls/response_models/submitted_polls_list.
 import 'package:ysr_project/features/polls/view_models/user_polls_view_model.dart';
 
 final pollsProvider =
-    StateNotifierProvider<PollsNotifer, UserPollsViewModel>((ref) {
+    StateNotifierProvider.autoDispose<PollsNotifer, UserPollsViewModel>((ref) {
   return PollsNotifer(
     ref.read(pollsRepositoryProvider),
   );

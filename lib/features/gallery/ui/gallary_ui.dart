@@ -2,8 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:ysr_project/colors/app_colors.dart';
+import 'package:ysr_project/core_widgets/ysr_app_bar.dart';
 import 'package:ysr_project/features/gallery/providers/gallary_providers.dart';
+import 'package:ysr_project/features/gallery/providers/gallery_specific_event_provider.dart';
+import 'package:ysr_project/features/gallery/ui/gallery_summary_ui.dart';
+import 'package:ysr_project/features/gallery/view_model/gallery_view_model.dart';
 import 'package:ysr_project/features/helper/download_multiple_file.dart';
 
 class GalleryScreen extends ConsumerStatefulWidget {
@@ -22,10 +27,9 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
     final viewModel = ref.watch(galleryNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        foregroundColor: Colors.white,
-        title:
-            Text("gallery".tr(), style: TextStyle(fontWeight: FontWeight.bold)),
+      appBar: YsrAppBar(
+        title: Text("gallery".tr(),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
         centerTitle: true,
       ),
       body: switch (true) {
@@ -36,157 +40,182 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
         _ => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Gap(20),
+              Gap(10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Gap(10),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Text(
-                      "select_the_event:".tr(),
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Container(
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.primaryColor),
-                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.grey.shade300),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.5),
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
+                      child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           isExpanded: true,
-                          value: viewModel.eventName,
+                          value: viewModel.eventName.isNotEmpty
+                              ? viewModel.eventName
+                              : null,
+                          hint: const Text(
+                            "Select Event",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
+                            ),
+                          ),
                           onChanged: (String? newValue) {
                             notifier.updateEvent(newValue!);
                             setState(() {
-                              selectedImages
-                                  .clear(); // Reset selections when category changes
+                              selectedImages.clear();
                             });
                           },
+                          icon: const Icon(Icons.keyboard_arrow_down_rounded,
+                              color: Colors.black87),
+                          iconSize: 28,
+                          dropdownColor: Colors.white,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w600,
+                          ),
                           items: viewModel.eventsResponseModel.events
                               .map((category) {
                             return DropdownMenuItem<String>(
                               value: category.name,
                               child: Text(
                                 category.name,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w500),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             );
                           }).toList(),
-                          // icon: Icon(
-                          //   Icons.keyboard_arrow_down,
-                          //   color: AppColors.primaryColor,
-                          // ),
-                          // iconSize: 24,
-                          // underline: Container(),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-              Gap(20),
-              Expanded(
-                child: GridView.builder(
-                  padding: EdgeInsets.all(10),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                  ),
-                  itemCount: viewModel.galleryResponseModel.images.length,
-                  itemBuilder: (context, index) {
-                    final items = viewModel.galleryResponseModel.images[index];
-                    final imageUrl = "http://3.82.180.105:8000/api${items.url}";
-                    final isSelected = selectedImages.contains(imageUrl);
+              viewModel.eventName != "Select Events"
+                  ? Expanded(
+                      child: GridView.builder(
+                        padding: EdgeInsets.all(10),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 20,
+                        ),
+                        itemCount: viewModel.galleryResponseModel.images.length,
+                        itemBuilder: (context, index) {
+                          final items =
+                              viewModel.galleryResponseModel.images[index];
+                          final imageUrl =
+                              "http://3.82.180.105:8000/api${items.url}";
+                          final isSelected = selectedImages.contains(imageUrl);
 
-                    return GestureDetector(
-                      onLongPress: () {
-                        setState(() {
-                          if (isSelected) {
-                            selectedImages.remove(imageUrl);
-                          } else {
-                            selectedImages.add(imageUrl);
-                          }
-                        });
-                      },
-                      onTap: () {
-                        if (selectedImages.isNotEmpty) {
-                          setState(() {
-                            if (isSelected) {
-                              selectedImages.remove(imageUrl);
-                            } else {
-                              selectedImages.add(imageUrl);
-                            }
-                          });
-                        } else {
-                          // Open full-screen image if no selection mode is active
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FullScreenGalleryView(
-                                imageUrls: viewModel.galleryResponseModel.images
-                                    .map((e) =>
-                                        "http://3.82.180.105:8000/api${e.url}")
-                                    .toList(),
-                                initialIndex: index,
-                              ),
+                          return GestureDetector(
+                            onLongPress: () {
+                              setState(() {
+                                if (isSelected) {
+                                  selectedImages.remove(imageUrl);
+                                } else {
+                                  selectedImages.add(imageUrl);
+                                }
+                              });
+                            },
+                            onTap: () {
+                              if (selectedImages.isNotEmpty) {
+                                setState(() {
+                                  if (isSelected) {
+                                    selectedImages.remove(imageUrl);
+                                  } else {
+                                    selectedImages.add(imageUrl);
+                                  }
+                                });
+                              } else {
+                                // Open full-screen image if no selection mode is active
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FullScreenGalleryView(
+                                      imageUrls: viewModel
+                                          .galleryResponseModel.images
+                                          .map((e) =>
+                                              "http://3.82.180.105:8000/api${e.url}")
+                                          .toList(),
+                                      initialIndex: index,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Stack(
+                              children: [
+                                Hero(
+                                  tag: imageUrl,
+                                  child: Material(
+                                    elevation: 10,
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.network(
+                                        imageUrl,
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              value: loadingProgress
+                                                          .expectedTotalBytes !=
+                                                      null
+                                                  ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      (loadingProgress
+                                                              .expectedTotalBytes ??
+                                                          1)
+                                                  : null,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                if (isSelected)
+                                  Positioned(
+                                    top: 8,
+                                    right: 8,
+                                    child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        child: Icon(Icons.check_circle_rounded,
+                                            color: Colors.blue, size: 30)),
+                                  ),
+                              ],
                             ),
                           );
-                        }
-                      },
-                      child: Stack(
-                        children: [
-                          Hero(
-                            tag: imageUrl,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.network(
-                                imageUrl,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      value:
-                                          loadingProgress.expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  (loadingProgress
-                                                          .expectedTotalBytes ??
-                                                      1)
-                                              : null,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          if (isSelected)
-                            Positioned(
-                              top: 8,
-                              right: 8,
-                              child: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  child: Icon(Icons.check_circle_rounded,
-                                      color: Colors.blue, size: 30)),
-                            ),
-                        ],
+                        },
                       ),
-                    );
-                  },
-                ),
-              ),
+                    )
+                  : Expanded(child: GallerySummaryPage())
             ],
           ),
       },
@@ -261,5 +290,146 @@ class FullScreenGalleryView extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+class GalleryWidget extends ConsumerStatefulWidget {
+  final GalleryImageNotifier galleryImageNotifier;
+  final Function functionality;
+  final GalleryViewModel viewModel;
+  const GalleryWidget(
+      {required this.functionality,
+      super.key,
+      required this.viewModel,
+      required this.galleryImageNotifier});
+
+  @override
+  ConsumerState<GalleryWidget> createState() => _GalleryWidgetState();
+}
+
+class _GalleryWidgetState extends ConsumerState<GalleryWidget> {
+  final Set<String> selectedImages = {};
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = widget.viewModel;
+    return Scaffold(
+      appBar: null,
+      body: LazyLoadScrollView(
+        onEndOfPage: () {
+          widget.galleryImageNotifier.loadMoreImages();
+        },
+        child: GridView.builder(
+          padding: EdgeInsets.all(10),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+          ),
+          itemCount: viewModel.galleryResponseModel.images.length,
+          itemBuilder: (context, index) {
+            final items = viewModel.galleryResponseModel.images[index];
+            final imageUrl = "http://3.82.180.105:8000/api${items.url}";
+            final isSelected = selectedImages.contains(imageUrl);
+
+            return GestureDetector(
+              onLongPress: () {
+                setState(() {
+                  if (isSelected) {
+                    selectedImages.remove(imageUrl);
+                  } else {
+                    selectedImages.add(imageUrl);
+                  }
+                });
+              },
+              onTap: () {
+                if (selectedImages.isNotEmpty) {
+                  setState(() {
+                    if (isSelected) {
+                      selectedImages.remove(imageUrl);
+                    } else {
+                      selectedImages.add(imageUrl);
+                    }
+                  });
+                } else {
+                  // Open full-screen image if no selection mode is active
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FullScreenGalleryView(
+                        imageUrls: viewModel.galleryResponseModel.images
+                            .map((e) => "http://3.82.180.105:8000/api${e.url}")
+                            .toList(),
+                        initialIndex: index,
+                      ),
+                    ),
+                  );
+                }
+              },
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(13),
+                      border: Border.all(color: Colors.white, width: 3),
+                    ),
+                    child: Hero(
+                      tag: imageUrl,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          imageUrl,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        (loadingProgress.expectedTotalBytes ??
+                                            1)
+                                    : null,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (isSelected)
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Icon(Icons.check_circle_rounded,
+                              color: Colors.blue, size: 30)),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+      floatingActionButton: selectedImages.isNotEmpty
+          ? FloatingActionButton(
+              onPressed: () async {
+                await _downloadImages();
+              },
+              backgroundColor: AppColors.primaryColor,
+              child: Icon(Icons.download, color: Colors.white),
+            )
+          : null,
+    );
+  }
+
+  Future<void> _downloadImages() async {
+    await HelperDownloadFiles.downloadMultipleFiles(
+        selectedImages.toList(), context);
+    setState(() {
+      selectedImages.clear();
+    });
   }
 }

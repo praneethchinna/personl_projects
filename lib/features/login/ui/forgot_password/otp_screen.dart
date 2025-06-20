@@ -7,6 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ysr_project/colors/app_colors.dart';
+import 'package:ysr_project/core_widgets/ysr_background_theme.dart';
+import 'package:ysr_project/core_widgets/ysr_button.dart';
 import 'package:ysr_project/features/login/providers/repo_providers.dart';
 import 'package:ysr_project/features/login/ui/forgot_password/reset_password.dart';
 import 'package:ysr_project/features/login/ui/login_screen.dart';
@@ -89,31 +91,35 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 100, left: 20, right: 20),
+    return YsrBackgroundTheme(
+      showBackButton: true,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'OTP Verification',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              'Type a Verification Code that we have sent',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
             Gap(10),
             Text(
-              'Enter the Verification Code we Just sent to Your Number +91${widget.number}',
+              'Enter your Verification Code below.',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey,
+              ),
             ),
             Gap(30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(6, (index) {
                 return SizedBox(
+                  height: 40,
                   width: 50,
                   child: TextField(
+                    cursorHeight: 20,
                     controller: _controllers[index],
                     focusNode: _focusNodes[index],
                     keyboardType: TextInputType.number,
@@ -121,7 +127,13 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                     maxLength: 1,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.symmetric(vertical: 5),
                       counterText: "",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: AppColors.textFieldColor),
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -138,6 +150,11 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                 children: [
                   Text(
                     'Didn\'t receive the OTP?',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
                   ),
                   Gap(4),
                   InkWell(
@@ -172,25 +189,28 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                 ],
               ),
             ),
-            Expanded(child: SizedBox()),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryColor,
-                  foregroundColor: Colors.white,
-                  minimumSize: Size(double.infinity, 50)),
-              onPressed: _allFieldsValid
-                  ? () {
-                      if (widget.isNewUser) {
-                        verifyNewUserOtp(context, ref);
-                      } else {
-                        verifyOtp(context, ref);
-                      }
-                    }
-                  : null,
-              child: Text(
-                'Verify',
-                style: TextStyle(fontSize: 18),
-              ),
+            Gap(40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                YSRButton(
+                    isEnabled: _allFieldsValid,
+                    onPressed: _allFieldsValid
+                        ? () {
+                            if (widget.isNewUser) {
+                              verifyNewUserOtp(context, ref);
+                            } else {
+                              verifyOtp(context, ref);
+                            }
+                          }
+                        : null,
+                    child: Text(
+                      "Verify OTP",
+                      style: TextStyle(
+                        color: _allFieldsValid ? Colors.white : Colors.grey,
+                      ),
+                    )),
+              ],
             ),
             Gap(100)
           ],
@@ -234,6 +254,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
         content: Text("Otp verified successfully"),
       ));
       EasyLoading.dismiss();
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

@@ -1,12 +1,31 @@
-List<HomeFeedsResponseModel> homeFeedsResponseModelFromJson(
-    List<dynamic> json) {
-  List<HomeFeedsResponseModel> homeFeedsResponseModels =
-      <HomeFeedsResponseModel>[];
-  for (final dynamic element in json) {
-    homeFeedsResponseModels
-        .add(HomeFeedsResponseModel.fromJson(element as Map<String, dynamic>));
-  }
-  return homeFeedsResponseModels;
+class HomeFeedFullResponseModel {
+  int page;
+  int pageSize;
+  int totalPosts;
+  int totalPages;
+  bool hasNext;
+
+  List<HomeFeedsResponseModel> homeFeedResponseModelList;
+  HomeFeedFullResponseModel({
+    required this.page,
+    required this.pageSize,
+    required this.totalPosts,
+    required this.totalPages,
+    required this.hasNext,
+    required this.homeFeedResponseModelList,
+  });
+
+  factory HomeFeedFullResponseModel.fromJson(Map<String, dynamic> json) =>
+      HomeFeedFullResponseModel(
+        page: json["page"],
+        pageSize: json["page_size"],
+        totalPosts: json["total_posts"],
+        totalPages: json["total_pages"],
+        hasNext: json["has_next"],
+        homeFeedResponseModelList: (json["posts"] as List)
+            .map((e) => HomeFeedsResponseModel.fromJson(e))
+            .toList(),
+      );
 }
 
 class HomeFeedsResponseModel {
@@ -26,7 +45,8 @@ class HomeFeedsResponseModel {
       required this.shareCount,
       required this.comments,
       required this.postType,
-      required this.pinnedPost});
+      required this.pinnedPost,
+      required this.saved});
 
   factory HomeFeedsResponseModel.fromJson(Map<String, dynamic> json) =>
       HomeFeedsResponseModel(
@@ -51,7 +71,8 @@ class HomeFeedsResponseModel {
           comments: List<Comment>.from((json["comments"] ?? [])
               .map((x) => Comment.fromJson(x as Map<String, dynamic>))),
           postType: json["post_type"] ?? "",
-          pinnedPost: json["pinned_post"] ?? false);
+          pinnedPost: json["pinned_post"] ?? false,
+          saved: json["saved"] ?? false);
 
   String batchId;
   int likeCount;
@@ -69,6 +90,7 @@ class HomeFeedsResponseModel {
   List<Comment> comments;
   String postType;
   bool pinnedPost;
+  bool saved;
 }
 
 class Media {

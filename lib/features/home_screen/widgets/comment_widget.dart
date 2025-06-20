@@ -11,7 +11,7 @@ import 'package:ysr_project/services/user/user_data.dart';
 class CommentModel {
   final String name;
   final String message;
-  final String timeAgo;
+  final DateTime timeAgo;
   final String avatarUrl;
 
   CommentModel({
@@ -38,7 +38,7 @@ class CommentsBottomSheet extends ConsumerWidget {
         .map((comment) => CommentModel(
               name: comment.userName,
               message: comment.commentText,
-              timeAgo: DateFormat("MMMM d, y").format(comment.commentDate),
+              timeAgo: comment.commentDate,
               avatarUrl: comment.userId.toString(),
             ))
         .toList();
@@ -61,7 +61,7 @@ class CommentsBottomSheet extends ConsumerWidget {
               height: 4,
               width: 40,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: Colors.grey,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -93,7 +93,7 @@ class CommentsBottomSheet extends ConsumerWidget {
                   itemCount: comments.length,
                   separatorBuilder: (context, index) => Divider(
                     height: 1,
-                    color: Colors.grey[200],
+                    color: Colors.black54,
                     endIndent: 10,
                     indent: 10,
                   ),
@@ -118,6 +118,20 @@ class CommentTile extends StatelessWidget {
   final CommentModel comment;
 
   const CommentTile({required this.comment});
+
+  String timeAgo(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+    if (difference.inDays > 0) {
+      return '${difference.inDays} day ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} hour ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} minute ago';
+    } else {
+      return 'just now';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,11 +160,10 @@ class CommentTile extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      comment.timeAgo,
+                      timeAgo(comment.timeAgo),
                       style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey,
-                        fontSize: 12,
+                        fontWeight: FontWeight.w300,
+                        fontSize: 11,
                       ),
                     ),
                   ],
@@ -192,17 +205,16 @@ class _CommentInputState extends ConsumerState<CommentInput> {
     final notifier = ref.read(homeFeedNotifierProvider.notifier);
     final post = viewModel.homeFeedViewModels[widget.id];
     return Container(
+      margin: EdgeInsets.fromLTRB(8, 8, 8, 39),
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: Offset(0, -2),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.black, // Optional border color
+          width: 0.6, // Optional border width
+        ),
       ),
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(4),
       child: Row(
         children: [
           Initicon(text: ref.read(userProvider).name, size: 28),
@@ -221,6 +233,7 @@ class _CommentInputState extends ConsumerState<CommentInput> {
             ),
           ),
           FloatingActionButton(
+            elevation: 0,
             mini: true,
             backgroundColor: Colors.green,
             child: Icon(Icons.arrow_upward, color: Colors.white),

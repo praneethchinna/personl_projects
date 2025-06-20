@@ -28,7 +28,10 @@ class GalleryNotifier extends StateNotifier<GalleryViewModel> {
   FutureOr<void> build() async {
     try {
       final eventsList = await galleryRepo.fetchEvents();
-      final eventName = eventsList.events.first.name;
+      final eventName = "Select Events";
+      eventsList.events.insert(
+          0, Event(name: eventName, date: DateTime.now(), time: "00:00"));
+
       state = state.copyWith(eventsResponseModel: eventsList);
       updateEvent(eventName);
     } catch (e) {
@@ -44,6 +47,12 @@ class GalleryNotifier extends StateNotifier<GalleryViewModel> {
   }
 
   Future<void> fetchImages(String eventId) async {
+    if (eventId.toLowerCase() == "select events") {
+      state = state.copyWith(
+          isLoading: false,
+          galleryResponseModel: GalleryResponseModel(images: []));
+      return;
+    }
     try {
       final response = await galleryRepo.fetchImages(eventId);
       state = state.copyWith(galleryResponseModel: response, isLoading: false);

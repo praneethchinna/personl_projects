@@ -69,7 +69,11 @@
   "upload_id_proof": "Upload ID Proof",
   "no_file_selected": "No file selected",
   "selfie_capture": "Selfie Capture",
-  "submit": "Submit"
+  "submit": "Submit",
+
+  "rewards": "Rewards",
+  "leaderboard": "Leader board",
+  "language_settings": "Language Settings"
 
 
 

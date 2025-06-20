@@ -22,12 +22,13 @@ class HomeFeedsRepoImpl {
 
   HomeFeedsRepoImpl({required this.dio, required this.ref});
 
-  Future<List<HomeFeedsResponseModel>> getHomeFeeds() async {
+  Future<HomeFeedFullResponseModel> getHomeFeeds({int page = 1}) async {
     try {
       final userId = ref.read(userProvider).userId;
-      final response = await dio.get('/uploads/homefeeduser?user_id=$userId');
+      final response =
+          await dio.get('/uploads/homefeeduser?user_id=$userId&page=$page');
       if (response.statusCode == 200) {
-        return homeFeedsResponseModelFromJson(response.data);
+        return HomeFeedFullResponseModel.fromJson(response.data);
       } else {
         return throw Exception("Failed to fetch Home Feeds");
       }
@@ -137,7 +138,7 @@ class HomeFeedsRepoImpl {
     try {
       final response = await dio.get('/special-videos');
       if (response.statusCode == 200) {
-        final listOfVideos = response.data as List;
+        final listOfVideos = response.data["videos"] as List;
         return listOfVideos
             .map((element) => SpecialVideos.fromJson(element))
             .toList();

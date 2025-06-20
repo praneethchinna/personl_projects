@@ -78,6 +78,14 @@ dependencies:
   camera: ^0.11.1
   flutter_animate: ^4.5.2
   easy_localization: ^3.0.7+1
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+  flutter_svg: ^2.1.0
+  lazy_load_scrollview: ^1.3.0
+  loadmore: ^2.1.0
+  youtube_explode_dart: ^2.4.2
+  blur: ^4.0.2
+  fl_chart: ^0.71.0
 
 
 
@@ -93,6 +101,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.3
+  build_runner: ^2.4.15
+  riverpod_generator: ^2.6.5
 
 flutter_icons:
   android: true
@@ -114,6 +124,12 @@ flutter:
   assets:
     - assets/
     - assets/translations/
+    - assets/svgs/
+    - assets/videos/
+    - assets/rewards/
+    - assets/gif/
+    - assets/initial_screens/
+    - assets/signup_icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

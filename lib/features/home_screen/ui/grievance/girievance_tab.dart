@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/colors/app_colors.dart';
+import 'package:ysr_project/core_widgets/ysr_app_bar.dart';
 import 'package:ysr_project/features/home_screen/ui/grievance/grievance_list.dart';
 import 'package:ysr_project/features/home_screen/ui/grievance/grievance_ui.dart';
 import 'package:ysr_project/main.dart';
@@ -50,7 +51,8 @@ class _GrievanceTabState extends ConsumerState<GrievanceTab>
     }
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: YsrAppBar(
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {
@@ -59,10 +61,9 @@ class _GrievanceTabState extends ConsumerState<GrievanceTab>
             icon: const Icon(Icons.refresh),
           )
         ],
-        foregroundColor: Colors.white,
         title: Text(
           "grievance_form".tr(),
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
       ),
       body: Column(

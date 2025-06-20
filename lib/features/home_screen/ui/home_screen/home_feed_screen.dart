@@ -3,13 +3,22 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
+import 'package:ysr_project/colors/app_colors.dart';
+import 'package:ysr_project/core_widgets/ysr_app_bar.dart';
+import 'package:ysr_project/core_widgets/ysr_background_theme.dart';
+import 'package:ysr_project/features/home_screen/providers/home_feed_repository.dart';
 import 'package:ysr_project/features/home_screen/ui/home_screen/feed_screen.dart';
-import 'package:ysr_project/features/home_screen/widgets/multi_level_progress_widgets.dart';
+import 'package:ysr_project/features/influencer/story_feed_screen.dart';
+import 'package:ysr_project/features/notifications/presentation/ui/notifications_screen.dart';
+import 'package:ysr_project/features/profile/ui/user_profile_ui.dart';
+import 'package:ysr_project/features/saved/saved.dart';
+import 'package:ysr_project/services/user/user_data.dart';
+
+final isLatestFeedSelected = StateProvider<bool>((ref) => true);
 
 class HomeFeedScreen extends ConsumerStatefulWidget {
   const HomeFeedScreen({super.key});
@@ -21,24 +30,123 @@ class HomeFeedScreen extends ConsumerStatefulWidget {
 class _HomeFeedScreenState extends ConsumerState<HomeFeedScreen> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ref.watch(futurePointsProvider).when(
-              loading: () => Skeletonizer(
-                enabled: true,
-                child: MultiLevelProgressWidget(
-                  progress: 100,
-                  progressColor: Colors.grey,
-                ),
+    return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: YsrAppBar(
+          leading: Image.asset(
+            "assets/image_2.png",
+            width: 45,
+            height: 45,
+          ),
+          title: Text(
+            "Welcome ${ref.watch(userProvider).name}",
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+          ),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (_) => const NotificationsScreen()),
+                );
+              },
+              child: Image.asset(
+                "assets/notifications.png",
+                width: 25,
+                height: 25,
               ),
-              data: (data) => MultiLevelProgressWidget(
-                progress: data.totalPoints!.toDouble(),
-              ),
-              error: (_, __) => SizedBox.shrink(),
             ),
-        HomeFeedList()
-      ],
-    );
+            Gap(5),
+            GestureDetector(
+              onTap: () {
+                final phNumber = ref.read(userProvider).mobile;
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => UserProfileUI(phNumber)),
+                );
+              },
+              child: Image.asset(
+                "assets/profile.png",
+                width: 35,
+                height: 35,
+              ),
+            ),
+            Gap(5),
+          ],
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: StoryFeedScreen(),
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(
+            //     left: 10,
+            //   ),
+            //   child: Row(
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: [
+            //       GestureDetector(
+            //         onTap: () {
+            //           ref.read(isLatestFeedSelected.notifier).state = true;
+            //           ref.invalidate(homeFeedNotifierProvider);
+            //         },
+            //         child: Container(
+            //           padding:
+            //               EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+            //           decoration: BoxDecoration(
+            //             color: ref.watch(isLatestFeedSelected)
+            //                 ? AppColors.primaryColor
+            //                 : Colors.transparent,
+            //             borderRadius: BorderRadius.circular(20),
+            //           ),
+            //           alignment: Alignment.center,
+            //           child: Text(
+            //             "Latest",
+            //             style: TextStyle(
+            //                 fontWeight: FontWeight.bold,
+            //                 fontSize: 12,
+            //                 color: ref.watch(isLatestFeedSelected)
+            //                     ? Colors.white
+            //                     : Colors.black),
+            //           ),
+            //         ),
+            //       ),
+            //       Gap(10),
+            //       GestureDetector(
+            //         onTap: () {
+            //           ref.read(isLatestFeedSelected.notifier).state = false;
+            //         },
+            //         child: Container(
+            //           padding:
+            //               EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            //           decoration: BoxDecoration(
+            //             color: ref.watch(isLatestFeedSelected)
+            //                 ? Colors.transparent
+            //                 : AppColors.primaryColor,
+            //             borderRadius: BorderRadius.circular(20),
+            //           ),
+            //           alignment: Alignment.center,
+            //           child: Text(
+            //             "Saved",
+            //             style: TextStyle(
+            //                 fontSize: 12,
+            //                 fontWeight: FontWeight.bold,
+            //                 color: ref.watch(isLatestFeedSelected)
+            //                     ? Colors.black
+            //                     : Colors.white),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            ref.watch(isLatestFeedSelected)
+                ? Expanded(child: HomeFeedList())
+                : Expanded(child: SavedPostsScreen())
+          ],
+        ));
   }
 
   Future<void> downloadMultipleFiles(List<String> urls) async {

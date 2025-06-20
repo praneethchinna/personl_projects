@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/home_screen/ui/home_screen/home_tab_screen.dart';
+import 'package:ysr_project/features/login/ui/get_started_pages/your_voice_page.dart';
 import 'package:ysr_project/features/login/ui/login_screen.dart';
 import 'package:ysr_project/services/shared_preferences/shared_preferences_provider.dart';
 import 'package:ysr_project/services/user/user_data.dart';
@@ -39,16 +41,19 @@ void main() async {
 void configLoading() {
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 2000)
-    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-    ..loadingStyle = EasyLoadingStyle.dark
-    ..indicatorSize = 45.0
-    ..radius = 10.0
-    ..progressColor = Colors.yellow
-    ..backgroundColor = Colors.green
-    ..indicatorColor = Colors.yellow
-    ..textColor = Colors.yellow
-    ..maskColor = Colors.blue.withOpacity(0.5)
-    ..userInteractions = true
+    ..indicatorType = EasyLoadingIndicatorType.chasingDots
+    ..maskType = EasyLoadingMaskType.custom
+    ..maskColor = AppColors.primaryColor.withOpacity(0.2)
+    ..displayDuration = const Duration(seconds: 2)
+    ..loadingStyle = EasyLoadingStyle.custom
+    ..indicatorSize = 36.0
+    ..radius = 100.0
+    ..contentPadding = EdgeInsets.zero
+    ..progressColor = Colors.black
+    ..backgroundColor = Colors.white
+    ..indicatorColor = AppColors.electricOcean
+    ..textColor = Colors.black
+    ..userInteractions = false
     ..dismissOnTap = false;
 }
 
@@ -137,7 +142,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         );
       } else {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginScreen()),
+          MaterialPageRoute(builder: (context) => YourVoicePage()),
         );
       }
     });
@@ -152,16 +157,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: Colors.white,
       body: Center(
         child: ScaleTransition(
           scale: _scaleAnimation,
-          child: Image.asset(
-            'assets/ysr.png',
-            width: 700,
-            height: 700,
-            fit: BoxFit.contain,
-          ),
+          child: Image.asset("assets/gif/ysr_splash_gif.gif",
+              width: 700, height: 700),
         ),
       ),
     );

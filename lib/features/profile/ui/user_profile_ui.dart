@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_initicon/flutter_initicon.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -8,6 +9,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:ysr_project/colors/app_colors.dart';
+import 'package:ysr_project/core_widgets/ysr_app_bar.dart';
 import 'package:ysr_project/features/home_screen/helper_class/logout_invalidate_providers.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/ui/notifications_ui.dart';
@@ -23,11 +25,11 @@ class UserProfileUI extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profileData = ref.watch(profileAsyncProvider(phoneNumber));
     return Scaffold(
-        backgroundColor: Colors.blueGrey[50],
-        appBar: AppBar(
-          foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        appBar: YsrAppBar(
           title: Text(
             "profile".tr(),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
           centerTitle: true,
           actions: [
@@ -42,18 +44,7 @@ class UserProfileUI extends ConsumerWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.edit),
-                      Gap(10),
-                      Text(
-                        "edit".tr(),
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
+                  child: Icon(MdiIcons.accountEdit),
                 ))
           ],
         ),
@@ -64,14 +55,31 @@ class UserProfileUI extends ConsumerWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 20),
-
-                    Initicon(
-                      text: data.name,
-                      size: 100,
-                      backgroundColor: Colors.blueGrey,
+                    Column(
+                      children: [
+                        Image.asset(
+                          'assets/profile.png',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.contain,
+                        ),
+                        Gap(10),
+                        Text(
+                          data.name,
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black),
+                        ),
+                        Image.asset(
+                          'assets/level.png',
+                          width: 38,
+                          height: 38,
+                          fit: BoxFit.contain,
+                        ),
+                      ],
                     ),
-
-                    SizedBox(height: 20),
+                    SizedBox(height: 4),
                     ref.watch(futurePointsProvider).when(
                           loading: () => Skeletonizer(
                             enabled: true,
@@ -80,178 +88,284 @@ class UserProfileUI extends ConsumerWidget {
                               progressColor: Colors.grey,
                             ),
                           ),
-                          data: (data) => ListTile(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 20),
-                            leading: Image.asset(
-                              'assets/coin.png',
-                              width: 25,
-                              height: 25,
-                            ),
-                            title: Text("total_points".tr(),
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            subtitle: Text(
-                                "level: ${(data.totalPoints! ~/ 100)}",
-                                style: TextStyle()),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                    "${data.totalPoints.toString()} / ${((data.totalPoints! ~/ 100) + 1) * 100}",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold)),
-                                Gap(10),
-                                CircularPercentIndicator(
-                                  radius: 20.0,
-                                  lineWidth: 7.0,
-                                  animation: true,
-                                  animationDuration: 3000,
-                                  percent: ((data.totalPoints! % 100) / 100)
-                                      .clamp(0.0, 1.0),
-                                  circularStrokeCap: CircularStrokeCap.round,
-                                  progressColor: AppColors.primaryColor,
-                                  backgroundColor: Colors.green.shade300,
-                                )
-                              ],
-                            ),
+                          data: (data) => Column(
+                            children: [
+                              Text(data.userLevel.toString(),
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black)),
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(32.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 4,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.asset(
+                                      'assets/points.png',
+                                      width: 20,
+                                      height: 20,
+                                    ),
+                                    Gap(10),
+                                    Text(
+                                      data.totalPoints.toString(),
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
+                                    ),
+                                    Gap(5),
+                                    Text(
+                                      "points".tr(),
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Gap(10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  LikeStatCard(
+                                    label: "liked".tr(),
+                                    count: data.likedCount ?? 0,
+                                    imagePath: 'assets/liked_icon.png',
+                                  ),
+                                  LikeStatCard(
+                                    label: "commented".tr(),
+                                    count: data.commentedCount ?? 0,
+                                    imagePath: 'assets/commented_icon.png',
+                                  ),
+                                  LikeStatCard(
+                                    label: "shared".tr(),
+                                    count: data.sharedCount ?? 0,
+                                    imagePath: 'assets/shared_icon.png',
+                                  ),
+                                ],
+                              ),
+                              Gap(15),
+                              profileData.when(
+                                data: (data) {
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(10),
+                                            alignment: Alignment.center,
+                                            width: 200,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.deepPurple,
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(5),
+                                                  bottomLeft:
+                                                      Radius.circular(5)),
+                                            ),
+                                            child: Text(
+                                              data.referralCode,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Clipboard.setData(ClipboardData(
+                                                  text: data.referralCode));
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        "Copied to clipboard")),
+                                              );
+                                            },
+                                            child: Container(
+                                              height: 40,
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(5),
+                                                    bottomRight:
+                                                        Radius.circular(5)),
+                                                border: Border.all(
+                                                  color: AppColors.primaryColor,
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              child: Text(
+                                                "COPY",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                    color:
+                                                        AppColors.primaryColor),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Gap(5),
+                                    ],
+                                  );
+                                },
+                                error: (_, __) => SizedBox.shrink(),
+                                loading: () => SizedBox.shrink(),
+                              ),
+                            ],
                           ),
                           error: (_, __) => SizedBox.shrink(),
                         ),
-                    SizedBox(height: 20),
-                    // User Details
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 170,
-                            child: TextField(
-                              readOnly: true, // Make it non-editable
-                              controller: TextEditingController(
-                                  text: data.referralCode),
-                              style: const TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              decoration: InputDecoration(
-                                labelText: "referral_code".tr(),
-                                labelStyle: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.grey.shade800,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                filled: true,
-                                fillColor: Colors.blueGrey[50],
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                  borderSide:
-                                      BorderSide(color: Colors.grey.shade400),
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 15),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              String link =
-                                  "Check out this video: referral tv\nJoin our platform using my referral code${data.referralCode} and earn Signup bonus of 100 points and Referral Bonus of 50 points! Sign up here: https://drive.google.com/file/d/1lVrEEKee_4toRpCMYhPvrJdpakUpaVpm/view?usp=drive_link";
-                              ShareCard(title: "referral tv", link: link)
-                                  .shareOnSocialMedia(context, "whatsapp");
-                            },
-                            child: Chip(
-                              label: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text("share_on".tr()),
-                                  Gap(10),
-                                  Icon(
-                                    MdiIcons.whatsapp,
-                                    color: Colors.white,
-                                  )
-                                ],
-                              ),
-                              backgroundColor: Colors.green,
-                              labelStyle:
-                                  TextStyle(color: Colors.white, fontSize: 17),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    if (data.name.isNotEmpty) ...[
-                      ProfileCard(
-                        icon: LucideIcons.user,
-                        title: "name".tr(),
-                        value: data.name,
-                      ),
-                    ],
-                    if (data.email.isNotEmpty) ...[
-                      ProfileCard(
-                        icon: LucideIcons.mail,
-                        title: "email".tr(),
-                        value: data.email,
-                      ),
-                    ],
+
                     if (data.mobile.isNotEmpty) ...[
                       ProfileCard(
-                        icon: LucideIcons.phone,
+                        imagePath: 'assets/number_icon.png',
                         title: "phone".tr(),
                         value: data.mobile,
                       ),
                     ],
+                    if (data.email.isNotEmpty) ...[
+                      ProfileCard(
+                        imagePath: 'assets/email_icon.png',
+                        title: "email".tr(),
+                        value: data.email,
+                      ),
+                    ],
+                    if (data.gender.isNotEmpty) ...[
+                      ProfileCard(
+                        imagePath: 'assets/gender.png',
+                        title: "gender".tr(),
+                        value: data.gender,
+                      ),
+                    ],
                     if (data.country.isNotEmpty) ...[
                       ProfileCard(
-                        icon: LucideIcons.globe,
+                        imagePath: 'assets/country_icon.png',
                         title: "country".tr(),
                         value: data.country,
                       ),
                     ],
-
                     if (data.parliament.isNotEmpty) ...[
                       ProfileCard(
-                        icon: LucideIcons.mapPin,
+                        imagePath: 'assets/parliament_icon.png',
                         title: "parliament".tr(),
                         value: data.parliament,
                       ),
                     ],
                     if (data.constituency.isNotEmpty) ...[
                       ProfileCard(
-                        icon: LucideIcons.mapPin,
+                        imagePath: 'assets/assembly_icon.png',
                         title: "constituency".tr(),
                         value: data.constituency,
                       ),
                     ],
-                    if (data.gender.isNotEmpty) ...[
-                      ProfileCard(
-                        icon: Icons.person,
-                        title: "gender".tr(),
-                        value: data.gender,
-                      ),
-                    ],
-
-                    // Logout Button
-                    SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await LogoutInvalidationProvider.logout(ref, context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Text("logout".tr(),
-                          style: TextStyle(fontSize: 18, color: Colors.white)),
-                    ),
+                    Gap(10),
+                    // profileData.when(
+                    //   data: (data) {
+                    //     return Container(
+                    //       height: 100,
+                    //       margin: EdgeInsets.symmetric(horizontal: 10),
+                    //       width: double.infinity,
+                    //       decoration: BoxDecoration(
+                    //         color: AppColors.royalBlue,
+                    //         borderRadius: BorderRadius.circular(5),
+                    //       ),
+                    //       child: Center(
+                    //         child: Column(
+                    //           mainAxisSize: MainAxisSize.min,
+                    //           children: [
+                    //             Row(
+                    //               mainAxisSize: MainAxisSize.min,
+                    //               children: [
+                    //                 Container(
+                    //                   padding: const EdgeInsets.all(10),
+                    //                   alignment: Alignment.center,
+                    //                   width: 200,
+                    //                   height: 40,
+                    //                   decoration: BoxDecoration(
+                    //                     color: AppColors.deepPurple,
+                    //                     borderRadius: BorderRadius.only(
+                    //                         topLeft: Radius.circular(5),
+                    //                         bottomLeft: Radius.circular(5)),
+                    //                   ),
+                    //                   child: Text(
+                    //                     data.referralCode,
+                    //                     style: TextStyle(
+                    //                       fontSize: 12,
+                    //                       fontWeight: FontWeight.w600,
+                    //                       color: Colors.white,
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //                 GestureDetector(
+                    //                   onTap: () {
+                    //                     String link =
+                    //                         "referral tv\nJoin our platform using my referral code${data.referralCode} and earn Signup bonus of 100 points and Referral Bonus of 50 points! Sign up here: https://drive.google.com/file/d/1lVrEEKee_4toRpCMYhPvrJdpakUpaVpm/view?usp=drive_link";
+                    //                     ShareCard(title: "referral", link: link)
+                    //                         .shareOnSocialMedia(
+                    //                             context, "whatsapp");
+                    //                   },
+                    //                   child: Container(
+                    //                     height: 40,
+                    //                     padding: const EdgeInsets.all(10),
+                    //                     decoration: BoxDecoration(
+                    //                       color: Colors.white,
+                    //                       borderRadius: BorderRadius.only(
+                    //                           topRight: Radius.circular(5),
+                    //                           bottomRight: Radius.circular(5)),
+                    //                       border: Border.all(
+                    //                         color: AppColors.primaryColor,
+                    //                         width: 1,
+                    //                       ),
+                    //                     ),
+                    //                     child: Text(
+                    //                       "COPY",
+                    //                       style: TextStyle(
+                    //                           fontSize: 12,
+                    //                           fontWeight: FontWeight.w600,
+                    //                           color: AppColors.primaryColor),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //             Gap(10),
+                    //             Text(
+                    //               "Tap to copy your referral code",
+                    //               style: TextStyle(
+                    //                 fontSize: 12,
+                    //                 fontWeight: FontWeight.w600,
+                    //                 color: Colors.white,
+                    //               ),
+                    //             )
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    //   error: (_, __) => SizedBox.shrink(),
+                    //   loading: () => SizedBox.shrink(),
+                    // ),
                     SizedBox(height: 30),
                   ],
                 ),
@@ -269,26 +383,137 @@ class UserProfileUI extends ConsumerWidget {
 }
 
 class ProfileCard extends StatelessWidget {
-  final IconData icon;
+  final String imagePath; // Path to asset image
   final String title;
   final String value;
+  final double imageSize;
 
   const ProfileCard(
       {super.key,
-      required this.icon,
+      required this.imagePath,
       required this.title,
-      required this.value});
+      required this.value,
+      this.imageSize = 25,
+      th});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 3,
-      child: ListTile(
-        leading: Icon(icon, color: Colors.blueAccent),
-        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(value, style: TextStyle(color: Colors.grey[700])),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          )
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+            ),
+            child: Image.asset(
+              imagePath,
+              width: imageSize,
+              height: imageSize,
+              fit: BoxFit.contain,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade700,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class LikeStatCard extends StatelessWidget {
+  final String label;
+  final int count;
+  final String imagePath; // PNG or asset path
+  final Color? bgColor;
+  final Color? iconColor;
+
+  const LikeStatCard({
+    super.key,
+    required this.label,
+    required this.count,
+    required this.imagePath,
+    this.bgColor,
+    this.iconColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: bgColor ?? Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade300,
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Icon (PNG image)
+          Image.asset(
+            imagePath,
+            height: 24,
+            width: 24,
+          ),
+          const SizedBox(width: 8),
+          // Text content
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(fontSize: 14, color: Colors.black),
+              ),
+              Text(
+                count.toString(),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

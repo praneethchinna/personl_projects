@@ -16,22 +16,42 @@ class AsyncDropdownSelector<T> extends ConsumerStatefulWidget
   // Add these new properties
   final FocusNode? focusNode;
   final Function(String)? onFieldSubmitted;
+  final TextStyle? subTitleTextStyle;
+  final Color? suffixIconColor;
+  final InputBorder? border;
+  final InputBorder? enabledBorder;
+  final TextStyle? textStyle;
+  final TextStyle? hintStyle;
+  final bool? showSubtitle;
 
-  const AsyncDropdownSelector({
-    super.key,
-    required this.hintText,
-    required this.subTitle,
-    this.validator,
-    required this.itemsProvider,
-    required this.filter,
-    required this.itemBuilder,
-    this.customEmptyWidget,
-    this.extraTopItemBuilder,
-    required this.textEditingController,
-    // Add these to the constructor
-    this.focusNode,
-    this.onFieldSubmitted,
-  });
+  const AsyncDropdownSelector(
+      {super.key,
+      required this.hintText,
+      required this.subTitle,
+      this.subTitleTextStyle = const TextStyle(
+        fontSize: 12,
+        color: Colors.black,
+        fontWeight: FontWeight.w500,
+      ),
+      this.suffixIconColor = Colors.black,
+      this.border,
+      this.enabledBorder,
+      this.textStyle = const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
+      this.hintStyle,
+      this.validator,
+      required this.itemsProvider,
+      required this.filter,
+      required this.itemBuilder,
+      this.customEmptyWidget,
+      this.extraTopItemBuilder,
+      required this.textEditingController,
+      // Add these to the constructor
+      this.focusNode,
+      this.onFieldSubmitted,
+      this.showSubtitle = true});
 
   @override
   ConsumerState<AsyncDropdownSelector> createState() =>
@@ -85,14 +105,8 @@ class AsyncDropdownSelectorState<T>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            widget.subTitle,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          if (widget.showSubtitle ?? true)
+            Text(widget.subTitle, style: widget.subTitleTextStyle),
           SizedBox(height: 8),
           IntrinsicHeight(
             child: Form(
@@ -103,18 +117,20 @@ class AsyncDropdownSelectorState<T>
                   AbsorbPointer(
                     child: TextFormField(
                       controller: textEditingController,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: widget.textStyle,
                       decoration: InputDecoration(
                         hintText: widget.hintText,
+                        hintStyle: widget.hintStyle,
                         alignLabelWithHint: true,
-                        suffixIcon:
-                            const Icon(Icons.keyboard_arrow_down_outlined),
+                        suffixIcon: Icon(
+                          Icons.keyboard_arrow_down_outlined,
+                          color: widget.suffixIconColor,
+                        ),
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 16),
                         errorText: _errorText,
+                        border: widget.border,
+                        enabledBorder: widget.enabledBorder,
                       ),
                       readOnly: true,
                     ),

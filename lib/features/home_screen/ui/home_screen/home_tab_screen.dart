@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/home_screen/ui/home_screen/home_feed_screen.dart';
 import 'package:ysr_project/features/home_screen/ui/home_screen/home_screen_drawer.dart';
 import 'package:ysr_project/features/home_screen/ui/influencer_video_ui.dart';
@@ -10,6 +15,7 @@ import 'package:ysr_project/features/home_screen/ui/notification_imp.dart';
 import 'package:ysr_project/features/home_screen/ui/special_videos_page.dart';
 import 'package:ysr_project/features/home_screen/widgets/easy_toggle_button.dart';
 import 'package:ysr_project/features/polls/ui/poll_screen.dart';
+import 'package:ysr_project/features/special_videos/special_videos_ui.dart';
 import 'package:ysr_project/services/shared_preferences/shared_preferences_provider.dart';
 import 'package:ysr_project/services/user/user_data.dart';
 import 'package:ysr_project/main.dart';
@@ -25,13 +31,11 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
   final List<Widget> _pages = [
     HomeFeedScreen(),
     PollScreen(),
-    SpecialVideosPage(
-      showAppBar: false,
-    ),
+    SpecialVideosUi(),
+    MoreScreen(),
     InfluencerVideoUI(
       showAppBar: false,
     ),
-    MoreScreen(),
   ];
 
   @override
@@ -46,89 +50,112 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
         return true;
       },
       child: Scaffold(
-        drawer: HomeScreenDrawer(),
-        appBar: AppBar(
-          foregroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.white),
-          titleSpacing: 0,
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/image_2.png',
-                width: 60,
-                height: 60,
-                fit: BoxFit.contain,
-              ),
-              Gap(50),
-              Expanded(
-                child: Text(
-                  "Hi..  ${ref.read(userProvider).name}",
-                  style: TextStyle(fontSize: 18),
+        appBar: null,
+        // appBar: AppBar(
+        //   foregroundColor: Colors.white,
+        //   iconTheme: IconThemeData(color: Colors.white),
+        //   titleSpacing: 0,
+        //   title: Row(
+        //     mainAxisSize: MainAxisSize.min,
+        //     children: [
+        //       Image.asset(
+        //         'assets/image_2.png',
+        //         width: 60,
+        //         height: 60,
+        //         fit: BoxFit.contain,
+        //       ),
+        //       Gap(50),
+        //       Expanded(
+        //         child: Text(
+        //           "Hi..  ${ref.read(userProvider).name}",
+        //           style: TextStyle(fontSize: 18),
+        //         ),
+        //       ),
+        //       Gap(5),
+        //     ],
+        //   ),
+        //   actions: [
+        //     Consumer(
+        //       builder: (context, ref, _) {
+        //         final userName = ref.watch(languageProvider);
+        //         return EasyToggleButton(
+        //           initialValue: userName.languageCode == "en",
+        //           changed: (value) {
+        //             Locale newLocale = value ? Locale('en') : Locale('te');
+        //
+        //             ref.read(languageProvider.notifier).state = newLocale;
+        //
+        //             context.setLocale(newLocale);
+        //             LanguageSettings.updateLanguage(newLocale.languageCode);
+        //           },
+        //         );
+        //       },
+        //     ),
+        //     Gap(3),
+        //     GestureDetector(
+        //       onTap: () {
+        //         Navigator.push(context,
+        //             MaterialPageRoute(builder: (context) => NotificationImp()));
+        //       },
+        //       child: Icon(
+        //         Icons.notifications_active,
+        //       ),
+        //     ),
+        //     SizedBox(
+        //       width: 10,
+        //     ),
+        //   ],
+        // ),
+        body: _pages[_selectedIndex],
+        bottomNavigationBar: Stack(
+          children: [
+            Container(
+              height: Platform.isIOS ? 100 : 80,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.skyBlue,
+                    AppColors.pastelGreen,
+                  ],
                 ),
               ),
-              Gap(5),
-            ],
-          ),
-          actions: [
-            Consumer(
-              builder: (context, ref, _) {
-                final userName = ref.watch(languageProvider);
-                return EasyToggleButton(
-                  initialValue: userName.languageCode == "en",
-                  changed: (value) {
-                    Locale newLocale = value ? Locale('en') : Locale('te');
-
-                    ref.read(languageProvider.notifier).state = newLocale;
-
-                    context.setLocale(newLocale);
-                    LanguageSettings.updateLanguage(newLocale.languageCode);
-                  },
-                );
+            ),
+            BottomNavigationBar(
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              type: BottomNavigationBarType.fixed,
+              unselectedItemColor: Colors.black,
+              unselectedLabelStyle: TextStyle(color: Colors.black),
+              showUnselectedLabels: true,
+              selectedItemColor: AppColors.deepPurple,
+              currentIndex: ref.watch(tabIndexProvider),
+              items: [
+                BottomNavigationBarItem(
+                    icon: Icon(MdiIcons.homeCircle), label: 'home'.tr()),
+                BottomNavigationBarItem(
+                    icon: Icon(MdiIcons.poll), label: 'poll'.tr()),
+                BottomNavigationBarItem(
+                    icon: SvgPicture.asset(
+                      'assets/svgs/video_icon.svg',
+                      color: ref.watch(tabIndexProvider) == 2
+                          ? AppColors.deepPurple
+                          : Colors.black,
+                      height: 20,
+                    ),
+                    label: 'special_videos'.tr()),
+                BottomNavigationBarItem(
+                    icon: SvgPicture.asset(
+                      'assets/svgs/more_icon.svg',
+                      color: ref.watch(tabIndexProvider) == 3
+                          ? AppColors.deepPurple
+                          : Colors.black,
+                      height: 20,
+                    ),
+                    label: 'more'.tr()),
+              ],
+              onTap: (index) {
+                ref.read(tabIndexProvider.notifier).state = index;
               },
-            ),
-            Gap(3),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => NotificationImp()));
-              },
-              child: Icon(
-                Icons.notifications_active,
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-          ],
-        ),
-        body: _pages[_selectedIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          onTap: (value) {
-            ref.read(tabIndexProvider.notifier).state = value;
-          },
-          currentIndex: _selectedIndex,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'home'.tr(),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.poll),
-              label: 'poll'.tr(),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.video_collection_rounded),
-              label: 'special_videos'.tr(),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_pin),
-              label: 'influencer_videos'.tr(),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.more_vert_rounded),
-              label: 'more'.tr(),
             ),
           ],
         ),
@@ -136,3 +163,5 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
     );
   }
 }
+
+final tabIndexProvider = StateProvider<int>((ref) => 0);

@@ -19,7 +19,7 @@
 
     <application
         android:enableOnBackInvokedCallback="true"
-        android:label="ysr_project"
+        android:label="YSRCP"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         tools:targetApi="tiramisu">
