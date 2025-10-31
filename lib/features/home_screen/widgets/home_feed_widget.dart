@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -46,6 +48,7 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
 
   @override
   void initState() {
+    log("------------------------- in home feed widget init state-------------------------");
     super.initState();
     updateDescriptionAndLink();
   }
@@ -152,7 +155,6 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-
                     CircleAvatar(
                       backgroundImage: AssetImage(
                           "assets/ysrcp_logo3.png"), // Change as needed
@@ -400,11 +402,11 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
           ),
         ),
         if (widget.item.pinnedPost)
-        Image.asset(
-          "assets/pin.png",
-          width: 20,
-          height: 20,
-        ),
+          Image.asset(
+            "assets/pin.png",
+            width: 20,
+            height: 20,
+          ),
       ],
     );
   }
@@ -444,6 +446,10 @@ class _HomeFeedWidgetState extends ConsumerState<HomeFeedWidget> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 class PostActionsBar extends StatelessWidget {
@@ -515,7 +521,8 @@ class PostActionsBar extends StatelessWidget {
             label: shareCount.toString(),
             onTap: onShare,
           ),
-          IconButton(padding: EdgeInsets.zero,
+          IconButton(
+            padding: EdgeInsets.zero,
             icon: Icon(
               isSaved ? Icons.bookmark : Icons.bookmark_border,
               color: Colors.blueAccent,

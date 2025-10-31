@@ -233,6 +233,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     final value = userCredential?.user?.email;
                     return ref.read(repoProvider).signInGoogleWithEmail(value!);
                   }).then((value) {
+                    EasyLoading.dismiss();
                     if (value) {
                       showSuccessDialog(context);
                     } else {

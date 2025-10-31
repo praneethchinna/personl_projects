@@ -30,36 +30,7 @@ class EnterPhoneScreen extends ConsumerWidget {
             ],
           ),
         ));
-    Scaffold(
-      backgroundColor: Colors.white,
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-      ),
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Stack(
-          children: [
-            Image.asset(
-              'assets/phone.jpg',
-              width: 500,
-              height: 500,
-              fit: BoxFit.contain,
-            ),
-            Positioned(
-              top: 470,
-              left: 20,
-              right: 20,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: buildPhoneNumberField(context, ref),
-              ),
-            )
-          ],
-        ),
-      ).animate().shimmer(duration: 1000.ms),
-    );
+
   }
 
   Widget buildPhoneNumberField(BuildContext context, WidgetRef ref) {
@@ -123,6 +94,34 @@ class EnterPhoneScreen extends ConsumerWidget {
       ],
     );
   }
+  void getNewUserOtp(BuildContext context, WidgetRef ref) {
+    EasyLoading.show();
+    ref.read(repoProvider).newUserOtp(phoneNumberController.text).then((value) {
+      EasyLoading.dismiss();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("otp Sent scuccessfully"),
+      ));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpScreen(
+              number: phoneNumberController.text,
+              email: email,
+              name: name,
+              isNewUser: true,
+            ),
+          ));
+    }).onError((error, stackTrace) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(error.toString()),
+        ),
+      );
+    }).whenComplete(() {
+      EasyLoading.dismiss();
+    });
+  }
 
   void getTop(BuildContext context, WidgetRef ref) {
     EasyLoading.show();
@@ -153,32 +152,5 @@ class EnterPhoneScreen extends ConsumerWidget {
     });
   }
 
-  void getNewUserOtp(BuildContext context, WidgetRef ref) {
-    EasyLoading.show();
-    ref.read(repoProvider).newUserOtp(phoneNumberController.text).then((value) {
-      EasyLoading.dismiss();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("otp Sent scuccessfully"),
-      ));
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OtpScreen(
-              number: phoneNumberController.text,
-              email: email,
-              name: name,
-              isNewUser: true,
-            ),
-          ));
-    }).onError((error, stackTrace) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text(error.toString()),
-        ),
-      );
-    }).whenComplete(() {
-      EasyLoading.dismiss();
-    });
-  }
+
 }

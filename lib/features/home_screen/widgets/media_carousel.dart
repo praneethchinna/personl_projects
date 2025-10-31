@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:video_player/video_player.dart';
 import 'package:ysr_project/colors/app_colors.dart';
@@ -25,7 +26,7 @@ class MediaCarousel extends StatefulWidget {
 }
 
 class _MediaCarouselState extends State<MediaCarousel>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late TabController _tabController;
   int _currentIndex = 0;
   List<FlickManager?> flickManagers = [];
@@ -88,13 +89,14 @@ class _MediaCarouselState extends State<MediaCarousel>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: SizedBox(
-            height: widget.height,
+            height: 500,
             child: TabBarView(
               controller: _tabController,
               physics: BouncingScrollPhysics(),
@@ -110,10 +112,17 @@ class _MediaCarouselState extends State<MediaCarousel>
                             ),
                           ),
                           child: FlickVideoPlayer(
-                              flickManager: flickManagers[
-                                  widget.mediaUrls.indexOf(url)]!),
-                        ),
-                      )
+                            preferredDeviceOrientationFullscreen: [
+                              DeviceOrientation.portraitUp,
+                            ],
+                            flickManager:
+                                flickManagers[widget.mediaUrls.indexOf(url)]!,
+                            flickVideoWithControls: FlickVideoWithControls(
+                              controls: FlickPortraitControls(),
+                              videoFit: BoxFit.cover,
+                            ),
+                          ),
+                        ))
                     : FutureBuilder<Size>(
                         future: _getImageSize(url),
                         builder: (context, snapshot) {
@@ -198,4 +207,8 @@ class _MediaCarouselState extends State<MediaCarousel>
       }),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

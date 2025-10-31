@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loadmore/loadmore.dart';
@@ -89,6 +91,7 @@ class _HomeFeedListState extends ConsumerState<HomeFeedList> {
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     itemCount: viewModel.homeFeedViewModels.length,
                     itemBuilder: (context, index) {
+                      log(index.toString()+"-----------------------------");
                       final item = viewModel.homeFeedViewModels[index];
                       final isVideo =
                           item.media.first.fileType.contains("video");

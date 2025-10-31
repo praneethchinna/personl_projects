@@ -252,50 +252,7 @@ class _SelectLocationScreenState extends ConsumerState<SelectLocationScreen> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            // ElevatedButton(
-            //   onPressed: state.country != null &&
-            //           state.state != null &&
-            //           parliamentTFController.text.isNotEmpty &&
-            //           assemblyTFController.text.isNotEmpty
-            //       ? () {
-            //           EasyLoading.show();
-            //           ref.read(repoProvider).updateUserDetails().then(
-            //               (value) {
-            //             EasyLoading.dismiss();
-            //             if (value) {
-            //               _showSuccessDialog(context);
-            //             } else {
-            //               showDialog(
-            //                   context: context,
-            //                   builder: (context) => ErrorDialog(
-            //                       title: "somthing went wrong",
-            //                       message: "can't sign up"));
-            //             }
-            //           }, onError: (error, stackTrace) {
-            //             EasyLoading.dismiss();
-            //             showDialog(
-            //                 context: context,
-            //                 builder: (context) => ErrorDialog(
-            //                     title: "somthing went wrong",
-            //                     message: error.toString()));
-            //           }).whenComplete(() {
-            //             EasyLoading.dismiss();
-            //           });
-            //         }
-            //       : null,
-            //   style: ElevatedButton.styleFrom(
-            //     backgroundColor: AppColors.oceanBlue,
-            //     padding: EdgeInsets.symmetric(vertical: 16),
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(8),
-            //     ),
-            //     minimumSize: Size(double.infinity, 0),
-            //   ),
-            //   child: Text(
-            //     'Finish',
-            //     style: TextStyle(fontSize: 16, color: Colors.white),
-            //   ),
-            // ),
+
           ]),
         ));
   }

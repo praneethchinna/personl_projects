@@ -21,9 +21,6 @@ import 'package:ysr_project/features/saved/providers/saved_posts_repository.dart
 import 'package:ysr_project/main.dart';
 import 'package:ysr_project/services/user/user_data.dart';
 
-
-
-
 class SavedFeedWidget extends ConsumerStatefulWidget {
   final HomeFeedViewModel item;
   final int index;
@@ -31,10 +28,10 @@ class SavedFeedWidget extends ConsumerStatefulWidget {
   final Iterable<int?> likedUsers;
   const SavedFeedWidget(
       {super.key,
-        required this.item,
-        required this.index,
-        required this.isVideo,
-        required this.likedUsers});
+      required this.item,
+      required this.index,
+      required this.isVideo,
+      required this.likedUsers});
 
   @override
   ConsumerState<SavedFeedWidget> createState() => _HomeFeedWidgetState();
@@ -59,18 +56,18 @@ class _HomeFeedWidgetState extends ConsumerState<SavedFeedWidget> {
       child: Column(
         children: links
             .map((e) => GestureDetector(
-          onTap: () async {
-            final Uri url = Uri.parse(e);
-            if (await canLaunchUrl(url)) {
-              await launchUrl(url,
-                  mode: LaunchMode.externalApplication);
-            }
-          },
-          child: Text(e,
-              style: const TextStyle(
-                  color: Colors.blue,
-                  decoration: TextDecoration.underline)),
-        ))
+                  onTap: () async {
+                    final Uri url = Uri.parse(e);
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url,
+                          mode: LaunchMode.externalApplication);
+                    }
+                  },
+                  child: Text(e,
+                      style: const TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline)),
+                ))
             .toList(),
       ),
     );
@@ -84,19 +81,19 @@ class _HomeFeedWidgetState extends ConsumerState<SavedFeedWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: hashTags
             .map((e) => GestureDetector(
-          onTap: () async {
-            final hashtag = e.replaceAll("#", "");
-            final Uri url =
-            Uri.parse("https://twitter.com/hashtag/$hashtag");
-            if (await canLaunchUrl(url)) {
-              await launchUrl(
-                url,
-              );
-            }
-          },
-          child: Text(e,
-              style: const TextStyle(color: AppColors.primaryColor)),
-        ))
+                  onTap: () async {
+                    final hashtag = e.replaceAll("#", "");
+                    final Uri url =
+                        Uri.parse("https://twitter.com/hashtag/$hashtag");
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(
+                        url,
+                      );
+                    }
+                  },
+                  child: Text(e,
+                      style: const TextStyle(color: AppColors.primaryColor)),
+                ))
             .toList(),
       ),
     );
@@ -155,7 +152,6 @@ class _HomeFeedWidgetState extends ConsumerState<SavedFeedWidget> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-
                     CircleAvatar(
                       backgroundImage: AssetImage(
                           "assets/ysrcp_logo3.png"), // Change as needed
@@ -199,55 +195,55 @@ class _HomeFeedWidgetState extends ConsumerState<SavedFeedWidget> {
                             controller: _controller,
                             content: ref
                                 .watch(futurePointsForBatchIdProvider(
-                                widget.item.batchId))
+                                    widget.item.batchId))
                                 .when(
-                              data: (data) {
-                                return SingleChildScrollView(
-                                  child: SizedBox(
-                                    width: 250,
-                                    child: Column(
-                                      children: [
-                                        Row(children: [
-                                          buildExpanded("Actions", 2),
-                                          Gap(3),
-                                          buildExpanded("Points", 1),
-                                        ]),
-                                        Gap(10),
-                                        ListView.builder(
-                                          padding: EdgeInsets.zero,
-                                          physics:
-                                          NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemBuilder: (context, item) {
-                                            final point = data[item];
-                                            final iconData =
-                                            SocialMediaIcons
-                                                .getIconData(point
-                                                .actionType
-                                                .toLowerCase());
+                                  data: (data) {
+                                    return SingleChildScrollView(
+                                      child: SizedBox(
+                                        width: 250,
+                                        child: Column(
+                                          children: [
+                                            Row(children: [
+                                              buildExpanded("Actions", 2),
+                                              Gap(3),
+                                              buildExpanded("Points", 1),
+                                            ]),
+                                            Gap(10),
+                                            ListView.builder(
+                                              padding: EdgeInsets.zero,
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemBuilder: (context, item) {
+                                                final point = data[item];
+                                                final iconData =
+                                                    SocialMediaIcons
+                                                        .getIconData(point
+                                                            .actionType
+                                                            .toLowerCase());
 
-                                            return ListTile(
-                                              leading: Icon(iconData),
-                                              title: Text(point.actionType),
-                                              trailing: Text(
-                                                point.points.toString(),
-                                                style:
-                                                TextStyle(fontSize: 13),
-                                              ),
-                                            );
-                                          },
-                                          itemCount: data.length,
+                                                return ListTile(
+                                                  leading: Icon(iconData),
+                                                  title: Text(point.actionType),
+                                                  trailing: Text(
+                                                    point.points.toString(),
+                                                    style:
+                                                        TextStyle(fontSize: 13),
+                                                  ),
+                                                );
+                                              },
+                                              itemCount: data.length,
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                              error: (error, stack) {
-                                return Text(error.toString());
-                              },
-                              loading: () => Skeletonizer(
-                                  child: ListView.builder(
+                                      ),
+                                    );
+                                  },
+                                  error: (error, stack) {
+                                    return Text(error.toString());
+                                  },
+                                  loading: () => Skeletonizer(
+                                      child: ListView.builder(
                                     physics: NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
@@ -258,7 +254,7 @@ class _HomeFeedWidgetState extends ConsumerState<SavedFeedWidget> {
                                     },
                                     itemCount: 5,
                                   )),
-                            ),
+                                ),
                             child: Icon(
                               MdiIcons.informationSlabCircle,
                               color: AppColors.primaryColor,
@@ -284,21 +280,21 @@ class _HomeFeedWidgetState extends ConsumerState<SavedFeedWidget> {
               Container(
                 child: widget.isVideo
                     ? MediaCarousel(
-                    onUrlChanged: (url) {
-                      setState(() {
-                        _currentUrl = url;
-                      });
-                    },
-                    mediaUrls:
-                    widget.item.media.map((e) => e.fileUrl).toList())
+                        onUrlChanged: (url) {
+                          setState(() {
+                            _currentUrl = url;
+                          });
+                        },
+                        mediaUrls:
+                            widget.item.media.map((e) => e.fileUrl).toList())
                     : MediaCarousel(
-                    onUrlChanged: (url) {
-                      setState(() {
-                        _currentUrl = url;
-                      });
-                    },
-                    mediaUrls:
-                    widget.item.media.map((e) => e.fileUrl).toList()),
+                        onUrlChanged: (url) {
+                          setState(() {
+                            _currentUrl = url;
+                          });
+                        },
+                        mediaUrls:
+                            widget.item.media.map((e) => e.fileUrl).toList()),
               ),
               SizedBox(height: 5),
               Row(
@@ -316,11 +312,11 @@ class _HomeFeedWidgetState extends ConsumerState<SavedFeedWidget> {
                       ref
                           .read(homeFeedRepoProvider)
                           .postAction(
-                          action: "like",
-                          batchId: widget.item.batchId,
-                          userName: userData.name,
-                          commentText: "",
-                          shareType: "")
+                              action: "like",
+                              batchId: widget.item.batchId,
+                              userName: userData.name,
+                              commentText: "",
+                              shareType: "")
                           .then((value) {
                         EasyLoading.dismiss();
                         if (value) {
@@ -343,11 +339,11 @@ class _HomeFeedWidgetState extends ConsumerState<SavedFeedWidget> {
                       ref
                           .read(homeFeedRepoProvider)
                           .postAction(
-                          action: "share",
-                          batchId: widget.item.batchId,
-                          userName: userData.name,
-                          commentText: "",
-                          shareType: "whatsapp")
+                              action: "share",
+                              batchId: widget.item.batchId,
+                              userName: userData.name,
+                              commentText: "",
+                              shareType: "whatsapp")
                           .then((value) async {
                         EasyLoading.dismiss();
                         if (value) {
@@ -381,11 +377,11 @@ class _HomeFeedWidgetState extends ConsumerState<SavedFeedWidget> {
                       ref
                           .read(homeFeedRepoProvider)
                           .postAction(
-                          action: "save",
-                          batchId: widget.item.batchId,
-                          userName: userData.name,
-                          commentText: "",
-                          shareType: "")
+                              action: "save",
+                              batchId: widget.item.batchId,
+                              userName: userData.name,
+                              commentText: "",
+                              shareType: "")
                           .then((value) {
                         EasyLoading.dismiss();
                         if (value) {
@@ -496,10 +492,10 @@ class PostActionsBar extends StatelessWidget {
             icon: isLiked
                 ? Image.asset("assets/like_icon.png", width: 18, height: 18)
                 : Icon(
-              Icons.favorite_border,
-              color: Colors.red,
-              size: 18,
-            ),
+                    Icons.favorite_border,
+                    color: Colors.red,
+                    size: 18,
+                  ),
             label: '$likeCount',
             onTap: onLike,
           ),
