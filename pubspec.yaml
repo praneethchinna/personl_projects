@@ -40,7 +40,7 @@ dependencies:
   dio: ^5.8.0+1
   hooks_riverpod: ^2.6.1
   dropdown_search: ^6.0.2
-  skeletonizer: ^1.4.3
+  skeletonizer: ^2.1.0
   shared_preferences: ^2.5.1
   flutter_boxicons: ^3.2.0
   flutter_initicon: ^3.0.1

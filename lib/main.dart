@@ -13,15 +13,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/home_screen/ui/home_screen/home_tab_screen.dart';
 import 'package:ysr_project/features/login/ui/get_started_pages/your_voice_page.dart';
-
 import 'package:ysr_project/services/shared_preferences/shared_preferences_provider.dart';
 import 'package:ysr_project/services/user/user_data.dart';
 
 List<CameraDescription> cameras = [];
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
-   MediaKit.ensureInitialized( );
+  MediaKit.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
   cameras = await availableCameras();

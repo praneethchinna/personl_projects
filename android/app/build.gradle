@@ -8,12 +8,13 @@ plugins {
 
 android {
     namespace = "com.example.ysr_project"
-    compileSdk = 35
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -46,5 +47,6 @@ flutter {
 apply plugin: 'com.google.gms.google-services'
 dependencies {
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 }
 
