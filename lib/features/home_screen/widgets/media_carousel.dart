@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:video_player/video_player.dart';
-import 'package:ysr_project/colors/app_colors.dart';
 
 class MediaCarousel extends StatefulWidget {
   final List<String> mediaUrls;

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/notifications/domain/models/notification_model.dart';
-import 'package:ysr_project/features/notifications/presentation/providers/notifications_provider.dart';
 
 class NotificationItem extends ConsumerWidget {
   final bool isRead;

@@ -249,7 +249,8 @@ class _ImportantDocsUiState extends ConsumerState<ImportantDocsUi> {
                         itemCount: state.documents.length,
                         itemBuilder: (context, index) {
                           final doc = state.documents[index];
-                          return PdfTile(url: doc.pdfPath,
+                          return PdfTile(
+                            url: doc.pdfPath,
                             isBookmarked: doc.isSaved,
                             title: doc.pdfName,
                             date: formatDate(doc.createdAt),

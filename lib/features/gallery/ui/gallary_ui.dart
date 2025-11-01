@@ -12,7 +12,7 @@ import 'package:ysr_project/features/gallery/view_model/gallery_view_model.dart'
 import 'package:ysr_project/features/helper/download_multiple_file.dart';
 
 class GalleryScreen extends ConsumerStatefulWidget {
-  GalleryScreen({super.key});
+  const GalleryScreen({super.key});
 
   @override
   ConsumerState<GalleryScreen> createState() => _GalleryScreenState();

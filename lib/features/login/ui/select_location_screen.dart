@@ -16,7 +16,7 @@ import 'package:ysr_project/features/widget/show_error_dialog.dart';
 import 'package:ysr_project/services/http_networks/dio_provider.dart';
 
 class SelectLocationScreen extends ConsumerStatefulWidget {
-  const SelectLocationScreen({Key? key}) : super(key: key);
+  const SelectLocationScreen({super.key});
 
   @override
   ConsumerState<SelectLocationScreen> createState() =>
@@ -252,7 +252,6 @@ class _SelectLocationScreenState extends ConsumerState<SelectLocationScreen> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-
           ]),
         ));
   }

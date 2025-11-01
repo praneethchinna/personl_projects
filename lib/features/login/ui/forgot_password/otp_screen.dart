@@ -5,13 +5,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:flutter/material.dart';
 import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/core_widgets/ysr_background_theme.dart';
 import 'package:ysr_project/core_widgets/ysr_button.dart';
 import 'package:ysr_project/features/login/providers/repo_providers.dart';
 import 'package:ysr_project/features/login/ui/forgot_password/reset_password.dart';
-import 'package:ysr_project/features/login/ui/login_screen.dart';
 import 'package:ysr_project/features/login/ui/signup_screen.dart';
 
 class OtpScreen extends ConsumerStatefulWidget {
@@ -163,7 +161,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
                       _secondsRemaining = 60;
                       _startTimer();
-                      _controllers.forEach((element) => element.clear());
+                      for (var element in _controllers) {
+                        element.clear();
+                      }
                       if (widget.isNewUser) {
                         getNewUserOtp(context, ref);
                       } else {

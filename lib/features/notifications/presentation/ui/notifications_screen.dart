@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/core_widgets/ysr_app_bar.dart';
-import 'package:ysr_project/features/notifications/domain/models/notification_model.dart';
 import 'package:ysr_project/features/notifications/presentation/providers/notifications_provider.dart';
 import 'package:ysr_project/features/notifications/presentation/ui/widgets/notification_item.dart';
-import 'package:ysr_project/services/user/user_data.dart';
 
 class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});
 
   @override
-  ConsumerState<NotificationsScreen> createState() => _NotificationsScreenState();
+  ConsumerState<NotificationsScreen> createState() =>
+      _NotificationsScreenState();
 }
 
 class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
@@ -31,7 +30,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.8) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.8) {
       _loadMore();
     }
   }
@@ -39,7 +39,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
   Future<void> _loadMore() async {
     if (_isLoadingMore) return;
     setState(() => _isLoadingMore = true);
-    await ref.read(notificationsNotifierProvider.notifier).loadMoreNotifications();
+    await ref
+        .read(notificationsNotifierProvider.notifier)
+        .loadMoreNotifications();
     setState(() => _isLoadingMore = false);
   }
 
@@ -94,7 +96,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      final notification = notificationResponse.notifications[index];
+                      final notification =
+                          notificationResponse.notifications[index];
                       return Dismissible(
                         key: ValueKey(notification.id),
                         direction: DismissDirection.endToStart,
@@ -112,7 +115,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                         child: Column(
                           children: [
                             NotificationItem(
-                              notification: notification,isRead: notification.viewed,
+                              notification: notification,
+                              isRead: notification.viewed,
                             ),
                             const Divider(height: 1, indent: 16, endIndent: 16),
                           ],

@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -21,8 +20,7 @@ Future<UserCredential?> signInWithGoogle() async {
   debugPrint('signInWithGoogle: signIn ok');
 
   // Obtain authentication details
-  final GoogleSignInAuthentication googleAuth =
-      await googleUser.authentication;
+  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
   debugPrint('signInWithGoogle: authentication ok');
 
   // Create a credential
@@ -38,9 +36,10 @@ Future<UserCredential?> signInWithGoogle() async {
         await FirebaseAuth.instance.signInWithCredential(credential);
     debugPrint('signInWithGoogle: signInWithCredential ok');
     return userCredential;
-  } catch (e, stackTrace) {
-    debugPrint('signInWithGoogle: signInWithCredential failed: $e',
-        );
+  } catch (e) {
+    debugPrint(
+      'signInWithGoogle: signInWithCredential failed: $e',
+    );
     return null;
   }
 }

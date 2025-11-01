@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -30,7 +29,6 @@ class EnterPhoneScreen extends ConsumerWidget {
             ],
           ),
         ));
-
   }
 
   Widget buildPhoneNumberField(BuildContext context, WidgetRef ref) {
@@ -94,6 +92,7 @@ class EnterPhoneScreen extends ConsumerWidget {
       ],
     );
   }
+
   void getNewUserOtp(BuildContext context, WidgetRef ref) {
     EasyLoading.show();
     ref.read(repoProvider).newUserOtp(phoneNumberController.text).then((value) {
@@ -151,6 +150,4 @@ class EnterPhoneScreen extends ConsumerWidget {
       EasyLoading.dismiss();
     });
   }
-
-
 }

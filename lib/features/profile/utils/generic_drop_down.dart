@@ -22,7 +22,7 @@ class GenericDropdownSelector<T> extends ConsumerWidget {
   final AutoDisposeFutureProvider<List<T>> itemsProvider;
   final TextEditingController textEditingController;
   final Widget Function(BuildContext context, T entity, bool isSelected)
-  itemBuilder;
+      itemBuilder;
   final bool Function(T entity, String searchText) filter;
   final String? Function(String?)? validator;
   final InputDecoration? decoration;
@@ -82,7 +82,7 @@ class SelectionScreen<T> extends ConsumerStatefulWidget {
   final String subTitle;
   final AutoDisposeFutureProvider<List<T>> itemsProvider;
   final Widget Function(BuildContext context, T entity, bool isSelected)
-  itemBuilder;
+      itemBuilder;
   final bool Function(T entity, String searchText) filter;
 
   @override
@@ -138,9 +138,8 @@ class _SelectionScreenState<T> extends ConsumerState<SelectionScreen<T>> {
       ),
       body: asyncItems.when(
         data: (items) {
-          final filteredItems = items
-              .where((item) => widget.filter(item, _searchText))
-              .toList();
+          final filteredItems =
+              items.where((item) => widget.filter(item, _searchText)).toList();
           if (filteredItems.isEmpty && _searchText.isNotEmpty) {
             return const Center(child: Text('No matching items found.'));
           } else if (filteredItems.isEmpty) {

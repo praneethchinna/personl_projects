@@ -39,7 +39,8 @@ class GallerySummaryState {
   }
 }
 
-class GallerySummaryNotifier extends AutoDisposeAsyncNotifier<GallerySummaryState> {
+class GallerySummaryNotifier
+    extends AutoDisposeAsyncNotifier<GallerySummaryState> {
   late final Dio _dio;
 
   @override
@@ -80,8 +81,11 @@ class GallerySummaryNotifier extends AutoDisposeAsyncNotifier<GallerySummaryStat
   Future<void> fetchNextGallerySummary() async {
     final currentState = state.valueOrNull;
 
-    if (currentState == null || currentState.isLoading || !currentState.hasNext)
+    if (currentState == null ||
+        currentState.isLoading ||
+        !currentState.hasNext) {
       return;
+    }
 
     // Optimistically mark loading
     state = AsyncData(currentState.copyWith(isLoading: true));
@@ -96,7 +100,7 @@ class GallerySummaryNotifier extends AutoDisposeAsyncNotifier<GallerySummaryStat
   }
 }
 
-final gallerySummaryProvider =
-    AutoDisposeAsyncNotifierProvider<GallerySummaryNotifier, GallerySummaryState>(
+final gallerySummaryProvider = AutoDisposeAsyncNotifierProvider<
+    GallerySummaryNotifier, GallerySummaryState>(
   GallerySummaryNotifier.new,
 );

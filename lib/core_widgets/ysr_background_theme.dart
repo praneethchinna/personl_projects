@@ -33,7 +33,7 @@ class YsrBackgroundTheme extends StatelessWidget {
                   Row(
                     children: [
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.pop(context);
                         },
                         child: Padding(

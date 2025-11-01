@@ -14,12 +14,10 @@ import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/home_screen/helper_class/file_share_helper.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repository.dart';
-import 'package:ysr_project/features/home_screen/ui/home_screen/home_feed_screen.dart';
 import 'package:ysr_project/features/home_screen/view_model/home_feed_view_model.dart';
 import 'package:ysr_project/features/home_screen/widgets/build_platform_icons.dart';
 import 'package:ysr_project/features/home_screen/widgets/comment_widget.dart';
 import 'package:ysr_project/features/home_screen/widgets/media_carousel.dart';
-import 'package:ysr_project/features/saved/providers/saved_posts_repository.dart';
 import 'package:ysr_project/main.dart';
 import 'package:ysr_project/services/user/user_data.dart';
 

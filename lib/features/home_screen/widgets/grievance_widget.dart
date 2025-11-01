@@ -40,7 +40,6 @@ class _GrievanceWidgetState extends ConsumerState<GrievanceWidget> {
             ),
             child: Row(
               children: [
-
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -53,7 +52,6 @@ class _GrievanceWidgetState extends ConsumerState<GrievanceWidget> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                       const SizedBox(height: 4),
                       Row(
                         children: [

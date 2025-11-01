@@ -28,14 +28,11 @@ class GrievanceInfoFormState extends State<GrievanceInfoForm> {
   String? categoryName;
   String? grievanceDescription;
 
-
   void clearTextFields() {
     categoryName = null;
     grievanceDescription = null;
     _grievanceEditingController.clear();
   }
-
-
 
   @override
   Widget build(BuildContext context) {

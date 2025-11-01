@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,11 +12,8 @@ import 'package:ysr_project/features/home_screen/ui/home_screen/home_tab_screen.
 import 'package:ysr_project/features/login/providers/login_provider.dart';
 import 'package:ysr_project/features/login/providers/repo_providers.dart';
 import 'package:ysr_project/features/login/ui/forgot_password/enter_phone_screen.dart';
-import 'package:ysr_project/features/login/ui/signup_screen.dart';
 import 'package:ysr_project/features/widget/show_error_dialog.dart';
 import 'package:ysr_project/services/google_sign_in/google_sign_in_helper.dart';
-
-import 'initial_screens.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});

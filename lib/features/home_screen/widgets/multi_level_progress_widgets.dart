@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/colors/app_colors.dart';
-import 'package:ysr_project/features/home_screen/ui/home_screen/home_tab_screen.dart';
 import 'package:ysr_project/features/home_screen/widgets/multi_level_circular_indicator.dart';
 import 'package:ysr_project/main.dart';
 
@@ -14,8 +13,8 @@ class MultiLevelProgressWidget extends ConsumerWidget {
       {super.key, required this.progress, this.progressColor});
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
-    final currentLocale=ref.watch(languageProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(languageProvider);
     double levelGap = 100; // Each level covers 100 points
     int currentLevel = (progress ~/ levelGap); // Determine the current level
     int nextLevel = currentLevel + 1; // Determine the next level
@@ -48,7 +47,7 @@ class MultiLevelProgressWidget extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-               Text(
+              Text(
                 "your_progress".tr(),
                 style: TextStyle(
                     fontSize: 14,

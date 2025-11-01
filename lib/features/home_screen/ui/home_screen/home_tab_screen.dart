@@ -3,22 +3,14 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/home_screen/ui/home_screen/home_feed_screen.dart';
-import 'package:ysr_project/features/home_screen/ui/home_screen/home_screen_drawer.dart';
 import 'package:ysr_project/features/home_screen/ui/influencer_video_ui.dart';
 import 'package:ysr_project/features/home_screen/ui/more_screen.dart';
-import 'package:ysr_project/features/home_screen/ui/notification_imp.dart';
-import 'package:ysr_project/features/home_screen/ui/special_videos_page.dart';
-import 'package:ysr_project/features/home_screen/widgets/easy_toggle_button.dart';
 import 'package:ysr_project/features/polls/ui/poll_screen.dart';
 import 'package:ysr_project/features/special_videos/special_videos_ui.dart';
-import 'package:ysr_project/services/shared_preferences/shared_preferences_provider.dart';
-import 'package:ysr_project/services/user/user_data.dart';
-import 'package:ysr_project/main.dart';
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key});

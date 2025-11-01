@@ -61,7 +61,8 @@ class BadgeCard extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                           color: Colors.black87,
                         ),
-                      ),Gap(5),
+                      ),
+                      Gap(5),
                       Text(
                         badgeName,
                         style: TextStyle(

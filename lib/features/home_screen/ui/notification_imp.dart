@@ -60,6 +60,7 @@ class NotificationImp extends ConsumerWidget {
                   } catch (e) {
                     SizedBox.shrink();
                   }
+                  return null;
                 },
               ),
             );

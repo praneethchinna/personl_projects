@@ -9,8 +9,10 @@ final rewardsRepositoryProvider = Provider<RewardsRepository>((ref) {
   return RewardsRepository(dio: dio, ref: ref);
 });
 
-final rewardsFutureProvider = FutureProvider.autoDispose<RewardsResponseModel>((ref) async {
+final rewardsFutureProvider =
+    FutureProvider.autoDispose<RewardsResponseModel>((ref) async {
   final repository = ref.read(rewardsRepositoryProvider);
-  final userId = ref.read(userProvider).userId; // Assuming you have a userProvider
+  final userId =
+      ref.read(userProvider).userId; // Assuming you have a userProvider
   return repository.getUserRewards(userId);
 });

@@ -3,7 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repository.dart';
 import 'package:ysr_project/features/home_screen/ui/home_screen/home_tab_screen.dart';
-import 'package:ysr_project/features/home_screen/ui/more_screen.dart';
 import 'package:ysr_project/features/login/ui/login_screen.dart';
 import 'package:ysr_project/features/polls/providers/polls_provider.dart';
 import 'package:ysr_project/services/google_sign_in/google_sign_in_helper.dart';

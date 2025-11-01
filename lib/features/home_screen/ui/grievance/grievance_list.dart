@@ -66,8 +66,8 @@ class GrievanceList extends ConsumerWidget {
 
 class ShimmerLoadingWidget extends StatelessWidget {
   const ShimmerLoadingWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

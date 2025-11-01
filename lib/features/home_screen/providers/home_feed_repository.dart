@@ -37,7 +37,7 @@ class HomeFeedNotifer extends StateNotifier<HomeViewModel> {
           isLoading: false,
           isError: false,
           homeFeedViewModels: homeFeedViewModels);
-    } on Exception catch (e) {
+    } on Exception {
       state = state
           .copyWith(isLoading: false, isError: true, homeFeedViewModels: []);
     }
@@ -56,7 +56,7 @@ class HomeFeedNotifer extends StateNotifier<HomeViewModel> {
           isLoading: false,
           isError: false,
           homeFeedViewModels: homeFeedViewModels);
-    } on Exception catch (e) {
+    } on Exception {
       state = state
           .copyWith(isLoading: false, isError: true, homeFeedViewModels: []);
     }

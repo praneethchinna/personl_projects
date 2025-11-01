@@ -1,12 +1,9 @@
 // ignore_for_file: avoid_print
 
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ysr_project/core_widgets/ysr_app_bar.dart';
-import 'package:ysr_project/features/gallery/ui/gallery_summary_ui.dart';
 import 'package:ysr_project/features/help/presentation/ui/help_screen.dart';
 import 'package:ysr_project/features/important_docs/important_docs.dart';
-import 'package:ysr_project/features/leaderborad/leaderboard_ui.dart';
 import 'package:ysr_project/features/leaderborad/leaderboard_ui_temp.dart';
 import 'package:ysr_project/features/myrewards/ui/rewards_screen.dart';
 import 'package:ysr_project/features/profile/ui/user_profile_ui.dart';
@@ -20,12 +17,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ysr_project/features/gallery/ui/gallary_ui.dart';
 import 'package:ysr_project/features/home_screen/helper_class/logout_invalidate_providers.dart';
-import 'package:ysr_project/features/home_screen/response_model/pdf_ui.dart';
 import 'package:ysr_project/features/home_screen/ui/grievance/girievance_tab.dart';
 import 'package:ysr_project/features/home_screen/ui/home_screen/home_tab_screen.dart';
-import 'package:ysr_project/features/home_screen/ui/influencer_video_ui.dart';
 import 'package:ysr_project/features/home_screen/ui/notifications_ui.dart';
-import 'package:ysr_project/features/home_screen/ui/special_videos_page.dart';
 import 'package:ysr_project/services/http_networks/dio_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ysr_project/services/user/user_data.dart';

@@ -70,7 +70,8 @@ class _YsrButtonState extends State<YsrButton> {
           // Conditional gradient for the button based on hover state.
           // If hovered, the gradient is null (so the solid black color applies).
           // If not hovered, the linear gradient uses the provided colors.
-          gradient: _isHovered ? null : LinearGradient(colors: widget.gradientColors),
+          gradient:
+              _isHovered ? null : LinearGradient(colors: widget.gradientColors),
           // Applies rounded corners to the button.
           borderRadius: BorderRadius.circular(30),
           // Border is removed as per the original comment's implied intent ("No border").
@@ -81,10 +82,12 @@ class _YsrButtonState extends State<YsrButton> {
           onPressed: widget.onPressed,
           // Defines the style of the TextButton, making it transparent and removing default padding.
           style: TextButton.styleFrom(
-            backgroundColor: Colors.transparent, // Ensures no default background interference.
+            backgroundColor: Colors
+                .transparent, // Ensures no default background interference.
             padding: EdgeInsets.zero, // Removes default padding of TextButton.
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30), // Ensures tap area matches container's rounded corners.
+              borderRadius: BorderRadius.circular(
+                  30), // Ensures tap area matches container's rounded corners.
             ),
           ),
           child: Text(

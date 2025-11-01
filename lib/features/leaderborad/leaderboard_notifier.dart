@@ -6,14 +6,16 @@ import 'package:ysr_project/features/leaderborad/leaderboard_response_model.dart
 enum Types {
   state("state"),
   parliament("parliament"),
-  assembly("constituency"),;
+  assembly("constituency"),
+  ;
 
   final String description;
 
   const Types(this.description);
 }
 
-class LeaderBoardNotifier extends AutoDisposeAsyncNotifier<List<LeaderboardEntry>> {
+class LeaderBoardNotifier
+    extends AutoDisposeAsyncNotifier<List<LeaderboardEntry>> {
   String stateName = '';
   String parliament = '';
   String assembly = '';

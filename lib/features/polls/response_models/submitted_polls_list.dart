@@ -34,8 +34,8 @@ class Poll {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['poll_id'] = this.pollId;
-    data['option'] = this.option;
+    data['poll_id'] = pollId;
+    data['option'] = option;
     return data;
   }
 }

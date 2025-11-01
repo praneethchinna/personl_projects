@@ -21,7 +21,8 @@ class RewardsResponseModel {
       name: json['name'] as String,
       totalPoints: json['total_points'] as int,
       currentLevel: json['current_level'] as String,
-      levelCompletionPercentage: (json['level_completion_percentage'] as num).toDouble(),
+      levelCompletionPercentage:
+          (json['level_completion_percentage'] as num).toDouble(),
       levels: (json['levels'] as List<dynamic>)
           .map((level) => Level.fromJson(level as Map<String, dynamic>))
           .toList(),

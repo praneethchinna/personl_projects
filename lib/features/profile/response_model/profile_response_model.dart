@@ -38,9 +38,9 @@ class User {
     this.parliament = '',
     this.mobile = '',
     this.gender = '',
-    this.country="",
-    this.referralCode="",
-    this.state="",
+    this.country = "",
+    this.referralCode = "",
+    this.state = "",
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(

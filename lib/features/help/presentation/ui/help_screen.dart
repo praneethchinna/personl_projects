@@ -103,11 +103,10 @@ class _FaqItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const _FaqItem({
-    Key? key,
     required this.faq,
     required this.isExpanded,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

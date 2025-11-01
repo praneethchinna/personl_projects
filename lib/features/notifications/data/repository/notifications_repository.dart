@@ -8,7 +8,8 @@ class NotificationsRepository {
 
   NotificationsRepository({required this.dio, required this.ref});
 
-  Future<NotificationResponse> getNotifications(int userId, {int page = 1, int pageSize = 10}) async {
+  Future<NotificationResponse> getNotifications(int userId,
+      {int page = 1, int pageSize = 10}) async {
     try {
       final response = await dio.get(
         '/notifications/userfeed',
@@ -18,7 +19,7 @@ class NotificationsRepository {
           'page_size': pageSize,
         },
       );
-      
+
       if (response.statusCode == 200) {
         return NotificationResponse.fromJson(response.data);
       } else {
@@ -47,7 +48,8 @@ class NotificationsRepository {
         NotificationModel(
           id: 1,
           source: 'Sakshi',
-          text: 'Sakshi posted a new video: Ambati Rambabu Reveal Facts About Chandrababu Super Six',
+          text:
+              'Sakshi posted a new video: Ambati Rambabu Reveal Facts About Chandrababu Super Six',
           postType: 'influencer_video',
           refId: '1634',
           createdAt: '2025-06-15T04:45:06',
@@ -56,7 +58,8 @@ class NotificationsRepository {
         NotificationModel(
           id: 2,
           source: 'Sakshi',
-          text: 'Sakshi posted a new video: Ambati Rambabu Counter To Nara Lokesh Warning',
+          text:
+              'Sakshi posted a new video: Ambati Rambabu Counter To Nara Lokesh Warning',
           postType: 'influencer_video',
           refId: '1633',
           createdAt: '2025-06-15T03:00:06',

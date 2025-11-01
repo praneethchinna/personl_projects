@@ -66,14 +66,12 @@ class ShareCard {
           return;
       }
 
-      if (url != null) {
-        uri = Uri.parse(url);
-        if (await canLaunchUrl(uri)) {
-          await launchUrl(uri, mode: LaunchMode.externalApplication);
-        } else {
-          // Fallback to generic share if can't launch URL
-          await Share.share(shareText);
-        }
+      uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        // Fallback to generic share if can't launch URL
+        await Share.share(shareText);
       }
     } catch (e) {
       if (context.mounted) {

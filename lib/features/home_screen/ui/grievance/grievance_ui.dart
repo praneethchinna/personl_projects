@@ -13,8 +13,7 @@ import 'package:ysr_project/features/home_screen/ui/grievance/girievance_tab.dar
 class GrievanceFormStepper extends ConsumerStatefulWidget {
   final List<CameraDescription> cameras;
 
-  const GrievanceFormStepper({Key? key, required this.cameras})
-      : super(key: key);
+  const GrievanceFormStepper({super.key, required this.cameras});
 
   @override
   _GrievanceFormStepperState createState() => _GrievanceFormStepperState();

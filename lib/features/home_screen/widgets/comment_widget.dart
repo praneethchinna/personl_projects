@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_initicon/flutter_initicon.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repository.dart';
 import 'package:ysr_project/services/user/user_data.dart';
@@ -117,7 +116,7 @@ class CommentsBottomSheet extends ConsumerWidget {
 class CommentTile extends StatelessWidget {
   final CommentModel comment;
 
-  const CommentTile({required this.comment});
+  const CommentTile({super.key, required this.comment});
 
   String timeAgo(DateTime date) {
     final now = DateTime.now();

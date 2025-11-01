@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/home_screen/helper_class/file_share_helper.dart';
 
 class PdfTile extends StatelessWidget {

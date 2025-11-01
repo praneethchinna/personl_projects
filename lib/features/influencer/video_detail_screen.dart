@@ -1,11 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:ysr_project/colors/app_colors.dart';
-import 'package:ysr_project/core_widgets/ysr_app_bar.dart';
 import 'package:ysr_project/features/home_screen/ui/notifications_ui.dart';
 import 'package:ysr_project/features/widget/reusable_youtube_player.dart';
 

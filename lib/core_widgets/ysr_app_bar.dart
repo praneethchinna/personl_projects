@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ysr_project/colors/app_colors.dart';
 
-
 class YsrAppBar extends StatelessWidget implements PreferredSizeWidget {
   // These properties directly map to AppBar's properties
   final Widget? leading;

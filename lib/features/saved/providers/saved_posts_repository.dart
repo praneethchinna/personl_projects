@@ -15,7 +15,7 @@ final savedPostsNotifierProvider =
 );
 
 class SavedPostsNotifier extends StateNotifier<SavedPostsViewModel> {
-  bool _hasMore = true;
+  final bool _hasMore = true;
   int _page = 1;
   final Ref ref;
   final SavedPostsRepoImpl savedPostsRepo;

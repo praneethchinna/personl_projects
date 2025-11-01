@@ -67,7 +67,8 @@ class PollWidget extends StatelessWidget {
     return Row(
       children: [
         CircleAvatar(
-          backgroundImage: AssetImage("assets/ysrcp_logo3.png"), // Change as needed
+          backgroundImage:
+              AssetImage("assets/ysrcp_logo3.png"), // Change as needed
           radius: 20,
         ),
         const SizedBox(width: 8),
@@ -78,7 +79,10 @@ class PollWidget extends StatelessWidget {
         const Spacer(),
         Text(
           DateFormat("MMMM d, y").format(createdAt),
-          style: TextStyle(color: Colors.grey[600],fontWeight: FontWeight.w500,fontSize: 10),
+          style: TextStyle(
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
+              fontSize: 10),
         ),
       ],
     );
@@ -121,16 +125,16 @@ class PollWidget extends StatelessWidget {
             Text(
               option,
               style: TextStyle(
-                color: isDisabled ? Colors.grey : Colors.black,
-                fontWeight: FontWeight.w500,fontSize: 12
-
-              ),
+                  color: isDisabled ? Colors.grey : Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12),
             ),
             const Spacer(),
             if (isDisabled)
               Text(
                 votes[index].toString(),
-                style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 12),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
               ),
           ],
         ),

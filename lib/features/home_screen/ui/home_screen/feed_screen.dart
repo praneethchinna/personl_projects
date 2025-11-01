@@ -91,7 +91,7 @@ class _HomeFeedListState extends ConsumerState<HomeFeedList> {
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     itemCount: viewModel.homeFeedViewModels.length,
                     itemBuilder: (context, index) {
-                      log(index.toString()+"-----------------------------");
+                      log("$index-----------------------------");
                       final item = viewModel.homeFeedViewModels[index];
                       final isVideo =
                           item.media.first.fileType.contains("video");

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
-import 'package:ysr_project/features/home_screen/ui/home_screen/home_tab_screen.dart';
 import 'package:ysr_project/features/home_screen/widgets/video_card.dart';
 import 'package:ysr_project/main.dart';
 

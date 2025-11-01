@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:ysr_project/core_widgets/ysr_app_bar.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
-import 'package:ysr_project/features/home_screen/widgets/multi_level_progress_widgets.dart';
 import 'package:ysr_project/features/leaderborad/leaderboard_notifier_temp.dart';
 import 'package:ysr_project/features/leaderborad/leaderboard_providers.dart';
 import 'package:ysr_project/features/leaderborad/leaderboard_response_model.dart';

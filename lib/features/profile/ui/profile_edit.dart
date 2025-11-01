@@ -1,11 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
 
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_initicon/flutter_initicon.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ysr_project/colors/app_colors.dart';
@@ -13,7 +10,6 @@ import 'package:ysr_project/core_widgets/ysr_app_bar.dart';
 import 'package:ysr_project/core_widgets/ysr_buttons.dart';
 import 'package:ysr_project/features/home_screen/providers/home_feed_repo_provider.dart';
 import 'package:ysr_project/features/login/response_models/assembly_response_model.dart';
-import 'package:ysr_project/features/login/response_models/country_state_response_model.dart';
 import 'package:ysr_project/features/login/response_models/parliament_response_model.dart';
 import 'package:ysr_project/features/login/ui/select_location_screen.dart';
 import 'package:ysr_project/features/profile/provider/profileProvider.dart';
@@ -61,15 +57,13 @@ class _ProfileEditState extends ConsumerState<ProfileEdit> {
           await ref.read(profileAsyncProvider(widget.phoneNumber).future);
       final temp = await ref.read(parliamentProvider.future);
 
-      if (profileData != null) {
-        _nameController.text = profileData.name;
-        _genderController.text = profileData.gender;
-        _emailController.text = profileData.email;
-        _countryController.text = profileData.country;
-        _stateController.text = profileData.state;
-        _parliamentController.text = profileData.parliament;
-        _constituencyController.text = profileData.constituency;
-      }
+      _nameController.text = profileData.name;
+      _genderController.text = profileData.gender;
+      _emailController.text = profileData.email;
+      _countryController.text = profileData.country;
+      _stateController.text = profileData.state;
+      _parliamentController.text = profileData.parliament;
+      _constituencyController.text = profileData.constituency;
       final parliamentData = temp.firstWhere((element) =>
           element.parliamentName.toLowerCase() ==
           _parliamentController.text.toLowerCase());
@@ -183,7 +177,7 @@ class _ProfileEditState extends ConsumerState<ProfileEdit> {
                               focusedBorder: appBorder(),
                               labelText: 'gender'.tr(),
                             ),
-                            value: _genderController.text.isNotEmpty
+                            initialValue: _genderController.text.isNotEmpty
                                 ? _genderController.text
                                 : null,
                             items: ['Male', 'Female'].map((String gender) {

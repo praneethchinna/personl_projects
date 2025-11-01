@@ -1,13 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/core_widgets/ysr_app_bar.dart';
 import 'package:ysr_project/features/myrewards/ui/widgets/badge_card.dart';
 import 'package:ysr_project/features/myrewards/ui/widgets/level_unlock_dialog.dart';
-import '../data/models/rewards_response_model.dart';
 import '../provider/rewards_provider.dart';
 
 class RewardsScreen extends ConsumerWidget {

@@ -6,9 +6,9 @@ class ImportantDocsRepo {
   ImportantDocsRepo({required this.dio});
 
   Future<ImportantDocsResponse> getImportantDocs(
-      {String? pdfType, int page = 1,required int userId}) async {
+      {String? pdfType, int page = 1, required int userId}) async {
     try {
-      final queryParams = <String, dynamic>{'page': page,"user_id":userId};
+      final queryParams = <String, dynamic>{'page': page, "user_id": userId};
       if (pdfType != null && pdfType.isNotEmpty) {
         queryParams['pdf_type_name'] = pdfType;
       }

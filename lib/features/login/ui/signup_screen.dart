@@ -4,7 +4,6 @@ import 'package:ysr_project/colors/app_colors.dart';
 import 'package:ysr_project/core_widgets/ysr_background_theme.dart';
 import 'package:ysr_project/core_widgets/ysr_button.dart';
 import 'package:ysr_project/features/login/providers/login_provider.dart';
-import 'package:ysr_project/features/login/providers/repo_providers.dart';
 import 'package:ysr_project/features/login/ui/select_location_screen.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {

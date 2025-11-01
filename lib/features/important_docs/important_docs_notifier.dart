@@ -57,8 +57,8 @@ class ImportantDocsAsyncNotifier
       {String? pdfType, int page = 1}) async {
     try {
       state = const AsyncLoading();
-      final ImportantDocsResponse response =
-          await repo.getImportantDocs(pdfType: pdfType, page: page,userId: ref.read(userProvider).userId);
+      final ImportantDocsResponse response = await repo.getImportantDocs(
+          pdfType: pdfType, page: page, userId: ref.read(userProvider).userId);
       final newState = ImportantDocsPaginationState(
         documents: response.files,
         isLoading: false,
@@ -90,8 +90,10 @@ class ImportantDocsAsyncNotifier
     final nextPage = current.currentPage + 1;
     try {
       state = const AsyncLoading();
-      final ImportantDocsResponse response =
-          await repo.getImportantDocs(pdfType: _lastPdfType, page: nextPage,userId: ref.read(userProvider).userId);
+      final ImportantDocsResponse response = await repo.getImportantDocs(
+          pdfType: _lastPdfType,
+          page: nextPage,
+          userId: ref.read(userProvider).userId);
       state = AsyncData(
         current.copyWith(
           documents: [...current.documents, ...response.files],
